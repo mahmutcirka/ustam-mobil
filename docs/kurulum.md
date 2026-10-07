@@ -1,7 +1,7 @@
 # Kurulum ve Çalıştırma
 
 ### Ön Gereksinimler
-- [Bun](https://bun.sh/) kurulu olmalıdır (`curl -fsSL https://bun.sh/install | bash`).
+- [Bun](https://bun.sh/) kurulu olmalıdır — macOS/Linux: `curl -fsSL https://bun.sh/install | bash`, Windows: `powershell -c "irm bun.sh/install.ps1 | iex"`.
 - [Rust & Cargo](https://rustup.rs/) kurulu olmalıdır.
 - İşletim sisteminize göre [Tauri Önkoşulları](https://v2.tauri.app/start/prerequisites/) tamamlanmış olmalıdır.
 
@@ -9,7 +9,7 @@
 
 1. **Depoyu klonlayın:**
 ```bash
-git clone https://github.com/keyvanarasteh/hello-mobil.git
+git clone https://github.com/KULLANICI-ADIN/hello-mobil.git
 cd hello-mobil
 ```
 
