@@ -1,7 +1,16 @@
-/* Adım 2: Global stil — tüm sayfaların ortak renkleri ve yardımcı sınıfları */
+/* Global stil — tüm sayfaların ortak renkleri ve yardımcı sınıfları.
+   Renk değerleri docs/branding.md ile birebir aynı tutulur. */
 :root {
   --renk-ana: #e4002b;
+  --renk-ana-yazi: #e4002b;
+  --renk-ana-ustu: #ffffff;
+  --renk-ana-yumusak: #fde8ec;
   --renk-koyu: #1a1a2e;
+  --vurgu: #f59e0b;
+  --vurgu-yumusak: #fef3c7;
+  --basari: #15803d;
+  --basari-yumusak: #dcfce7;
+  --hata: #b91c1c;
   --zemin: #f4f5f7;
   --kart: #ffffff;
   --yazi: #1a1a2e;
@@ -16,8 +25,14 @@
   -webkit-text-size-adjust: 100%;
 }
 
-/* Adım 15: Gece modu — <html data-tema="gece"> olunca değişkenler koyulaşır */
+/* Gece modu — <html data-tema="gece"> olunca değişkenler koyulaşır */
 :root[data-tema="gece"] {
+  --renk-ana-yazi: #ff5c77;
+  --renk-ana-yumusak: #3a1520;
+  --vurgu-yumusak: #3d2e0a;
+  --basari: #4ade80;
+  --basari-yumusak: #12301d;
+  --hata: #f87171;
   --zemin: #0f1117;
   --kart: #1a1d26;
   --yazi: #f3f4f6;
@@ -40,7 +55,9 @@ a {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
   color: inherit;
 }
@@ -56,6 +73,17 @@ button {
   gap: 16px;
 }
 
+/* Form ve özet sayfaları geniş ekranda da okunabilir genişlikte kalır */
+.sayfa.dar {
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+.izgara {
+  display: grid;
+  gap: 12px;
+}
+
 .kart {
   background: var(--kart);
   border: 1px solid var(--kenar);
@@ -63,12 +91,13 @@ button {
 }
 
 .btn {
+  display: block;
   width: 100%;
   padding: 14px 18px;
   border: 0;
   border-radius: var(--radius);
   background: var(--renk-ana);
-  color: #fff;
+  color: var(--renk-ana-ustu);
   font-weight: 600;
   text-align: center;
 }
@@ -76,6 +105,12 @@ button {
 .btn:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+.btn.ikincil {
+  background: var(--kart);
+  color: var(--yazi);
+  border: 1px solid var(--kenar);
 }
 
 .bos {

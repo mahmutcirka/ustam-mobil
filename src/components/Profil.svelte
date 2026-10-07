@@ -1,58 +1,79 @@
 <script lang="ts">
-  // Adım 14: Profil — basit (sahte) giriş formu, kullanıcı localStorage'da tutulur
-  import { biletlerim } from "$lib/biletler.svelte";
+  // Profil — iletişim bilgileri (localStorage), dil ve tema ayarları
+  import { tema } from "$lib/tema.svelte";
+  import { dil, diller, dilAdlari } from "$lib/i18n.svelte";
+  import { isEmirleri } from "$lib/isEmirleri.svelte";
+  import { oku, yaz } from "$lib/depo";
 
-  let kullanici = $state(
-    typeof localStorage !== "undefined"
-      ? (localStorage.getItem("kullanici") ?? "")
-      : ""
-  );
-  let ad = $state("");
-  let eposta = $state("");
-
-  const gecerli = $derived(ad.trim().length > 1 && eposta.includes("@"));
-
-  function girisYap(event: SubmitEvent) {
-    event.preventDefault();
-    kullanici = ad.trim();
-    localStorage.setItem("kullanici", kullanici);
+  interface Bilgiler {
+    ad: string;
+    telefon: string;
+    adres: string;
   }
 
-  function cikisYap() {
-    kullanici = "";
-    localStorage.removeItem("kullanici");
+  const ANAHTAR = "profil";
+  const kayitli = oku<Bilgiler>(ANAHTAR, { ad: "", telefon: "", adres: "" });
+
+  let ad = $state(kayitli.ad);
+  let telefon = $state(kayitli.telefon);
+  let adres = $state(kayitli.adres);
+  let kaydedilenAd = $state(kayitli.ad);
+  let kaydedildi = $state(false);
+
+  function kaydet(event: SubmitEvent) {
+    event.preventDefault();
+    yaz(ANAHTAR, { ad: ad.trim(), telefon: telefon.trim(), adres: adres.trim() });
+    kaydedilenAd = ad.trim();
+    kaydedildi = true;
+    setTimeout(() => (kaydedildi = false), 2000);
   }
 </script>
 
-<div class="sayfa">
-  {#if kullanici}
-    <div class="kart profil">
-      <div class="avatar">{kullanici[0].toLocaleUpperCase("tr")}</div>
-      <h2>Merhaba, {kullanici}</h2>
-      <p>{biletlerim.liste.length} biletiniz var</p>
+<div class="sayfa dar">
+  <div class="kart profil">
+    <div class="avatar">{(kaydedilenAd[0] ?? "?").toLocaleUpperCase("tr")}</div>
+    <h2>{kaydedilenAd || dil.t("profil.misafir")}</h2>
+    <p>{dil.t("profil.isSayisi", { n: isEmirleri.liste.length })}</p>
+  </div>
+
+  <form class="kart form" onsubmit={kaydet}>
+    <label>
+      {dil.t("profil.ad")}
+      <input bind:value={ad} autocomplete="name" />
+    </label>
+    <label>
+      {dil.t("profil.telefon")}
+      <input type="tel" dir="ltr" bind:value={telefon} autocomplete="tel" placeholder="05xx xxx xx xx" />
+    </label>
+    <label>
+      {dil.t("profil.adres")}
+      <textarea rows="2" bind:value={adres} autocomplete="street-address"></textarea>
+    </label>
+    <button class="btn">{kaydedildi ? dil.t("profil.kaydedildi") : dil.t("profil.kaydet")}</button>
+  </form>
+
+  <h3>{dil.t("profil.ayarlar")}</h3>
+  <div class="kart ayarlar">
+    <div class="ayar">
+      <span>{dil.t("profil.dil")}</span>
+      <div class="diller">
+        {#each diller as d}
+          <button class:aktif={dil.kod === d} lang={d} onclick={() => dil.degistir(d)}>{dilAdlari[d]}</button>
+        {/each}
+      </div>
     </div>
-    <a class="btn" href="/biletlerim">Biletlerime git</a>
-    <button class="btn ikincil" onclick={cikisYap}>Çıkış yap</button>
-  {:else}
-    <h1>Giriş yap</h1>
-    <form class="kart form" onsubmit={girisYap}>
-      <label>
-        Ad Soyad
-        <input bind:value={ad} placeholder="Ayşe Yılmaz" />
-      </label>
-      <label>
-        E-posta
-        <input type="email" bind:value={eposta} placeholder="ayse@ornek.com" />
-      </label>
-      <button class="btn" disabled={!gecerli}>Giriş yap</button>
-    </form>
-  {/if}
+    <label class="ayar satir">
+      <span>{dil.t("profil.tema")}</span>
+      <input type="checkbox" checked={tema.mod === "gece"} onchange={() => tema.degistir()} />
+    </label>
+  </div>
 </div>
 
 <style>
-  h1 {
-    margin: 0;
-    font-size: 22px;
+  h3 {
+    margin: 8px 0 -6px;
+    font-size: 15px;
+    color: var(--yazi-soluk);
   }
 
   .profil {
@@ -75,7 +96,7 @@
     margin: 0 auto;
     border-radius: 50%;
     background: var(--renk-ana);
-    color: #fff;
+    color: var(--renk-ana-ustu);
     font-size: 32px;
     font-weight: 700;
     line-height: 72px;
@@ -96,18 +117,64 @@
     font-weight: 600;
   }
 
-  input {
+  input,
+  textarea {
     padding: 12px;
     border: 1px solid var(--kenar);
     border-radius: 10px;
     background: var(--zemin);
     font-weight: 400;
+    resize: vertical;
   }
 
-  .ikincil {
-    background: var(--kart);
-    color: var(--yazi);
+  .ayarlar {
+    padding: 4px 16px;
+  }
+
+  .ayar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 0;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .ayar + .ayar {
+    border-top: 1px solid var(--kenar);
+  }
+
+  .ayar.satir {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .ayar.satir input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--renk-ana);
+  }
+
+  .diller {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .diller button {
+    padding: 10px 4px;
     border: 1px solid var(--kenar);
-    margin-top: 8px;
+    border-radius: 10px;
+    background: var(--zemin);
+    font-size: 13px;
+  }
+
+  .diller button.aktif {
+    background: var(--renk-ana);
+    border-color: var(--renk-ana);
+    color: var(--renk-ana-ustu);
+    font-weight: 700;
   }
 </style>

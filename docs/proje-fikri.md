@@ -29,7 +29,7 @@ arasındaki kaydı netleştirir: usta kapıya geldiğinde kod doğrulanır.
 | Etkinlik kartları | Usta kartları |
 | Bilet kategorisi + adet seçimi | Sorun tipi + aciliyet + ziyaret saati seçimi |
 | Sepet | Çağrı özeti (`/cagri`) |
-| Bilet kodu `PSK-XXX-XXXXXXX` (Rust) | İş emri kodu `UST-ELK-1012-K7Q4` (Rust) |
+| Bilet kodu `PSK-XXX-XXXXXXX` (Rust) | İş emri kodu `UST-ELK-1210-K7Q4` (Rust) |
 | Biletlerim | İş Emirlerim |
 
 ---
@@ -85,9 +85,9 @@ interface IsEmri {
 ### Rust iş emri kodu formatı
 
 ```
-UST-ELK-1012-K7Q4
+UST-ELK-1210-K7Q4
 │   │   │    └── 4 haneli büyük harf/rakam (rastgele, 0/O ve 1/I hariç)
-│   │   └─────── gün + ay (12 Ekim)
+│   │   └─────── gün + ay (12 Ekim → 1210)
 │   └─────────── kategori kodu: TES tesisat · ELK elektrik · CLN çilingir · KMB kombi · BYZ beyaz eşya
 └─────────────── sabit önek
 ```

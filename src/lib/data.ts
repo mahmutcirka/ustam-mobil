@@ -1,128 +1,72 @@
-// Adım 4: Veri modeli — şimdilik sabit (mock) veri, ileride bir API'den gelebilir
+// Mock veri — ustalar ve sorun şablonları (ileride bir API'den gelebilir)
+import type { Aciliyet, Dil, Kategori, Usta } from "../types/ustam";
 
-export type Kategori = "Futbol" | "Basketbol" | "Konser" | "Tiyatro";
+export const kategoriler: Kategori[] = ["tesisat", "elektrik", "cilingir", "kombi", "beyaz-esya"];
 
-export interface BiletKategorisi {
-  ad: string;
-  fiyat: number;
-}
+export const kategoriIkon: Record<Kategori, string> = {
+  tesisat: "🚰",
+  elektrik: "⚡",
+  cilingir: "🔑",
+  kombi: "🔥",
+  "beyaz-esya": "🧺",
+};
 
-export interface Etkinlik {
-  id: number;
-  baslik: string;
-  kategori: Kategori;
-  tarih: string; // ISO formatında: "2026-10-18T19:00"
-  mekan: string;
-  sehir: string;
-  renk: string; // afiş görseli yerine CSS gradyanı
-  aciklama: string;
-  biletler: BiletKategorisi[];
-}
+export const kategoriSorunlari: Record<Kategori, string[]> = {
+  tesisat: ["su-sizintisi", "tikali-gider", "musluk-ariza"],
+  elektrik: ["sigorta-atiyor", "priz-yanik", "elektrik-yok"],
+  cilingir: ["kapida-kaldim", "kilit-degisimi", "anahtar-kirildi"],
+  kombi: ["sicak-su-yok", "basinc-dusuk", "petek-isinmiyor"],
+  "beyaz-esya": ["camasir-makinesi", "buzdolabi", "bulasik-makinesi"],
+};
 
-export const kategoriler: Kategori[] = ["Futbol", "Basketbol", "Konser", "Tiyatro"];
+export const aciliyetler: Aciliyet[] = ["hemen", "bugun", "randevu"];
 
-export const etkinlikler: Etkinlik[] = [
-  {
-    id: 1,
-    baslik: "Boğaziçi SK – Anadolu FK",
-    kategori: "Futbol",
-    tarih: "2026-10-18T19:00",
-    mekan: "Kuzey Stadyumu",
-    sehir: "İstanbul",
-    renk: "linear-gradient(135deg, #e4002b, #7a0016)",
-    aciklama: "Ligin 9. haftasında zirve mücadelesi. Kapılar maçtan 2 saat önce açılır.",
-    biletler: [
-      { ad: "Kale Arkası", fiyat: 450 },
-      { ad: "Yan Tribün", fiyat: 900 },
-      { ad: "Maraton", fiyat: 1500 },
-    ],
-  },
-  {
-    id: 2,
-    baslik: "Ege Yıldızları – Başkent Basket",
-    kategori: "Basketbol",
-    tarih: "2026-10-22T20:30",
-    mekan: "Kordon Spor Salonu",
-    sehir: "İzmir",
-    renk: "linear-gradient(135deg, #f97316, #9a3412)",
-    aciklama: "Normal sezon karşılaşması. Salona giriş için biletinizi telefonunuzda gösterin.",
-    biletler: [
-      { ad: "Üst Kat", fiyat: 300 },
-      { ad: "Alt Kat", fiyat: 650 },
-      { ad: "Parke Kenarı", fiyat: 2200 },
-    ],
-  },
-  {
-    id: 3,
-    baslik: "Gece Yarısı Orkestrası",
-    kategori: "Konser",
-    tarih: "2026-11-02T21:00",
-    mekan: "Açıkhava Sahnesi",
-    sehir: "İstanbul",
-    renk: "linear-gradient(135deg, #7c3aed, #1e1b4b)",
-    aciklama: "Yeni albüm turnesinin İstanbul durağı. 18 yaş sınırı vardır.",
-    biletler: [
-      { ad: "Ayakta", fiyat: 750 },
-      { ad: "Tribün", fiyat: 1100 },
-    ],
-  },
-  {
-    id: 4,
-    baslik: "Hamlet",
-    kategori: "Tiyatro",
-    tarih: "2026-10-25T20:00",
-    mekan: "Şehir Tiyatrosu Büyük Sahne",
-    sehir: "Ankara",
-    renk: "linear-gradient(135deg, #0f766e, #134e4a)",
-    aciklama: "Shakespeare'in klasik eseri, iki perde. Oyun süresi 2 saat 40 dakikadır.",
-    biletler: [
-      { ad: "Balkon", fiyat: 250 },
-      { ad: "Salon", fiyat: 400 },
-    ],
-  },
-  {
-    id: 5,
-    baslik: "Karadeniz Gücü – Boğaziçi SK",
-    kategori: "Futbol",
-    tarih: "2026-11-08T16:00",
-    mekan: "Sahil Arena",
-    sehir: "Trabzon",
-    renk: "linear-gradient(135deg, #1d4ed8, #7f1d1d)",
-    aciklama: "Deplasman tribünü biletleri yalnızca misafir taraftarlara satılır.",
-    biletler: [
-      { ad: "Kale Arkası", fiyat: 350 },
-      { ad: "Kapalı Tribün", fiyat: 800 },
-    ],
-  },
-  {
-    id: 6,
-    baslik: "Caz Günleri",
-    kategori: "Konser",
-    tarih: "2026-11-14T20:00",
-    mekan: "Kültür Merkezi",
-    sehir: "İzmir",
-    renk: "linear-gradient(135deg, #ca8a04, #422006)",
-    aciklama: "Üç farklı caz grubu aynı gecede sahnede.",
-    biletler: [
-      { ad: "Genel Giriş", fiyat: 500 },
-      { ad: "Masa", fiyat: 1200 },
-    ],
-  },
+// "Hemen" çağrılarında çıkış ücretine eklenen acil servis bedeli
+export const ACIL_UCRET = 150;
+
+// Bugün / randevu için seçilebilen ziyaret saatleri
+export const saatDilimleri = ["10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
+
+const usta = (u: Omit<Usta, "sorunlar">): Usta => ({ ...u, sorunlar: kategoriSorunlari[u.kategori] });
+
+export const ustalar: Usta[] = [
+  usta({ id: 1, ad: "Hasan Yıldız", kategori: "tesisat", puan: 4.8, yorumSayisi: 212, mesafeKm: 1.2, musait: true, cikisUcreti: 350, deneyimYil: 15, tamamlananIs: 1240, bolge: "Kadıköy" }),
+  usta({ id: 2, ad: "Mehmet Kaya", kategori: "elektrik", puan: 4.9, yorumSayisi: 318, mesafeKm: 0.8, musait: true, cikisUcreti: 300, deneyimYil: 12, tamamlananIs: 1580, bolge: "Üsküdar" }),
+  usta({ id: 3, ad: "Ali Demir", kategori: "cilingir", puan: 4.7, yorumSayisi: 156, mesafeKm: 2.5, musait: true, cikisUcreti: 400, deneyimYil: 9, tamamlananIs: 870, bolge: "Beşiktaş" }),
+  usta({ id: 4, ad: "Emre Aksoy", kategori: "kombi", puan: 4.6, yorumSayisi: 98, mesafeKm: 3.1, musait: false, cikisUcreti: 450, deneyimYil: 8, tamamlananIs: 540, bolge: "Ataşehir" }),
+  usta({ id: 5, ad: "Yusuf Şahin", kategori: "beyaz-esya", puan: 4.5, yorumSayisi: 74, mesafeKm: 4.0, musait: true, cikisUcreti: 380, deneyimYil: 10, tamamlananIs: 610, bolge: "Maltepe" }),
+  usta({ id: 6, ad: "Murat Öztürk", kategori: "tesisat", puan: 4.4, yorumSayisi: 61, mesafeKm: 5.2, musait: false, cikisUcreti: 300, deneyimYil: 6, tamamlananIs: 320, bolge: "Şişli" }),
+  usta({ id: 7, ad: "Kemal Arslan", kategori: "elektrik", puan: 4.7, yorumSayisi: 140, mesafeKm: 2.0, musait: true, cikisUcreti: 320, deneyimYil: 20, tamamlananIs: 2100, bolge: "Sarıyer" }),
+  usta({ id: 8, ad: "Burak Çelik", kategori: "kombi", puan: 4.9, yorumSayisi: 233, mesafeKm: 1.7, musait: true, cikisUcreti: 500, deneyimYil: 14, tamamlananIs: 1320, bolge: "Kadıköy" }),
 ];
 
-export function etkinlikBul(id: number): Etkinlik | undefined {
-  return etkinlikler.find((e) => e.id === id);
+export function ustaBul(id: number): Usta | undefined {
+  return ustalar.find((u) => u.id === id);
 }
 
-// Yardımcılar: para ve tarih biçimlendirme
-export const tl = (tutar: number) =>
-  tutar.toLocaleString("tr-TR", { style: "currency", currency: "TRY", maximumFractionDigits: 0 });
+export function tutarHesapla(u: Usta, aciliyet: Aciliyet): number {
+  return u.cikisUcreti + (aciliyet === "hemen" ? ACIL_UCRET : 0);
+}
 
-export const tarihYaz = (iso: string) =>
-  new Date(iso).toLocaleString("tr-TR", {
+// Biçimlendirme yardımcıları — seçili dile göre para, sayı ve tarih
+const yerel: Record<Dil, string> = { tr: "tr-TR", en: "en-GB", ar: "ar", fa: "fa-IR" };
+
+export const paraYaz = (tutar: number, dil: Dil) =>
+  tutar.toLocaleString(yerel[dil], { style: "currency", currency: "TRY", maximumFractionDigits: 0 });
+
+export const sayiYaz = (n: number, dil: Dil) => n.toLocaleString(yerel[dil]);
+
+export const tarihYaz = (iso: string, dil: Dil) =>
+  new Date(iso).toLocaleString(yerel[dil], {
     weekday: "short",
     day: "numeric",
     month: "long",
     hour: "2-digit",
     minute: "2-digit",
   });
+
+// Yerel saatle "YYYY-MM-DDTHH:mm" (toISOString UTC verdiği için elle kurulur)
+export function yerelIso(d: Date): string {
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}

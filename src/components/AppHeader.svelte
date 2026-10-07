@@ -1,17 +1,31 @@
 <script lang="ts">
-  // Adım 15: Ortak başlık ve gece / gündüz modu düğmesi
+  // Ortak başlık: logo, dil seçici ve gece / gündüz modu düğmesi
   import { tema } from "$lib/tema.svelte";
+  import { dil, diller } from "$lib/i18n.svelte";
+  import type { Dil } from "../types/ustam";
 </script>
 
 <header class="ust">
   <a href="/" class="logo">passo<span>klon</span></a>
-  <button
-    class="tema-dugme"
-    onclick={() => tema.degistir()}
-    aria-label={tema.mod === "gece" ? "Gündüz moduna geç" : "Gece moduna geç"}
-  >
-    {tema.mod === "gece" ? "☀️" : "🌙"}
-  </button>
+  <div class="araclar">
+    <select
+      class="dil-secici"
+      aria-label={dil.t("dil.sec")}
+      value={dil.kod}
+      onchange={(e) => dil.degistir(e.currentTarget.value as Dil)}
+    >
+      {#each diller as d}
+        <option value={d}>{d.toUpperCase()}</option>
+      {/each}
+    </select>
+    <button
+      class="tema-dugme"
+      onclick={() => tema.degistir()}
+      aria-label={tema.mod === "gece" ? dil.t("tema.gunduzeGec") : dil.t("tema.geceyeGec")}
+    >
+      {tema.mod === "gece" ? "☀️" : "🌙"}
+    </button>
+  </div>
 </header>
 
 <style>
@@ -36,6 +50,27 @@
 
   .logo span {
     color: var(--renk-ana);
+  }
+
+  .araclar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dil-secici {
+    height: 38px;
+    padding: 0 8px;
+    border: 1px solid #ffffff33;
+    border-radius: 19px;
+    background: #ffffff14;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .dil-secici option {
+    color: #000;
   }
 
   .tema-dugme {

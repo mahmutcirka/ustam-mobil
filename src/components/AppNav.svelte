@@ -1,43 +1,44 @@
 <script lang="ts">
-  // Adım 3 & 9: Alt menü navigasyonu ve dinamik sepet rozeti
+  // Alt menü navigasyonu — bekleyen çağrı ve aktif iş emri rozetleri
   import { onMount } from "svelte";
-  import { sepet } from "$lib/sepet.svelte";
+  import { cagri } from "$lib/cagri.svelte";
+  import { isEmirleri } from "$lib/isEmirleri.svelte";
+  import { dil } from "$lib/i18n.svelte";
+  import type { Anahtar } from "$lib/ceviriler";
 
-  let { currentPath = "/" } = $props();
-  let yol = $state(currentPath);
+  let yol = $state(typeof window !== "undefined" ? window.location.pathname : "/");
 
-  const menu = [
-    { href: "/", ad: "Keşfet", ikon: "🏟️" },
-    { href: "/biletlerim", ad: "Biletlerim", ikon: "🎟️" },
-    { href: "/sepet", ad: "Sepet", ikon: "🛒" },
-    { href: "/profil", ad: "Profil", ikon: "👤" },
-    { href: "/hakkinda", ad: "Rehber", ikon: "📖" },
+  const menu: { href: string; ad: Anahtar; ikon: string }[] = [
+    { href: "/", ad: "nav.ustalar", ikon: "🔧" },
+    { href: "/cagri", ad: "nav.cagri", ikon: "📋" },
+    { href: "/is-emirlerim", ad: "nav.isEmirleri", ikon: "🧾" },
+    { href: "/profil", ad: "nav.profil", ikon: "👤" },
   ];
 
+  const rozet = (href: string) =>
+    href === "/cagri" ? (cagri.taslak ? 1 : 0) : href === "/is-emirlerim" ? isEmirleri.aktifSayisi : 0;
+
+  const aktif = (href: string) =>
+    href === "/" ? yol === "/" || yol.startsWith("/usta/") : yol.startsWith(href);
+
   onMount(() => {
-    yol = window.location.pathname;
-    const handleNav = () => {
-      yol = window.location.pathname;
-    };
-    document.addEventListener("astro:page-load", handleNav);
-    window.addEventListener("popstate", handleNav);
+    const guncelle = () => (yol = window.location.pathname);
+    document.addEventListener("astro:page-load", guncelle);
+    window.addEventListener("popstate", guncelle);
     return () => {
-      document.removeEventListener("astro:page-load", handleNav);
-      window.removeEventListener("popstate", handleNav);
+      document.removeEventListener("astro:page-load", guncelle);
+      window.removeEventListener("popstate", guncelle);
     };
   });
 </script>
 
 <nav class="alt-menu">
   {#each menu as m}
-    <a
-      href={m.href}
-      class:aktif={yol === m.href || (m.href !== "/" && yol.startsWith(m.href))}
-    >
+    <a href={m.href} class:aktif={aktif(m.href)}>
       <span class="ikon">{m.ikon}</span>
-      {m.ad}
-      {#if m.href === "/sepet" && sepet.adet > 0}
-        <b class="rozet">{sepet.adet}</b>
+      {dil.t(m.ad)}
+      {#if rozet(m.href) > 0}
+        <b class="rozet">{rozet(m.href)}</b>
       {/if}
     </a>
   {/each}
@@ -81,7 +82,7 @@
   .rozet {
     position: absolute;
     top: 4px;
-    left: calc(50% + 6px);
+    inset-inline-start: calc(50% + 6px);
     min-width: 18px;
     padding: 0 5px;
     border-radius: 9px;

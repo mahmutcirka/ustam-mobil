@@ -2,37 +2,63 @@
 import { ClientRouter } from 'astro:transitions';
 import AppHeader from '../components/AppHeader.svelte';
 import AppNav from '../components/AppNav.svelte';
+import type { Dil } from '../types/ustam';
 import '../styles/app.css';
 
 interface Props {
   title?: string;
+  // Sabit dilli sayfalar (ör. /en/hakkinda) dili buradan verir; diğerleri kullanıcı tercihini kullanır
+  dil?: Dil;
+  // MDX sayfalarında layout, frontmatter'ı bu prop ile alır
+  frontmatter?: { title?: string; dil?: Dil };
 }
 
-const { title = "PassoKlon" } = Astro.props;
-const currentPath = Astro.url.pathname;
+const { frontmatter } = Astro.props;
+const title = Astro.props.title ?? frontmatter?.title ?? "Ustam";
+const sabitDil = Astro.props.dil ?? frontmatter?.dil;
 ---
 
 <!doctype html>
-<html lang="tr">
+<html lang={sabitDil ?? "tr"} dir={sabitDil === "ar" || sabitDil === "fa" ? "rtl" : "ltr"} data-sabit-dil={sabitDil}>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <script is:inline>
-      // Adım 15: Açılışta renk yanıp sönmesini engellemek için temayı anında uygula
-      document.documentElement.dataset.tema =
-        localStorage.getItem("tema") ??
-        (matchMedia("(prefers-color-scheme: dark)").matches ? "gece" : "gunduz");
+      // Açılışta yanıp sönmeyi önlemek için tema ve dil (lang + dir) boyamadan önce uygulanır.
+      // ClientRouter her sayfa geçişinde <html> özniteliklerini yenilediği için after-swap'ta tekrarlanır.
+      (function () {
+        function oku(anahtar) {
+          try { return localStorage.getItem(anahtar); } catch (e) { return null; }
+        }
+        function uygula() {
+          var h = document.documentElement;
+          h.dataset.tema = oku("tema") || (matchMedia("(prefers-color-scheme: dark)").matches ? "gece" : "gunduz");
+          if (!h.dataset.sabitDil) {
+            var d = oku("dil");
+            if (["tr", "en", "ar", "fa"].indexOf(d) === -1) d = "tr";
+            h.lang = d;
+            h.dir = d === "ar" || d === "fa" ? "rtl" : "ltr";
+          }
+        }
+        uygula();
+        if (!window.__ustamAyar) {
+          window.__ustamAyar = true;
+          document.addEventListener("astro:after-swap", uygula);
+        }
+      })();
     </script>
     <ClientRouter />
   </head>
   <body>
-    <AppHeader client:load />
+    <!-- Metinler seçili dile göre tarayıcıda çizildiği için ada bileşenler client:only çalışır -->
+    <AppHeader client:only="svelte" />
     <main>
       <slot />
     </main>
-    <AppNav client:load currentPath={currentPath} />
+    <AppNav client:only="svelte" />
   </body>
 </html>
 
