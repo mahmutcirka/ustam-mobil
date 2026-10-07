@@ -1,5 +1,6 @@
 <script lang="ts">
   // İş Emirlerim — Rust'ın ürettiği kodlar, durum yönetimi ve kapıdaki ustayı doğrulama
+  import Ikon from "$lib/components/Ikon.svelte";
   import { kategoriIkon, paraYaz, tarihYaz } from "$lib/data";
   import { isEmirleri, kodBicimiGecerli } from "$lib/isEmirleri.svelte";
   import { dil } from "$lib/i18n.svelte";
@@ -47,7 +48,7 @@
       <div class="kart emir" class:pasif={i.durum === "tamamlandi" || i.durum === "iptal"}>
         <div class="ust">
           <div class="baslik">
-            <span aria-hidden="true">{kategoriIkon[i.kategori]}</span>
+            <Ikon ad={kategoriIkon[i.kategori]} boyut={18} />
             <strong>{i.ustaAd}</strong>
             <span class="durum {i.durum}">{dil.t(`durum.${i.durum}`)}</span>
           </div>

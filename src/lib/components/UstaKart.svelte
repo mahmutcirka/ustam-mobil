@@ -1,5 +1,6 @@
 <script lang="ts">
   // Liste ekranındaki tek usta kartı — dışarıdan "usta" prop'u alır
+  import Ikon from "./Ikon.svelte";
   import type { Usta } from "../../types/ustam";
   import { kategoriIkon, paraYaz, sayiYaz } from "$lib/data";
   import { dil } from "$lib/i18n.svelte";
@@ -8,7 +9,7 @@
 </script>
 
 <a href="/usta/{usta.id}" class="kart usta">
-  <div class="avatar" aria-hidden="true">{kategoriIkon[usta.kategori]}</div>
+  <div class="avatar" aria-hidden="true"><Ikon ad={kategoriIkon[usta.kategori]} boyut={28} /></div>
   <div class="bilgi">
     <div class="satir">
       <h3>{usta.ad}</h3>

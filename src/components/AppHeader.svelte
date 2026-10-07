@@ -1,8 +1,11 @@
 <script lang="ts">
-  // Ortak başlık: logo, dil seçici ve gece / gündüz modu düğmesi
+  // Ortak başlık: logo, dil seçici ve tema düğmesi (Sistem → Gündüz → Gece)
+  import Ikon from "$lib/components/Ikon.svelte";
   import { tema } from "$lib/tema.svelte";
   import { bilgiSayfasiBul, dil, diller, sayfaYolu } from "$lib/i18n.svelte";
   import type { Dil } from "../types/ustam";
+
+  const temaIkonu = { sistem: "otomatik", gunduz: "gunes", gece: "ay" } as const;
 
   // Sabit dilli bilgi sayfasındaysak (ör. /en/gizlilik) seçilen dildeki karşılığına geç
   function dilSec(d: Dil) {
@@ -18,22 +21,22 @@
     <b>ust<span>am</span></b>
   </a>
   <div class="araclar">
-    <select
-      class="dil-secici"
-      aria-label={dil.t("dil.sec")}
-      value={dil.kod}
-      onchange={(e) => dilSec(e.currentTarget.value as Dil)}
-    >
-      {#each diller as d}
-        <option value={d}>{d.toUpperCase()}</option>
-      {/each}
-    </select>
+    <label class="dil-secici">
+      <Ikon ad="dunya" boyut={16} />
+      <span class="gorunmez">{dil.t("dil.sec")}</span>
+      <select value={dil.kod} onchange={(e) => dilSec(e.currentTarget.value as Dil)}>
+        {#each diller as d}
+          <option value={d}>{d.toUpperCase()}</option>
+        {/each}
+      </select>
+    </label>
     <button
       class="tema-dugme"
-      onclick={() => tema.degistir()}
-      aria-label={tema.mod === "gece" ? dil.t("tema.gunduzeGec") : dil.t("tema.geceyeGec")}
+      onclick={() => tema.siradaki()}
+      aria-label={dil.t("tema.degistir", { ad: dil.t(`tema.${tema.tercih}`) })}
+      title={dil.t(`tema.${tema.tercih}`)}
     >
-      {tema.mod === "gece" ? "☀️" : "🌙"}
+      <Ikon ad={temaIkonu[tema.tercih]} boyut={18} />
     </button>
   </div>
 </header>
@@ -48,6 +51,7 @@
     z-index: 10;
     padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
     background: var(--renk-koyu);
+    color: var(--koyu-ustu);
   }
 
   .logo {
@@ -76,14 +80,24 @@
   }
 
   .dil-secici {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     height: 38px;
-    padding: 0 8px;
+    padding-inline: 10px 6px;
     border: 1px solid var(--koyu-cizgi);
     border-radius: 19px;
     background: var(--koyu-cam);
+    cursor: pointer;
+  }
+
+  .dil-secici select {
+    border: 0;
+    background: transparent;
     color: var(--koyu-ustu);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
+    cursor: pointer;
   }
 
   .dil-secici option {
@@ -97,10 +111,14 @@
     border: 1px solid var(--koyu-cizgi);
     border-radius: 50%;
     background: var(--koyu-cam);
-    font-size: 18px;
-    cursor: pointer;
+    color: var(--koyu-ustu);
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform var(--sure-hizli) var(--egri);
+  }
+
+  .tema-dugme:active {
+    transform: rotate(-20deg) scale(0.94);
   }
 </style>

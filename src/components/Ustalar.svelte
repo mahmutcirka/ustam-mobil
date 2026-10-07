@@ -1,5 +1,6 @@
 <script lang="ts">
   // Ana sayfa (Ustalar) — arama + kategori filtresi + müsaitlik anahtarı + usta listesi
+  import Ikon from "$lib/components/Ikon.svelte";
   import UstaKart from "$lib/components/UstaKart.svelte";
   import { kategoriler, kategoriIkon, ustalar } from "$lib/data";
   import { dil } from "$lib/i18n.svelte";
@@ -38,7 +39,7 @@
     <button class:aktif={secili === "tumu"} onclick={() => (secili = "tumu")}>{dil.t("liste.tumu")}</button>
     {#each kategoriler as k}
       <button class:aktif={secili === k} onclick={() => (secili = k)}>
-        {kategoriIkon[k]} {dil.t(`kategori.${k}`)}
+        <Ikon ad={kategoriIkon[k]} boyut={16} /> {dil.t(`kategori.${k}`)}
       </button>
     {/each}
   </div>

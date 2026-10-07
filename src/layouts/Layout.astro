@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import AppHeader from '../components/AppHeader.svelte';
 import AppNav from '../components/AppNav.svelte';
+import Bildirimler from '../components/Bildirimler.svelte';
 import type { Dil } from '../types/ustam';
 import '../styles/app.css';
 
@@ -35,7 +36,9 @@ const sabitDil = Astro.props.dil ?? frontmatter?.dil;
         }
         function uygula() {
           var h = document.documentElement;
-          h.dataset.tema = oku("tema") || (matchMedia("(prefers-color-scheme: dark)").matches ? "gece" : "gunduz");
+          var t = (oku("tema") || "").replace(/"/g, "");
+          if (t !== "gunduz" && t !== "gece") t = matchMedia("(prefers-color-scheme: dark)").matches ? "gece" : "gunduz";
+          h.dataset.tema = t;
           if (!h.dataset.sabitDil) {
             var d = oku("dil");
             if (["tr", "en", "ar", "fa"].indexOf(d) === -1) d = "tr";
@@ -59,6 +62,7 @@ const sabitDil = Astro.props.dil ?? frontmatter?.dil;
       <slot />
     </main>
     <AppNav client:only="svelte" />
+    <Bildirimler client:only="svelte" />
   </body>
 </html>
 

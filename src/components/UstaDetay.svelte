@@ -1,5 +1,6 @@
 <script lang="ts">
   // Detay ve seçim ekranı — sorun tipi, aciliyet, ziyaret zamanı ve adres notu
+  import Ikon from "$lib/components/Ikon.svelte";
   import { ACIL_UCRET, aciliyetler, kategoriIkon, paraYaz, saatDilimleri, sayiYaz, tutarHesapla, yerelIso } from "$lib/data";
   import { cagri } from "$lib/cagri.svelte";
   import { dil } from "$lib/i18n.svelte";
@@ -48,7 +49,7 @@
 </script>
 
 <div class="kapak">
-  <div class="avatar" aria-hidden="true">{kategoriIkon[u.kategori]}</div>
+  <div class="avatar" aria-hidden="true"><Ikon ad={kategoriIkon[u.kategori]} boyut={36} /></div>
   <div>
     <span class="etiket">{dil.t(`kategori.${u.kategori}`)}</span>
     <h1>{u.ad}</h1>

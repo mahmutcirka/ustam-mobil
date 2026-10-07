@@ -1,14 +1,15 @@
 // Mock veri — ustalar ve sorun şablonları (ileride bir API'den gelebilir)
 import type { Aciliyet, Dil, Kategori, Usta } from "../types/ustam";
+import type { IkonAdi } from "./ikonlar";
 
 export const kategoriler: Kategori[] = ["tesisat", "elektrik", "cilingir", "kombi", "beyaz-esya"];
 
-export const kategoriIkon: Record<Kategori, string> = {
-  tesisat: "🚰",
-  elektrik: "⚡",
-  cilingir: "🔑",
-  kombi: "🔥",
-  "beyaz-esya": "🧺",
+export const kategoriIkon: Record<Kategori, IkonAdi> = {
+  tesisat: "damla",
+  elektrik: "simsek",
+  cilingir: "anahtar",
+  kombi: "alev",
+  "beyaz-esya": "camasir",
 };
 
 export const kategoriSorunlari: Record<Kategori, string[]> = {
