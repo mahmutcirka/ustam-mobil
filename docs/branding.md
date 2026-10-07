@@ -52,12 +52,30 @@ Kontrast oranları WCAG 2.1 bağıl parlaklık formülüyle hesaplanmıştır; m
 | `--golge-kart` | `0 1px 2px #0f172a0f, 0 2px 8px #0f172a0a` | `0 1px 2px #00000066` | Kartların hafif gölgesi |
 | `--golge-yuksek` | `0 12px 32px #0f172a29` | `0 16px 40px #000000a6` | Modal pencere, bildirim, harita kartı |
 | `--perde` | `#0f172a73` | `#000000a6` | Modal arkasındaki karartma |
+| `--yuzey-2` | `#f1f5f9` | `#273449` | İkinci yüzey: avatar, çip zemini, güvenlik kodu alanı, iskelet | `--yazi` 16.30 · 11.99, `--yazi-soluk` 6.92 · 4.89 |
+| `--secili` / `--secili-ustu` | `#0f172a` / `#ffffff` | `#f8fafc` / `#0f172a` | Seçili çip, sekme ve seçenekler (nötr) | 17.85 · 17.06 |
+| `--hata-yumusak` | `#fee2e2` | `#3b1414` | "Kapıyı açmayın" ve hata kutuları | `--hata` 5.30 · 5.86 |
+| `--basili` | `#0f172a0d` | `#ffffff14` | Basılı durum katmanı | — (dekoratif) |
 | `--qr-zemin` / `--qr-modul` | `#ffffff` / `#0f172a` | aynı (QR okuyucular için ters çevrilmez) | İş emri QR kodu — kontrast 17.85:1 |
 | `--su` | `#bfdbfe` | `#1e3a5f` | Harita: Boğaz ve Marmara |
 | `--kara` | `#e9eef4` | `#1a2536` | Harita: kara parçası |
 | `--radius-kucuk` / `--radius` / `--radius-buyuk` | `10px` / `14px` / `20px` | aynı | Input · kart ve buton · modal |
 | `--sure-hizli` / `--sure-orta` | `150ms` / `260ms` | aynı | Basma geri bildirimi · giriş animasyonları |
 | `--egri` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | aynı | Tüm geçişlerin hız eğrisi |
+
+### Boşluk, yazı ve dokunma ölçeği
+
+| Token | Değerler | Kullanım |
+|---|---|---|
+| `--b-1` … `--b-6` | 4 · 8 · 12 · 16 · 24 · 32 px | Boşluklar |
+| `--yz-xs` … `--yz-2xl` | 12 · 13 · 15 · 17 · 22 · 28 px | Yazı boyutları (etiket → sayfa başlığı) |
+| `--dokunma` | 44 px | En küçük dokunma hedefi (Apple HIG) |
+
+### Renk kullanım ilkesi
+
+- **Turuncu (`--renk-ana`) yalnızca birincil aksiyondadır:** "Ustayı çağır", "Çağrıyı onayla", filtre uygulama.
+- **Seçili durumlar nötrdür (`--secili`):** kategori çipleri, sekmeler, sıralama, gün ve saat seçimi.
+- Durum renkleri anlam taşır: yeşil = müsait / doğrulandı, sarı = bekleme / kapalı, kırmızı = tehlike / iptal.
 
 `prefers-reduced-motion: reduce` açık olan cihazlarda tüm animasyonlar kapatılır. Klavye odağı her öğede
 `--renk-ana` renginde 2px `:focus-visible` halkasıyla gösterilir.
