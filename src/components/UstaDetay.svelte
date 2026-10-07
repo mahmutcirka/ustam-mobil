@@ -64,6 +64,16 @@
   let sorun = $state(untrack(() => u.sorunlar[0]));
   let aciliyet = $state<Aciliyet>(untrack(() => (ustaDurumu(u).tur === "musait" ? "hemen" : "randevu")));
   let tarih = $state(yarin);
+
+  // Randevu için yarından itibaren 7 gün — tarayıcının tarih kutusu yerine dokunması kolay çipler
+  const randevuGunleri = Array.from({ length: 7 }, (_, i) => yerelIso(new Date(simdi.getTime() + (i + 1) * 86_400_000)).slice(0, 10));
+  const gunEtiketi = (g: string, i: number) =>
+    i === 0
+      ? dil.t("detay.yarin")
+      : new Date(`${g}T12:00`).toLocaleDateString(dil.kod === "fa" ? "fa-IR" : dil.kod, { weekday: "short", day: "numeric" });
+
+  const FOTO_SINIR = 15 * 1024 * 1024;
+  let fotoHata = $state(false);
   let randevuSaat = $state(randevuSaatleri[1] ?? randevuSaatleri[0] ?? "12:00");
   let bugunSaat = $state(bugunSaatleri[0] ?? "");
   let adresNotu = $state(untrack(() => profil.bilgi.adres));
@@ -96,9 +106,13 @@
   async function fotoSec(e: Event) {
     const dosya = (e.currentTarget as HTMLInputElement).files?.[0];
     if (!dosya) return;
+    fotoHata = !dosya.type.startsWith("image/") || dosya.size > FOTO_SINIR;
+    if (fotoHata) return;
     fotoYukleniyor = true;
     try {
       foto = await fotoKucult(dosya);
+    } catch {
+      fotoHata = true;
     } finally {
       fotoYukleniyor = false;
     }
@@ -170,7 +184,11 @@
     <div class="kart"><b>{dil.t("detay.yil", { n: sayiYaz(u.deneyimYil, dil.kod) })}</b><span>{dil.t("detay.deneyim")}</span></div>
     <div class="kart"><b>{sayiYaz(u.tamamlananIs, dil.kod)}</b><span>{dil.t("detay.tamamlanan")}</span></div>
     <div class="kart"><b>{dil.t("kart.dk", { dk: sayiYaz(u.yanitDk, dil.kod) })}</b><span>{dil.t("detay.yanit")}</span></div>
-    <div class="kart"><b>{dil.t("kart.km", { n: sayiYaz(km, dil.kod) })}</b><span>{dil.t("detay.mesafe")}</span></div>
+    {#if durum.tur === "musait"}
+      <div class="kart"><b>{dil.t("kart.dk", { dk: sayiYaz(varisDk(km), dil.kod) })}</b><span>{dil.t("detay.varis")}</span></div>
+    {:else}
+      <div class="kart"><b>{dil.t("kart.km", { n: sayiYaz(km, dil.kod) })}</b><span>{dil.t("detay.mesafe")}</span></div>
+    {/if}
   </div>
 
   <div class="kart bilgiler">
@@ -221,6 +239,9 @@
       <div>
         <b>{dil.t("detay.guvenlik")}</b>
         <p>{dil.t(`ipucu.${sorun}` as Anahtar)}</p>
+        {#if sorunBilgisi[sorun]?.tehlikeli}
+          <a class="acil-ara" href="tel:112"><Ikon ad="telefon" boyut={14} /> {dil.t("detay.acilAra")}</a>
+        {/if}
       </div>
     </div>
   </section>
@@ -240,7 +261,7 @@
       <p class="not">
         <Ikon ad="roket" boyut={18} />
         <span>
-          {dil.t("liste.aktifYolda", { usta: u.ad, dk: sayiYaz(varisDk(km), dil.kod) })} ·
+          {dil.t("detay.hemenVaris", { dk: sayiYaz(varisDk(km), dil.kod) })}
           <b>{dil.t("detay.acilUcret", { tutar: paraYaz(ACIL_UCRET, dil.kod) })}</b>
         </span>
       </p>
@@ -255,11 +276,12 @@
         </div>
       {/if}
     {:else}
-      <label class="alan">
-        {dil.t("detay.tarih")}
-        <input type="date" min={yarin} bind:value={tarih} />
-        <small>{gunYaz(`${tarih}T12:00`, dil.kod)}</small>
-      </label>
+      <div class="gunler" role="radiogroup" aria-label={dil.t("detay.tarih")}>
+        {#each randevuGunleri as g, i}
+          <button class:aktif={tarih === g} role="radio" aria-checked={tarih === g} onclick={() => (tarih = g)}>{gunEtiketi(g, i)}</button>
+        {/each}
+      </div>
+      <small class="secilen-gun">{gunYaz(`${tarih}T12:00`, dil.kod)}</small>
       <div class="saatler" role="radiogroup" aria-label={dil.t("detay.saat")}>
         {#each randevuSaatleri as s}
           <button class:aktif={randevuSaat === s} role="radio" aria-checked={randevuSaat === s} onclick={() => (randevuSaat = s)}>{s}</button>
@@ -278,10 +300,12 @@
     {:else}
       <label class="foto-sec" class:yukleniyor={fotoYukleniyor}>
         <Ikon ad="kamera" boyut={26} />
-        <span>{dil.t("detay.fotoNot")}</span>
+        <span><b>{dil.t("detay.fotoSec")}</b><br />{dil.t("detay.fotoNot")}</span>
         <input type="file" accept="image/*" capture="environment" onchange={fotoSec} />
       </label>
     {/if}
+    {#if fotoHata}<p class="foto-hata" role="alert"><Ikon ad="uyari" boyut={16} /> {dil.t("detay.fotoHata")}</p>{/if}
+    <p class="foto-gizlilik"><Ikon ad="kilit" boyut={14} /> {dil.t("detay.fotoGizlilik")}</p>
   </section>
 
   <label class="alan">
@@ -546,12 +570,12 @@
   .secenek.aktif,
   .aciliyet button.aktif,
   .saatler button.aktif {
-    border-color: var(--renk-ana);
-    box-shadow: 0 0 0 1px var(--renk-ana);
+    border-color: var(--secili);
+    box-shadow: 0 0 0 1px var(--secili);
   }
 
   .secenek input {
-    accent-color: var(--renk-ana);
+    accent-color: var(--secili);
   }
 
   .secenek-ad {
@@ -665,12 +689,6 @@
     font-weight: 600;
   }
 
-  .alan small {
-    font-weight: 400;
-    color: var(--yazi-soluk);
-  }
-
-  .alan input,
   .alan textarea {
     padding: 12px;
     border: 1px solid var(--kenar);
@@ -678,6 +696,69 @@
     background: var(--kart);
     font-weight: 400;
     resize: vertical;
+  }
+
+  .gunler {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .gunler button {
+    flex-shrink: 0;
+    min-width: 72px;
+    min-height: var(--dokunma);
+    padding: 0 12px;
+    border: 1px solid var(--kenar);
+    border-radius: var(--radius);
+    background: var(--kart);
+    font-weight: 600;
+  }
+
+  .gunler button.aktif {
+    border-color: var(--secili);
+    background: var(--secili);
+    color: var(--secili-ustu);
+  }
+
+  .secilen-gun {
+    font-size: var(--yz-sm);
+    color: var(--yazi-soluk);
+  }
+
+  .foto-hata {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    color: var(--hata);
+    font-size: var(--yz-sm);
+    font-weight: 600;
+  }
+
+  .foto-gizlilik {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 0;
+    font-size: var(--yz-xs);
+    color: var(--yazi-soluk);
+    line-height: 1.5;
+  }
+
+  .acil-ara {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: var(--hata);
+    color: var(--kart);
+    font-size: var(--yz-sm);
+    font-weight: 700;
   }
 
   .foto-sec {
