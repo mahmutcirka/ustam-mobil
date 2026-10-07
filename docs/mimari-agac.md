@@ -18,32 +18,36 @@ Ustam
 │   └── 2. adım: semt seçimi → mesafe ve varış süreleri bu semtten hesaplanır
 │
 ├── / (Ustalar — ana sayfa)                          src/pages/index.astro
-│   ├── Selamlama + semt düğmesi (Semt seçici penceresi)
+│   ├── Semt düğmesi (alt panel) · profil kısayolu · selamlama
+│   ├── "Ne oldu?": 4 acil kısayol — en yakın müsait usta adı + varış süresi → /usta/[id]?sorun=…&aciliyet=hemen
+│   ├── "Arızayı adım adım tarif et" → Ne oldu sihirbazı (alt panel): alan → sorun → aciliyet → en iyi 3 usta
 │   ├── Aktif iş bandı: "{usta} yolda · ~9 dk" → /is-emirlerim
-│   ├── "Acil mi?" kısayolları: en yakın müsait usta + varış süresi → /usta/[id]?sorun=…&aciliyet=hemen
-│   ├── Canlı arama · kategori çipleri (adetli) · Şu an müsait · Favoriler · Dilimi konuşan
-│   ├── Sıralama: Önerilen / En yakın / En yüksek puan / En uygun fiyat
-│   └── Görünüm: Liste (usta kartları) ⇄ Harita (stilize İstanbul, pinler, seçili usta kartı)
+│   ├── Akıllı arama (arama.ts): usta adı, semt, kategori ve 4 dildeki sorun adları; sorun önerileri
+│   ├── Kategori çipleri · Filtrele (alt panel: durum, mesafe, puan, ücret, dil, favori) · Sırala (alt panel)
+│   ├── "Önerilen" sıralama (eslestirme.ts) ve ilk kartta "Neden önerildi?" açıklaması
+│   └── Görünüm: Liste (usta kartları) ⇄ Harita (pinler, varış etiketi, alttaki usta kartı, "Listeye dön")
 │
 ├── /usta/[id] (Usta detayı ve çağrı hazırlama)       src/pages/usta/[id].astro
 │   ├── Kapak: ad, doğrulama rozeti, puan, anlık durum (müsait / meşgul / kapalı), favori
 │   ├── Rozetler · istatistikler (deneyim, tamamlanan iş, yanıt süresi, uzaklık) · saatler · diller
 │   ├── Sorun seçimi: işçilik aralığı + süre; "ustaya Türkçe iletilecek" önizlemesi; güvenlik ipucu
-│   ├── Aciliyet: Hemen (+acil ücret) / Bugün (çalışma saatleri içinde) / Randevu (tarih + saat)
-│   ├── Fotoğraf (cihazda küçültülür) · adres notu (profil adresinden dolar)
+│   ├── Aciliyet: Hemen (+acil ücret) / Bugün (çalışma saatleri içinde) / Randevu (7 günlük gün çipleri + saat)
+│   ├── Tehlikeli sorunlarda 112 bağlantısı
+│   ├── Fotoğraf (yalnızca görsel, ≤15 MB, cihazda küçültülür) · adres notu (profilden ya da "Tekrar çağır"dan dolar)
 │   ├── Yorumlar: puan dağılımı, 4 dilden yorumlar, kullanıcının kendi yorumu
 │   └── Sabit çağrı çubuğu: tahmini toplam + "Ustayı çağır"
 │
 ├── /cagri (Çağrı özeti ve onay)                      src/pages/cagri.astro
-│   ├── Fiyat dökümü → Rust: invoke("fiyat_hesapla", { girdi })  (acil · gece · Pazar · işçilik)
-│   ├── İletişim telefonu · ödeme tercihi (kapıda nakit / kart) · koşulların onayı
+│   ├── Adımlar: Usta · Sorun · Zaman (+ Değiştir) → Adres (düzenlenebilir) → İletişim → Ödeme
+│   ├── Fiyat dökümü → Rust: invoke("fiyat_hesapla", { girdi })  (acil · gece · Pazar · işçilik) + "Nasıl hesaplandı?"
+│   ├── Koşulların onayı · sabit onay çubuğu (tahmini toplam + "Çağrıyı onayla") · hata → "Tekrar dene"
 │   └── Onay → Rust: invoke("is_emri_uret", { kategori, zaman }) → /is-emirlerim
 │
 ├── /is-emirlerim (İş emirleri)                       src/pages/is-emirlerim.astro
 │   ├── Aktif sekmesi — canlı iş kartı (src/components/IsKarti.svelte)
-│   │   ├── Aşamalar: Talep alındı → Usta onayladı → Yolda (geri sayım) → Kapıda
-│   │   ├── Kod UST-ELK-1210-K7QZ · kopyala · QR kod
-│   │   ├── Kapıdaki ustayı doğrula → Rust: invoke("is_emri_dogrula", { kod })
+│   │   ├── Dikey çizelge (saatleriyle): Talep alındı → Usta onayladı → Yolda (geri sayım) → Kapıda → Tamamlandı
+│   │   ├── Güvenlik kodu alanı: UST-ELK-1210-K7QZ · kopyala · QR kod
+│   │   ├── Kapıdaki ustayı doğrula (giriş kodGirdisi.ts ile düzenlenir) → Rust: invoke("is_emri_dogrula", { kod })
 │   │   └── İptal (neden penceresi) · İş tamamlandı (doğrulamadan sonra) → değerlendirme penceresi
 │   └── Geçmiş sekmesi — tamamlanan / iptal edilen işler, puanım, "Tekrar çağır"
 │
@@ -84,7 +88,11 @@ Karşılama ─► Ustalar ─► Usta detayı ─► Çağrı özeti ─[Rust: 
 | `bildirim.svelte.ts` | Kısa bildirimler; sayfa geçişi için kuyruk | `sessionStorage["bildirim-kuyrugu"]` |
 | `saat.svelte.ts` | 15 sn'de bir güncellenen saat (müsaitlik, geri sayım) | — |
 | `motor.ts` → `kurallar.ts` / Rust | Kod üretimi, kod doğrulama, fiyat (Tauri'de Rust, tarayıcıda TS) | — |
-| `takip.ts` | İşin anlık aşaması, kalan süre, ilerleme | — |
+| `takip.ts` | İşin anlık aşaması, kalan süre, ilerleme (**simülasyon**: sunucu yok, zamana göre hesaplanır) | — |
+| `arama.ts` | Normalleştirilmiş, 4 dilli arama ve sorun önerileri | — |
+| `eslestirme.ts` | "Önerilen" sıralamanın sabit ağırlıklı kuralı ve nedenleri | — |
+| `kodGirdisi.ts` | Kapıdaki kodun yazımını düzenler (doğrulama Rust/kurallar.ts'te) | — |
+| "Tekrar çağır" taslağı | Önceki işin adres notu, detay sayfası bir kez okur | `localStorage["tekrar-taslagi"]` |
 
 ---
 

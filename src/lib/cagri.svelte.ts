@@ -1,4 +1,4 @@
-// Detay ekranında hazırlanan, henüz onaylanmamış çağrı (PassoKlon'daki sepetin karşılığı)
+// Detay ekranında hazırlanan, henüz onaylanmamış çağrı taslağı
 import type { CagriTaslagi } from "../types/ustam";
 import { tahminiFiyat, ustaBul } from "./data";
 import { oku, yaz } from "./depo";

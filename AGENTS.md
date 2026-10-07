@@ -68,6 +68,9 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 - Bileşen içinde genel `app.css` sınıflarıyla aynı adı kullanmak (`.sayfa`, `.kart`, `.btn`, `.bos`, `.izgara`, `.metin`, `.dar`)
   — Svelte kapsamlı stilleri genel sınıfı ezmez, ikisi birleşir ve beklenmedik boşluk/taşma oluşur.
 - Bileşenlerde emoji ikon kullanmak — yerine `<Ikon ad="…" />` (`src/lib/ikonlar.ts`).
+- Seçili durumları turuncuyla göstermek — turuncu (`--renk-ana`) yalnızca birincil aksiyonda; seçili için `--secili`.
+- Mobilde çok seçenekli içerik için ortada modal açmak — yerine `<Pencere alt>` (alttan açılan panel).
+- Yapay gecikme, sahte ağ isteği ya da "gerçek zamanlı bağlandı" gibi gerçek dışı iddialar — simülasyon kodda adıyla belirtilir (`takip.ts`).
 - İş kuralını yalnızca bir tarafta değiştirmek — Rust (`lib.rs`) ve TS (`kurallar.ts`) birlikte, ortak vektörlerle.
 
 ## 5. Sık Görevler İçin Tarifler

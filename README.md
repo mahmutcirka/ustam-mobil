@@ -91,8 +91,10 @@ uygulamasının dönüştürülmesiyle geliştirilmiştir (etkinlik → usta, se
 **Ustaları bulma**
 - 🗺️ **Liste ve harita:** 17 usta; stilize İstanbul haritasında (Boğaz, iki yaka, Adalar) pinler ve seçilen ustanın kartı.
 - 📍 **Semte göre mesafe ve varış süresi:** İlk açılışta seçilen semtten her ustaya km ve trafikli tahmini varış süresi hesaplanır.
-- 🚨 **"Acil mi?" kısayolları:** Su sızıntısı, elektrik kesintisi, kapıda kalma ve sıcak su için en yakın müsait usta tek dokunuşta açılır.
-- 🔎 **Filtre ve sıralama:** Canlı arama, kategori çipleri, şu an müsait, favoriler, **"dilimi konuşan usta"** filtresi; önerilen / en yakın / en yüksek puan / en uygun fiyat sıralaması.
+- 🚨 **"Ne oldu?" kısayolları:** Su sızıntısı, elektrik kesintisi, kapıda kalma ve sıcak su için en yakın müsait ustanın adı ve varış süresi; tek dokunuşla açılır.
+- 🧭 **Ne oldu sihirbazı:** Alan → sorun → aciliyet → size uygun en iyi 3 usta (güvenlik ipucuyla birlikte).
+- 🔎 **Akıllı arama:** "musluk", "sıcak su", "Kadıköy", usta adı ya da Arapça/Farsça sorun adı; sorun önerileri.
+- 🎛️ **Filtre ve sıralama panelleri:** Durum, mesafe, puan, ücret, konuşulan dil, favoriler; "Önerilen" sıralamanın açık kuralı ve **"Neden önerildi?"** açıklaması.
 - 🕘 **Canlı müsaitlik:** Çalışma saatleri ve meşguliyete göre "Şu an müsait", "Meşgul" ya da "Kapalı · 09:00 açılır".
 
 **Usta detayı ve çağrı**
@@ -102,7 +104,7 @@ uygulamasının dönüştürülmesiyle geliştirilmiştir (etkinlik → usta, se
 - 📷 Arızanın fotoğrafı (cihazda küçültülür, hiçbir yere gönderilmez), adres notu, Hemen / Bugün / Randevu.
 
 **Rust çekirdeği**
-- 🦀 **Kontrol karakterli iş emri kodu** `UST-ELK-1210-K7QZ` — yanlış yazılmış kod iş listesine bakılmadan yakalanır.
+- 🦀 **Kontrol karakterli iş emri kodu** `UST-ELK-1210-K7QZ` — rastgele kısımdaki her tek karakter hatası kesin yakalanır (kapsamlı testle doğrulanır).
 - 🧮 **Fiyat motoru** `fiyat_hesapla` — acil servis, gece (%25), Pazar (%15) ek ücretleri ve işçilik aralığı.
 - 🔁 Aynı kurallar tarayıcı için TypeScript'te; ikisi **ortak test vektörleriyle** doğrulanır.
 
@@ -180,8 +182,8 @@ cd src-tauri && cargo test
 
 | Katman | Komut | Kapsam |
 |---|---|---|
-| Rust kuralları | `cd src-tauri && cargo test` | Kod üretimi ve kontrol karakteri, kod doğrulama, haftanın günü, fiyat dökümü (7 test) |
-| TypeScript | `bun run test` | Ortak test vektörleri, 4 dilli sözlük tutarlılığı, örnek veri bütünlüğü, canlı takip aşamaları (70 test) |
+| Rust kuralları | `cd src-tauri && cargo test` | Kod üretimi ve kontrol karakteri (her tek karakter hatası), kod doğrulama, haftanın günü, fiyat dökümü (8 test) |
+| TypeScript | `bun run test` | Ortak test vektörleri, 4 dilli sözlük, örnek veri, canlı takip, arama ve önerilen sıralama, kod girişi (84 test) |
 | Tip kontrolü | `bunx svelte-check --tsconfig ./tsconfig.json` | Tüm Svelte bileşenleri ve TS modülleri |
 
 Rust ve TypeScript aynı iş kurallarını uygular; [`src-tauri/test-vektorleri.json`](src-tauri/test-vektorleri.json) dosyasındaki
