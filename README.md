@@ -65,7 +65,7 @@
 | **Ders** | `MYO063` — Mobil Programlama *(App Development)* · 2026–2027 Güz |
 | **Öğretim Görevlisi** | Öğr. Gör. Keyvan Arasteh Abbasabad — [qrofessor.com](https://qrofessor.com) · [GitHub](https://github.com/keyvanarasteh) · [LinkedIn](https://www.linkedin.com/in/keyvanarasteh/) |
 | **Kaynak Depo** | [`keyvanarasteh/hello-mobil`](https://github.com/keyvanarasteh/hello-mobil) |
-| **Öğrenci** | **Mahmut Çirka** — `2520191026` — 
+| **Öğrenci** | **Mahmut Çirka** — `2520191026` — Şube 1 |
 | **GitHub** | [`@mahmutcirka`](https://github.com/mahmutcirka) |
 | **Proje Fikri** | [`docs/proje-fikri.md`](docs/proje-fikri.md) |
 
