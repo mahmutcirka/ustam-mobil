@@ -4,8 +4,8 @@ import { kodGirdisiniDuzenle } from "../src/lib/kodGirdisi";
 import { kodDurumu } from "../src/lib/kurallar";
 
 describe("kod girişi", () => {
-  test.each(["ust elk 1210 k7qm", "USTELK1210K7QM", " ust-elk-1210-k7qm ", "UST.ELK.1210.K7QM"])("'%s' düzgün biçime gelir", (ham) => {
-    expect(kodGirdisiniDuzenle(ham)).toBe("UST-ELK-1210-K7QM");
+  test.each(["ust elk 1210 k7qz", "USTELK1210K7QZ", " ust-elk-1210-k7qz ", "UST.ELK.1210.K7QZ"])("'%s' düzgün biçime gelir", (ham) => {
+    expect(kodGirdisiniDuzenle(ham)).toBe("UST-ELK-1210-K7QZ");
     expect(kodDurumu(kodGirdisiniDuzenle(ham))).toBe("gecerli");
   });
 

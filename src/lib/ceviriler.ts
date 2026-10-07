@@ -96,7 +96,7 @@ const tr = {
   "is.dogrulaYer": "Ustanın söylediği kod",
   "is.dogrulaBtn": "Doğrula",
   "is.yanlis": "Bu kod iş emirlerinizde yok. Kapıyı açmayın!",
-  "is.formatHatali": "Kod biçimi hatalı (ör. UST-ELK-1210-K7QM).",
+  "is.formatHatali": "Kod biçimi hatalı (ör. UST-ELK-1210-K7QZ).",
   "is.kontrolHatali": "Kod yanlış yazılmış olabilir: kontrol karakteri tutmuyor. Ustadan kodu tekrar söylemesini isteyin.",
 
   "durum.tamamlandi": "Tamamlandı",
@@ -475,7 +475,7 @@ const en: Record<Anahtar, string> = {
   "is.dogrulaYer": "Code the pro tells you",
   "is.dogrulaBtn": "Verify",
   "is.yanlis": "This code is not in your jobs. Do not open the door!",
-  "is.formatHatali": "Invalid code format (e.g. UST-ELK-1210-K7QM).",
+  "is.formatHatali": "Invalid code format (e.g. UST-ELK-1210-K7QZ).",
   "is.kontrolHatali": "The code may be mistyped: the check character does not match. Ask the pro to repeat it.",
 
   "durum.tamamlandi": "Done",
@@ -852,7 +852,7 @@ const ar: Record<Anahtar, string> = {
   "is.dogrulaYer": "الرمز الذي يذكره الفنّي",
   "is.dogrulaBtn": "تحقّق",
   "is.yanlis": "هذا الرمز غير موجود في طلباتك. لا تفتح الباب!",
-  "is.formatHatali": "صيغة الرمز غير صحيحة (مثال: UST-ELK-1210-K7QM).",
+  "is.formatHatali": "صيغة الرمز غير صحيحة (مثال: UST-ELK-1210-K7QZ).",
   "is.kontrolHatali": "ربما كُتب الرمز بشكل خاطئ: حرف التحقق لا يطابق. اطلب من الفنّي تكراره.",
 
   "durum.tamamlandi": "منجز",
@@ -1229,7 +1229,7 @@ const fa: Record<Anahtar, string> = {
   "is.dogrulaYer": "کدی که استادکار می‌گوید",
   "is.dogrulaBtn": "بررسی",
   "is.yanlis": "این کد در سفارش‌های شما نیست. در را باز نکنید!",
-  "is.formatHatali": "قالب کد نادرست است (مثال: UST-ELK-1210-K7QM).",
+  "is.formatHatali": "قالب کد نادرست است (مثال: UST-ELK-1210-K7QZ).",
   "is.kontrolHatali": "شاید کد اشتباه وارد شده: نویسه کنترلی مطابقت ندارد. از استادکار بخواهید دوباره بگوید.",
 
   "durum.tamamlandi": "انجام شد",

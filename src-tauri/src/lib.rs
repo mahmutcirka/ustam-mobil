@@ -45,13 +45,23 @@ fn haftanin_gunu(yil: i32, ay: u32, gun: u32) -> u32 {
     ((y + y / 4 - y / 100 + y / 400 + T[(ay - 1) as usize] + gun as i32).rem_euclid(7)) as u32
 }
 
-// Ağırlıklı toplam (konum × base-36 değer) mod 32 → tek karakter.
-// Konum ağırlığı sayesinde tek karakter hatalarının ve yan yana yer değiştirmelerin çoğu yakalanır.
+// Karakter değeri: 32'lik alfabedeki sırası; alfabede olmayan (tarihteki 0/1) için base-36 değeri
+fn karakter_degeri(c: char) -> u32 {
+    ALFABE
+        .iter()
+        .position(|&b| b as char == c)
+        .map(|i| i as u32)
+        .unwrap_or_else(|| c.to_digit(36).unwrap_or(0))
+}
+
+// Ağırlıklı toplam (tek sayı ağırlıklar 1, 3, 5, … × değer) mod 32 → tek karakter.
+// Tek ağırlıklar 32 ile aralarında asal olduğundan alfabe içindeki her tek karakter hatası kesin yakalanır;
+// yan yana yer değiştirmelerin de çoğu yakalanır.
 fn kontrol_karakteri(govde: &str) -> char {
     let toplam: u32 = govde
         .chars()
         .enumerate()
-        .map(|(i, c)| (i as u32 + 1) * c.to_digit(36).unwrap_or(0))
+        .map(|(i, c)| (2 * i as u32 + 1) * karakter_degeri(c))
         .sum();
     ALFABE[(toplam % ALFABE.len() as u32) as usize] as char
 }
@@ -238,6 +248,24 @@ mod testler {
             for tohum in 1..50 {
                 let kod = kod_olustur(k, "2026-01-05T09:00", tohum).unwrap();
                 assert_eq!(kod_durumu(&kod), KodDurumu::Gecerli, "{kod}");
+            }
+        }
+    }
+
+    #[test]
+    fn rastgele_kisimdaki_her_tek_karakter_hatasi_yakalanir() {
+        for tohum in 1..40 {
+            let kod = kod_olustur("kombi", "2026-10-12T14:30", tohum).unwrap();
+            for konum in kod.len() - 4..kod.len() {
+                for &yeni in ALFABE {
+                    if kod.as_bytes()[konum] == yeni {
+                        continue;
+                    }
+                    let mut bayt = kod.clone().into_bytes();
+                    bayt[konum] = yeni;
+                    let bozuk = String::from_utf8(bayt).unwrap();
+                    assert_ne!(kod_durumu(&bozuk), KodDurumu::Gecerli, "{kod} → {bozuk}");
+                }
             }
         }
     }

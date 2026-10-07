@@ -42,7 +42,7 @@ Ustam
 ├── /is-emirlerim (İş emirleri)                       src/pages/is-emirlerim.astro
 │   ├── Aktif sekmesi — canlı iş kartı (src/components/IsKarti.svelte)
 │   │   ├── Aşamalar: Talep alındı → Usta onayladı → Yolda (geri sayım) → Kapıda
-│   │   ├── Kod UST-ELK-1210-K7QM · kopyala · QR kod
+│   │   ├── Kod UST-ELK-1210-K7QZ · kopyala · QR kod
 │   │   ├── Kapıdaki ustayı doğrula → Rust: invoke("is_emri_dogrula", { kod })
 │   │   └── İptal (neden penceresi) · İş tamamlandı (doğrulamadan sonra) → değerlendirme penceresi
 │   └── Geçmiş sekmesi — tamamlanan / iptal edilen işler, puanım, "Tekrar çağır"

@@ -83,7 +83,7 @@ export interface CagriTaslagi {
 
 // Rust kodu üretildikten sonra kaydedilen iş emri
 export interface IsEmri extends CagriTaslagi {
-  kod: string; // UST-ELK-1210-K7QM
+  kod: string; // UST-ELK-1210-K7QZ
   ustaAd: string;
   kategori: Kategori;
   fiyat: FiyatDokumu; // Rust fiyat_hesapla dökümü

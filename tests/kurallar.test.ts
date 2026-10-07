@@ -1,7 +1,7 @@
 // Rust ile aynı kuralların TypeScript karşılığını ortak test vektörleriyle doğrular
 import { describe, expect, test } from "bun:test";
 import vektorler from "../src-tauri/test-vektorleri.json";
-import { fiyatHesapla, haftaninGunu, kodDurumu, kodUret, kontrolKarakteri, zamanCoz, type FiyatGirdisi } from "../src/lib/kurallar";
+import { ALFABE, fiyatHesapla, haftaninGunu, kodDurumu, kodUret, kontrolKarakteri, zamanCoz, type FiyatGirdisi } from "../src/lib/kurallar";
 import { kategoriler } from "../src/lib/data";
 
 describe("ortak test vektörleri (Rust ile aynı)", () => {
@@ -31,7 +31,20 @@ describe("kod üretimi", () => {
   });
 
   test("tarih gün+ay olarak koda yazılır", () => {
-    expect(kodUret("elektrik", "2026-10-12T14:30", "K7Q")).toBe("UST-ELK-1210-K7QM");
+    expect(kodUret("elektrik", "2026-10-12T14:30", "K7Q")).toBe("UST-ELK-1210-K7QZ");
+  });
+
+  test("rastgele kısımdaki her tek karakter hatası yakalanır (kapsamlı)", () => {
+    for (let i = 0; i < 40; i++) {
+      const kod = kodUret("kombi", "2026-10-12T14:30");
+      for (let konum = kod.length - 4; konum < kod.length; konum++) {
+        for (const yeni of ALFABE) {
+          if (kod[konum] === yeni) continue;
+          const bozuk = kod.slice(0, konum) + yeni + kod.slice(konum + 1);
+          expect(kodDurumu(bozuk)).not.toBe("gecerli");
+        }
+      }
+    }
   });
 
   test("geçersiz tarih hata verir", () => {
