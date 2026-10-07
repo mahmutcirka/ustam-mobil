@@ -22,6 +22,7 @@ Rust ile `UST-ELK-1210-K7Q4` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | [`docs/kurulum.md`](docs/kurulum.md) | Ön gereksinimler ve çalıştırma | Komut değişirse önce burası güncellenir. |
 | [`docs/kaynaklar.md`](docs/kaynaklar.md) | Tasarım ve teknik referanslar | Yeni dış kaynak kullanıldığında buraya eklenir. |
 | [`docs/teslim.md`](docs/teslim.md) | Teslim adımları, görev → PR eşlemesi | Teslim biçimi bu belgeye göre hazırlanır. |
+| [`docs/ilerleme-batch-01.md`](docs/ilerleme-batch-01.md) | Batch 01 kontrol matrisi ve derleme kanıtı | Yeni teslimden önce matris güncellenir. |
 | [`docs/ajan-uyum-testi.md`](docs/ajan-uyum-testi.md) | Ajanın bu kurallara uyum testi | Kurallar değiştiğinde test yeniden çalıştırılır. |
 | [`docs/tasks/`](docs/tasks/) | Eğitmenin haftalık görev dokümanları | Salt okunur; ajan bu dosyaları değiştirmez. |
 

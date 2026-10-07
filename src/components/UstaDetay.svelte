@@ -4,6 +4,7 @@
   import { cagri } from "$lib/cagri.svelte";
   import { dil } from "$lib/i18n.svelte";
   import type { Anahtar } from "$lib/ceviriler";
+  import { untrack } from "svelte";
   import type { Aciliyet, Usta } from "../types/ustam";
 
   let { usta: u }: { usta: Usta } = $props();
@@ -19,8 +20,9 @@
   // Meşgul usta yalnızca randevu kabul eder
   const izinli = (a: Aciliyet) => u.musait || a === "randevu";
 
-  let sorun = $state(u.sorunlar[0]);
-  let aciliyet = $state<Aciliyet>(u.musait ? "hemen" : "randevu");
+  // Varsayılan seçimler sayfa açılırken bir kez alınır (usta prop'u sayfa boyunca değişmez)
+  let sorun = $state(untrack(() => u.sorunlar[0]));
+  let aciliyet = $state<Aciliyet>(untrack(() => (u.musait ? "hemen" : "randevu")));
   let tarih = $state(yarin);
   let saat = $state(saatDilimleri[1]);
   let bugunSaat = $state(bugunSaatleri[0] ?? "");
