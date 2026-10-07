@@ -52,6 +52,7 @@ Kontrast oranları WCAG 2.1 bağıl parlaklık formülüyle hesaplanmıştır; m
 | `--golge-kart` | `0 1px 2px #0f172a0f, 0 2px 8px #0f172a0a` | `0 1px 2px #00000066` | Kartların hafif gölgesi |
 | `--golge-yuksek` | `0 12px 32px #0f172a29` | `0 16px 40px #000000a6` | Modal pencere, bildirim, harita kartı |
 | `--perde` | `#0f172a73` | `#000000a6` | Modal arkasındaki karartma |
+| `--qr-zemin` / `--qr-modul` | `#ffffff` / `#0f172a` | aynı (QR okuyucular için ters çevrilmez) | İş emri QR kodu — kontrast 17.85:1 |
 | `--su` | `#bfdbfe` | `#1e3a5f` | Harita: Boğaz ve Marmara |
 | `--kara` | `#e9eef4` | `#1a2536` | Harita: kara parçası |
 | `--radius-kucuk` / `--radius` / `--radius-buyuk` | `10px` / `14px` / `20px` | aynı | Input · kart ve buton · modal |

@@ -5,7 +5,8 @@
   import SemtSecici from "$lib/components/SemtSecici.svelte";
   import UstaKart from "$lib/components/UstaKart.svelte";
   import UstaHaritasi from "./UstaHaritasi.svelte";
-  import { acilKisayollar, kategoriler, kategoriIkon, mesafeKm, saatYaz, sayiYaz, ustaDurumu, ustalar, varisDk } from "$lib/data";
+  import { acilKisayollar, kategoriler, kategoriIkon, mesafeKm, sayiYaz, tarihYaz, ustaDurumu, ustalar, varisDk } from "$lib/data";
+  import { takip } from "$lib/takip";
   import type { Anahtar } from "$lib/ceviriler";
   import { dil } from "$lib/i18n.svelte";
   import { favoriler } from "$lib/favoriler.svelte";
@@ -68,10 +69,16 @@
     }),
   );
 
-  const aktifIs = $derived(isEmirleri.liste.find((i) => i.durum === "yolda" || i.durum === "bekliyor"));
-  const aktifDk = $derived(
-    aktifIs ? Math.max(1, Math.round((new Date(aktifIs.zaman).getTime() - saat.simdi.getTime()) / 60_000)) : 0,
-  );
+  // En yeni aktif işin canlı aşaması (takip.ts) — banttaki metin aşamaya göre değişir
+  const aktifIs = $derived(isEmirleri.aktifler[0]);
+  const aktifMetin = $derived.by(() => {
+    if (!aktifIs) return "";
+    const t = takip(aktifIs, saat.simdi);
+    if (t.asama === "yolda") return dil.t("liste.aktifYolda", { usta: aktifIs.ustaAd, dk: sayiYaz(t.kalanDk, dil.kod) });
+    if (aktifIs.aciliyet !== "hemen" && t.asama !== "kapida")
+      return dil.t("liste.aktifRandevu", { usta: aktifIs.ustaAd, zaman: tarihYaz(aktifIs.zaman, dil.kod) });
+    return `${aktifIs.ustaAd} · ${dil.t(`asama.${t.asama}`)}`;
+  });
 
   const sayi = (k: Kategori | "tumu") => (k === "tumu" ? ustalar.length : ustalar.filter((u) => u.kategori === k).length);
 
@@ -103,11 +110,7 @@
   {#if aktifIs}
     <a class="aktif-is" href="/is-emirlerim">
       <span class="nabiz" aria-hidden="true"></span>
-      <span class="metin">
-        {aktifIs.durum === "yolda"
-          ? dil.t("liste.aktifYolda", { usta: aktifIs.ustaAd, dk: sayiYaz(aktifDk, dil.kod) })
-          : dil.t("liste.aktifRandevu", { usta: aktifIs.ustaAd, zaman: saatYaz(aktifIs.zaman, dil.kod) })}
-      </span>
+      <span class="metin">{aktifMetin}</span>
       <code dir="ltr">{aktifIs.kod}</code>
       <Ikon ad={dil.yon === "rtl" ? "ok-sol" : "ok-sag"} boyut={18} />
     </a>
