@@ -109,7 +109,7 @@ export const ustalar: Usta[] = [
     ],
   }),
   usta({
-    id: 4, ad: "Emre Aksoy", kategori: "kombi", puan: 4.6, yorumSayisi: 98, musait: false, cikisUcreti: 450,
+    id: 4, ad: "Emre Aksoy", kategori: "kombi", puan: 4.6, yorumSayisi: 98, musait: false, musaitOlacakDk: 35, cikisUcreti: 450,
     deneyimYil: 8, tamamlananIs: 540, semt: "Ataşehir", konum: { x: 75, y: 72 }, diller: ["tr"],
     rozetler: ["sigortali"], yanitDk: 18, calisma: ["09:00", "19:00"],
     yorumlar: [
@@ -127,7 +127,7 @@ export const ustalar: Usta[] = [
     ],
   }),
   usta({
-    id: 6, ad: "Murat Öztürk", kategori: "tesisat", puan: 4.4, yorumSayisi: 61, musait: false, cikisUcreti: 300,
+    id: 6, ad: "Murat Öztürk", kategori: "tesisat", puan: 4.4, yorumSayisi: 61, musait: false, musaitOlacakDk: 25, cikisUcreti: 300,
     deneyimYil: 6, tamamlananIs: 320, semt: "Şişli", konum: { x: 41, y: 47 }, diller: ["tr"],
     rozetler: [], yanitDk: 22, calisma: ["08:00", "18:00"],
     yorumlar: [y("Gökhan E.", 4, "tr", "2026-09-08", "Tıkalı gideri açtı, uygun fiyatlı.")],
@@ -204,7 +204,7 @@ export const ustalar: Usta[] = [
     ],
   }),
   usta({
-    id: 15, ad: "Hüseyin Doğan", kategori: "elektrik", puan: 4.3, yorumSayisi: 52, musait: false, cikisUcreti: 280,
+    id: 15, ad: "Hüseyin Doğan", kategori: "elektrik", puan: 4.3, yorumSayisi: 52, musait: false, musaitOlacakDk: 50, cikisUcreti: 280,
     deneyimYil: 5, tamamlananIs: 210, semt: "Kartal", konum: { x: 91, y: 94 }, diller: ["tr"],
     rozetler: [], yanitDk: 25, calisma: ["09:00", "18:00"],
     yorumlar: [y("Emine S.", 4, "tr", "2026-09-06", "Uygun fiyatlı, işini yaptı.")],
@@ -249,7 +249,7 @@ const dakika = (saat: string) => Number(saat.slice(0, 2)) * 60 + Number(saat.sli
 
 // Çalışma saatleri (gece yarısını aşmayan aralıklar) ve meşguliyete göre anlık durum
 export function ustaDurumu(u: Usta, simdi = new Date()): UstaDurumu {
-  if (!u.musait) return { tur: "mesgul" };
+  if (!u.musait) return { tur: "mesgul", dk: u.musaitOlacakDk };
   if (u.calisma === "7-24") return { tur: "musait" };
   const [ac, kapa] = u.calisma;
   const su = simdi.getHours() * 60 + simdi.getMinutes();
