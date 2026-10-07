@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import AppHeader from '../components/AppHeader.svelte';
 import AppNav from '../components/AppNav.svelte';
 import Bildirimler from '../components/Bildirimler.svelte';
+import Karsilama from '../components/Karsilama.svelte';
 import type { Dil } from '../types/ustam';
 import '../styles/app.css';
 
@@ -63,6 +64,7 @@ const sabitDil = Astro.props.dil ?? frontmatter?.dil;
     </main>
     <AppNav client:only="svelte" />
     <Bildirimler client:only="svelte" />
+    <Karsilama client:only="svelte" />
   </body>
 </html>
 

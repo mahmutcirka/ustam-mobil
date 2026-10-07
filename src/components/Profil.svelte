@@ -3,16 +3,9 @@
   import { tema } from "$lib/tema.svelte";
   import { bilgiSayfalari, dil, diller, dilAdlari, sayfaYolu } from "$lib/i18n.svelte";
   import { isEmirleri } from "$lib/isEmirleri.svelte";
-  import { oku, yaz } from "$lib/depo";
+  import { profil } from "$lib/profil.svelte";
 
-  interface Bilgiler {
-    ad: string;
-    telefon: string;
-    adres: string;
-  }
-
-  const ANAHTAR = "profil";
-  const kayitli = oku<Bilgiler>(ANAHTAR, { ad: "", telefon: "", adres: "" });
+  const kayitli = profil.bilgi;
 
   let ad = $state(kayitli.ad);
   let telefon = $state(kayitli.telefon);
@@ -22,7 +15,7 @@
 
   function kaydet(event: SubmitEvent) {
     event.preventDefault();
-    yaz(ANAHTAR, { ad: ad.trim(), telefon: telefon.trim(), adres: adres.trim() });
+    profil.guncelle({ ad: ad.trim(), telefon: telefon.trim(), adres: adres.trim() });
     kaydedilenAd = ad.trim();
     kaydedildi = true;
     setTimeout(() => (kaydedildi = false), 2000);
