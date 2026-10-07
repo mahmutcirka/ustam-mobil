@@ -30,7 +30,7 @@
   <a href="https://svelte.dev/"><img alt="Svelte 5" src="https://img.shields.io/badge/Svelte-5-FF3E00?style=for-the-badge&logo=svelte&logoColor=white"></a>
   <a href="https://react.dev/"><img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black"></a>
   <a href="https://bun.sh/"><img alt="Bun" src="https://img.shields.io/badge/Bun-1.x-000000?style=for-the-badge&logo=bun&logoColor=white"></a>
-  <a href="https://github.com/KULLANICI-ADIN/hello-mobil/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/KULLANICI-ADIN/hello-mobil/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/mahmutcirka/ustam-mobil/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/mahmutcirka/ustam-mobil/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="License Apache-2.0" src="https://img.shields.io/badge/License-Apache--2.0-blue?style=for-the-badge"></a>
 </p>
 <p>
@@ -66,7 +66,7 @@
 | **Öğretim Görevlisi** | Öğr. Gör. Keyvan Arasteh Abbasabad — [qrofessor.com](https://qrofessor.com) · [GitHub](https://github.com/keyvanarasteh) · [LinkedIn](https://www.linkedin.com/in/keyvanarasteh/) |
 | **Kaynak Depo** | [`keyvanarasteh/hello-mobil`](https://github.com/keyvanarasteh/hello-mobil) |
 | **Öğrenci** | **Mahmut Çirka** — `2520191026` — Şube 1 |
-| **GitHub** | [`@KULLANICI-ADIN`](https://github.com/KULLANICI-ADIN) |
+| **GitHub** | [`@mahmutcirka`](https://github.com/mahmutcirka) |
 | **Proje Fikri** | [`docs/proje-fikri.md`](docs/proje-fikri.md) |
 
 ---
@@ -155,8 +155,8 @@ Klasör yapısı [`docs/klasor-mimarisi.md`](docs/klasor-mimarisi.md), sayfa ağ
 
 ```bash
 # 1. Depoyu klonlayın
-git clone https://github.com/KULLANICI-ADIN/hello-mobil.git
-cd hello-mobil
+git clone https://github.com/mahmutcirka/ustam-mobil.git
+cd ustam-mobil
 
 # 2. Bağımlılıkları yükleyin
 bun install
