@@ -1,8 +1,17 @@
+use serde::{Deserialize, Serialize};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-// Karışan karakterler (0/O, 1/I) kullanılmaz — ön yüzdeki KOD_DESENI ile aynı alfabe
+// Ustam iş kuralları — iş emri kodu, kod doğrulama ve fiyat hesabı.
+// Aynı kurallar tarayıcı için src/lib/kurallar.ts içinde de vardır; ikisi
+// test-vektorleri.json'daki ortak örneklerle test edilir (cargo test / bun test).
+
+// Karışan karakterler (0/O, 1/I) kullanılmaz
 const ALFABE: &[u8] = b"ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+const ACIL_UCRET: u32 = 150;
+const GECE_ORANI: f64 = 0.25; // 22:00–07:59 arası çıkış ücretine eklenir
+const PAZAR_ORANI: f64 = 0.15; // Pazar günü çıkış ücretine eklenir
 
 // Aynı nanosaniyede gelen iki çağrının aynı kodu almaması için sayaç
 static SAYAC: AtomicU64 = AtomicU64::new(0);
@@ -18,20 +27,39 @@ fn kategori_kodu(kategori: &str) -> Option<&'static str> {
     }
 }
 
-// "2026-10-12T14:30" → "1210" (gün + ay)
-fn gun_ay(zaman: &str) -> Option<String> {
+// "2026-10-12T14:30" → (2026, 10, 12, 14, 30)
+fn zaman_coz(zaman: &str) -> Option<(i32, u32, u32, u32, u32)> {
+    let yil: i32 = zaman.get(0..4)?.parse().ok()?;
     let ay: u32 = zaman.get(5..7)?.parse().ok()?;
     let gun: u32 = zaman.get(8..10)?.parse().ok()?;
-    if !(1..=12).contains(&ay) || !(1..=31).contains(&gun) {
-        return None;
-    }
-    Some(format!("{:02}{:02}", gun, ay))
+    let saat: u32 = zaman.get(11..13).and_then(|s| s.parse().ok()).unwrap_or(12);
+    let dakika: u32 = zaman.get(14..16).and_then(|s| s.parse().ok()).unwrap_or(0);
+    let gecerli = (1..=12).contains(&ay) && (1..=31).contains(&gun) && saat < 24 && dakika < 60;
+    gecerli.then_some((yil, ay, gun, saat, dakika))
+}
+
+// Sakamoto algoritması — 0 = Pazar, 6 = Cumartesi
+fn haftanin_gunu(yil: i32, ay: u32, gun: u32) -> u32 {
+    const T: [i32; 12] = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4];
+    let y = if ay < 3 { yil - 1 } else { yil };
+    ((y + y / 4 - y / 100 + y / 400 + T[(ay - 1) as usize] + gun as i32).rem_euclid(7)) as u32
+}
+
+// Ağırlıklı toplam (konum × base-36 değer) mod 32 → tek karakter.
+// Konum ağırlığı sayesinde tek karakter hatalarının ve yan yana yer değiştirmelerin çoğu yakalanır.
+fn kontrol_karakteri(govde: &str) -> char {
+    let toplam: u32 = govde
+        .chars()
+        .enumerate()
+        .map(|(i, c)| (i as u32 + 1) * c.to_digit(36).unwrap_or(0))
+        .sum();
+    ALFABE[(toplam % ALFABE.len() as u32) as usize] as char
 }
 
 // xorshift64* — harici crate gerektirmeyen basit sözde rastgele üreteç
-fn rastgele_ek(tohum: u64) -> String {
+fn rastgele_ek(tohum: u64, uzunluk: usize) -> String {
     let mut x = tohum | 1;
-    (0..4)
+    (0..uzunluk)
         .map(|_| {
             x ^= x >> 12;
             x ^= x << 25;
@@ -42,26 +70,90 @@ fn rastgele_ek(tohum: u64) -> String {
         .collect()
 }
 
+// UST-ELK-1210-K7Q + kontrol karakteri → UST-ELK-1210-K7QX
 fn kod_olustur(kategori: &str, zaman: &str, tohum: u64) -> Result<String, String> {
     let kat = kategori_kodu(kategori).ok_or_else(|| format!("bilinmeyen kategori: {kategori}"))?;
-    let tarih = gun_ay(zaman).ok_or_else(|| format!("geçersiz tarih: {zaman}"))?;
-    Ok(format!("UST-{kat}-{tarih}-{}", rastgele_ek(tohum)))
+    let (_, ay, gun, _, _) = zaman_coz(zaman).ok_or_else(|| format!("geçersiz tarih: {zaman}"))?;
+    let tarih = format!("{gun:02}{ay:02}");
+    let ek = rastgele_ek(tohum, 3);
+    let kontrol = kontrol_karakteri(&format!("{kat}{tarih}{ek}"));
+    Ok(format!("UST-{kat}-{tarih}-{ek}{kontrol}"))
 }
 
-fn bicim_gecerli(kod: &str) -> bool {
-    let parcalar: Vec<&str> = kod.split('-').collect();
+#[derive(Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "kebab-case")]
+enum KodDurumu {
+    Gecerli,
+    BicimHatali,
+    KontrolHatali,
+}
+
+fn kod_durumu(kod: &str) -> KodDurumu {
+    let kod = kod.trim().to_uppercase();
+    let kod = kod.as_str();
+    let p: Vec<&str> = kod.split('-').collect();
     // ASCII dışı karakter, aşağıdaki bayt dilimlemesinde panik yaratabilir
-    if !kod.is_ascii() || parcalar.len() != 4 || parcalar[0] != "UST" {
-        return false;
+    if !kod.is_ascii() || p.len() != 4 || p[0] != "UST" {
+        return KodDurumu::BicimHatali;
     }
-    let kat_gecerli = ["TES", "ELK", "CLN", "KMB", "BYZ"].contains(&parcalar[1]);
-    let tarih_gecerli = parcalar[2].len() == 4
-        && gun_ay(&format!("2000-{}-{}", &parcalar[2][2..], &parcalar[2][..2])).is_some();
-    let ek_gecerli = parcalar[3].len() == 4 && parcalar[3].bytes().all(|b| ALFABE.contains(&b));
-    kat_gecerli && tarih_gecerli && ek_gecerli
+    let kat_gecerli = ["TES", "ELK", "CLN", "KMB", "BYZ"].contains(&p[1]);
+    let tarih_gecerli =
+        p[2].len() == 4 && zaman_coz(&format!("2000-{}-{}", &p[2][2..], &p[2][..2])).is_some();
+    let ek_gecerli = p[3].len() == 4 && p[3].bytes().all(|b| ALFABE.contains(&b));
+    if !(kat_gecerli && tarih_gecerli && ek_gecerli) {
+        return KodDurumu::BicimHatali;
+    }
+    let beklenen = kontrol_karakteri(&format!("{}{}{}", p[1], p[2], &p[3][..3]));
+    if p[3].ends_with(beklenen) {
+        KodDurumu::Gecerli
+    } else {
+        KodDurumu::KontrolHatali
+    }
 }
 
-// Ön yüz invoke("is_emri_uret", { kategori, zaman }) ile çağırır → "UST-ELK-1210-K7Q4"
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct FiyatGirdisi {
+    cikis_ucreti: u32,
+    aciliyet: String,
+    zaman: String,
+    iscilik_min: u32,
+    iscilik_max: u32,
+}
+
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct FiyatDokumu {
+    cikis: u32,
+    acil: u32,
+    gece: u32,
+    pazar: u32,
+    iscilik_min: u32,
+    iscilik_max: u32,
+    toplam_min: u32,
+    toplam_max: u32,
+}
+
+fn fiyat_dokumu(g: &FiyatGirdisi) -> Result<FiyatDokumu, String> {
+    let (yil, ay, gun, saat, _) = zaman_coz(&g.zaman).ok_or_else(|| format!("geçersiz tarih: {}", g.zaman))?;
+    let oran = |o: f64| (g.cikis_ucreti as f64 * o).round() as u32;
+    let acil = if g.aciliyet == "hemen" { ACIL_UCRET } else { 0 };
+    let gece = if saat >= 22 || saat < 8 { oran(GECE_ORANI) } else { 0 };
+    let pazar = if haftanin_gunu(yil, ay, gun) == 0 { oran(PAZAR_ORANI) } else { 0 };
+    let sabit = g.cikis_ucreti + acil + gece + pazar;
+    Ok(FiyatDokumu {
+        cikis: g.cikis_ucreti,
+        acil,
+        gece,
+        pazar,
+        iscilik_min: g.iscilik_min,
+        iscilik_max: g.iscilik_max,
+        toplam_min: sabit + g.iscilik_min,
+        toplam_max: sabit + g.iscilik_max,
+    })
+}
+
+// Ön yüz invoke("is_emri_uret", { kategori, zaman }) ile çağırır → "UST-ELK-1210-K7QX"
 #[tauri::command]
 fn is_emri_uret(kategori: String, zaman: String) -> Result<String, String> {
     let nano = SystemTime::now()
@@ -72,17 +164,23 @@ fn is_emri_uret(kategori: String, zaman: String) -> Result<String, String> {
     kod_olustur(&kategori, &zaman, tohum)
 }
 
-// Kapıdaki ustanın söylediği kodun biçimini doğrular
+// Kapıdaki ustanın söylediği kod: "gecerli" | "bicim-hatali" | "kontrol-hatali"
 #[tauri::command]
-fn is_emri_dogrula(kod: String) -> bool {
-    bicim_gecerli(kod.trim())
+fn is_emri_dogrula(kod: String) -> KodDurumu {
+    kod_durumu(&kod)
+}
+
+// invoke("fiyat_hesapla", { girdi: { cikisUcreti, aciliyet, zaman, iscilikMin, iscilikMax } })
+#[tauri::command]
+fn fiyat_hesapla(girdi: FiyatGirdisi) -> Result<FiyatDokumu, String> {
+    fiyat_dokumu(&girdi)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![is_emri_uret, is_emri_dogrula])
+        .invoke_handler(tauri::generate_handler![is_emri_uret, is_emri_dogrula, fiyat_hesapla])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -90,34 +188,73 @@ pub fn run() {
 #[cfg(test)]
 mod testler {
     use super::*;
+    use serde_json::Value;
 
-    #[test]
-    fn kod_bicimi_dogru() {
-        let kod = kod_olustur("elektrik", "2026-10-12T14:30", 42).unwrap();
-        assert!(kod.starts_with("UST-ELK-1210-"), "{kod}");
-        assert!(bicim_gecerli(&kod), "{kod}");
+    // Rust ve TypeScript'in birlikte doğrulandığı ortak örnekler
+    const VEKTORLER: &str = include_str!("../test-vektorleri.json");
+
+    fn vektorler() -> Value {
+        serde_json::from_str(VEKTORLER).expect("test-vektorleri.json okunamadı")
     }
 
     #[test]
-    fn tum_kategoriler_gecerli_kod_uretir() {
-        for k in ["tesisat", "elektrik", "cilingir", "kombi", "beyaz-esya"] {
-            assert!(bicim_gecerli(&kod_olustur(k, "2026-01-05T09:00", 7).unwrap()));
+    fn ortak_kontrol_karakterleri() {
+        for v in vektorler()["kontrolKarakteri"].as_array().unwrap() {
+            let govde = v["govde"].as_str().unwrap();
+            assert_eq!(kontrol_karakteri(govde).to_string(), v["beklenen"].as_str().unwrap(), "{govde}");
         }
+    }
+
+    #[test]
+    fn ortak_kod_durumlari() {
+        for v in vektorler()["kodDurumu"].as_array().unwrap() {
+            let kod = v["kod"].as_str().unwrap();
+            let durum = serde_json::to_value(kod_durumu(kod)).unwrap();
+            assert_eq!(durum, v["durum"], "{kod}");
+        }
+    }
+
+    #[test]
+    fn ortak_haftanin_gunleri() {
+        for v in vektorler()["haftaninGunu"].as_array().unwrap() {
+            let tarih = v["tarih"].as_str().unwrap();
+            let (y, a, g, _, _) = zaman_coz(tarih).unwrap();
+            assert_eq!(haftanin_gunu(y, a, g), v["gun"].as_u64().unwrap() as u32, "{tarih}");
+        }
+    }
+
+    #[test]
+    fn ortak_fiyat_dokumleri() {
+        for v in vektorler()["fiyat"].as_array().unwrap() {
+            let girdi: FiyatGirdisi = serde_json::from_value(v["girdi"].clone()).unwrap();
+            let beklenen: FiyatDokumu = serde_json::from_value(v["beklenen"].clone()).unwrap();
+            assert_eq!(fiyat_dokumu(&girdi).unwrap(), beklenen, "{}", v["aciklama"]);
+        }
+    }
+
+    #[test]
+    fn uretilen_kodlar_kendi_dogrulamasindan_gecer() {
+        for k in ["tesisat", "elektrik", "cilingir", "kombi", "beyaz-esya"] {
+            for tohum in 1..50 {
+                let kod = kod_olustur(k, "2026-01-05T09:00", tohum).unwrap();
+                assert_eq!(kod_durumu(&kod), KodDurumu::Gecerli, "{kod}");
+            }
+        }
+    }
+
+    #[test]
+    fn tek_karakter_hatasi_yakalanir() {
+        let kod = kod_olustur("elektrik", "2026-10-12T14:30", 42).unwrap();
+        let mut bayt = kod.into_bytes();
+        let son = bayt.len() - 2; // rastgele kısmın bir karakterini değiştir
+        bayt[son] = if bayt[son] == b'A' { b'B' } else { b'A' };
+        assert_ne!(kod_durumu(std::str::from_utf8(&bayt).unwrap()), KodDurumu::Gecerli);
     }
 
     #[test]
     fn hatali_girdiler_reddedilir() {
         assert!(kod_olustur("boyaci", "2026-10-12T14:30", 1).is_err());
         assert!(kod_olustur("kombi", "2026-13-40T14:30", 1).is_err());
-        assert!(!bicim_gecerli("PSK-001-ABCDEFG"));
-        assert!(!bicim_gecerli("UST-ELK-1210-K0Q4")); // 0 alfabede yok
-        assert!(!bicim_gecerli("UST-ELK-3213-K7Q4")); // 13. ay yok
-    }
-
-    #[test]
-    fn farkli_tohumlar_farkli_kod() {
-        let a = kod_olustur("tesisat", "2026-10-12T14:30", 1).unwrap();
-        let b = kod_olustur("tesisat", "2026-10-12T14:30", 2).unwrap();
-        assert_ne!(a, b);
+        assert_eq!(kod_durumu("UST-ELK-1210-ÜÜ"), KodDurumu::BicimHatali);
     }
 }

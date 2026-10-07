@@ -29,7 +29,7 @@ Ustam
 │   └── Tahmini tutar → Rust: invoke("is_emri_uret", { kategori, zaman })
 │
 ├── /is-emirlerim (İş emirleri ve kodlar)             src/pages/is-emirlerim.astro
-│   ├── Rust'ın ürettiği kod: UST-ELK-1210-K7Q4, durum (Bekliyor / Yolda / Tamamlandı / İptal)
+│   ├── Rust'ın ürettiği kod: UST-ELK-1210-K7QM, durum (Bekliyor / Yolda / Tamamlandı / İptal)
 │   └── Kapıdaki ustayı doğrula → Rust: invoke("is_emri_dogrula", { kod })
 │
 ├── /profil (Kullanıcı ve ayarlar)                    src/pages/profil.astro

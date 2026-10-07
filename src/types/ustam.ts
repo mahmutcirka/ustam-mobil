@@ -1,4 +1,5 @@
 // Ustam veri modeli — tüm ekranların paylaştığı tipler
+import type { FiyatDokumu } from "../lib/kurallar";
 
 export type Dil = "tr" | "en" | "ar" | "fa";
 
@@ -34,10 +35,10 @@ export interface CagriTaslagi {
 
 // Rust kodu üretildikten sonra kaydedilen iş emri
 export interface IsEmri extends CagriTaslagi {
-  kod: string; // UST-ELK-1210-K7Q4
+  kod: string; // UST-ELK-1210-K7QM
   ustaAd: string;
   kategori: Kategori;
-  tutar: number;
+  fiyat: FiyatDokumu; // Rust fiyat_hesapla dökümü
   durum: IsDurumu;
   olusturma: string;
 }

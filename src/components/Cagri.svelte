@@ -1,7 +1,7 @@
 <script lang="ts">
   // Çağrı özeti — "Çağrıyı onayla" Rust'taki is_emri_uret komutunu çağırır
   import Ikon from "$lib/components/Ikon.svelte";
-  import { ACIL_UCRET, kategoriIkon, paraYaz, tarihYaz } from "$lib/data";
+  import { aralikYaz, kategoriIkon, paraYaz, tarihYaz } from "$lib/data";
   import { cagri } from "$lib/cagri.svelte";
   import { isEmirleri } from "$lib/isEmirleri.svelte";
   import { dil } from "$lib/i18n.svelte";
@@ -52,14 +52,18 @@
       </dl>
     </div>
 
-    <div class="kart fiyat">
-      <div><span>{dil.t("cagri.cikis")}</span><span>{paraYaz(u.cikisUcreti, dil.kod)}</span></div>
-      {#if t.aciliyet === "hemen"}
-        <div><span>{dil.t("cagri.acil")}</span><span>{paraYaz(ACIL_UCRET, dil.kod)}</span></div>
-      {/if}
-      <div class="toplam"><span>{dil.t("cagri.toplam")}</span><b>{paraYaz(cagri.tutar, dil.kod)}</b></div>
-      <p>{dil.t("cagri.not")}</p>
-    </div>
+    {#if cagri.fiyat}
+      {@const f = cagri.fiyat}
+      <div class="kart fiyat">
+        <div><span>{dil.t("cagri.cikis")}</span><span>{paraYaz(f.cikis, dil.kod)}</span></div>
+        {#if f.acil}<div><span>{dil.t("cagri.acil")}</span><span>{paraYaz(f.acil, dil.kod)}</span></div>{/if}
+        {#if f.gece}<div><span>{dil.t("cagri.gece")}</span><span>{paraYaz(f.gece, dil.kod)}</span></div>{/if}
+        {#if f.pazar}<div><span>{dil.t("cagri.pazar")}</span><span>{paraYaz(f.pazar, dil.kod)}</span></div>{/if}
+        <div><span>{dil.t("cagri.iscilik")}</span><span>{aralikYaz(f.iscilikMin, f.iscilikMax, dil.kod)}</span></div>
+        <div class="toplam"><span>{dil.t("cagri.toplam")}</span><b>{aralikYaz(f.toplamMin, f.toplamMax, dil.kod)}</b></div>
+        <p>{dil.t("cagri.not")}</p>
+      </div>
+    {/if}
 
     {#if hata}
       <p class="hata">{dil.t("cagri.hata")} {hata}</p>

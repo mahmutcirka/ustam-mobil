@@ -158,19 +158,6 @@
     border-top: 1px solid var(--kenar);
   }
 
-  .ayar.satir {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .ayar.satir input {
-    width: 20px;
-    height: 20px;
-    accent-color: var(--renk-ana);
-  }
-
   .diller {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
