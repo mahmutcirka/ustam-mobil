@@ -54,7 +54,7 @@
   </div>
 </div>
 
-<div class="sayfa">
+<div class="sayfa dar">
   <div class="istatistik">
     <div class="kart"><b>{dil.t("detay.yil", { n: sayiYaz(u.deneyimYil, dil.kod) })}</b><span>{dil.t("detay.deneyim")}</span></div>
     <div class="kart"><b>{sayiYaz(u.tamamlananIs, dil.kod)}</b><span>{dil.t("detay.tamamlanan")}</span></div>
@@ -130,7 +130,8 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 28px 16px 20px;
+    /* İçerik .sayfa.dar (560px) ile aynı hizada başlasın */
+    padding: 28px max(16px, calc((100% - 560px) / 2 + 16px)) 20px;
     background: var(--renk-koyu);
     color: #fff;
   }
