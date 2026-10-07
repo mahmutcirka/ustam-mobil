@@ -7,7 +7,14 @@ export type Kategori = "tesisat" | "elektrik" | "cilingir" | "kombi" | "beyaz-es
 
 export type Aciliyet = "hemen" | "bugun" | "randevu";
 
-export type IsDurumu = "bekliyor" | "yolda" | "tamamlandi" | "iptal";
+// Kalıcı durum; aktif işin anlık aşaması (onaylandı, yolda, kapıda) zamana göre hesaplanır (takip.ts)
+export type IsDurumu = "aktif" | "tamamlandi" | "iptal";
+
+export type IsAsamasi = "alindi" | "onaylandi" | "yolda" | "kapida" | "tamamlandi";
+
+export type OdemeTercihi = "nakit" | "kart";
+
+export type IptalNedeni = "vazgectim" | "gecikti" | "baskasi" | "cozuldu";
 
 export type Semt =
   | "Sarıyer"
@@ -80,5 +87,11 @@ export interface IsEmri extends CagriTaslagi {
   kategori: Kategori;
   fiyat: FiyatDokumu; // Rust fiyat_hesapla dökümü
   durum: IsDurumu;
-  olusturma: string;
+  olusturma: string; // yerel ISO
+  varisDk: number; // oluşturma anındaki tahmini yol süresi
+  odeme: OdemeTercihi;
+  telefon: string;
+  dogrulandi?: boolean; // kapıdaki ustanın kodu doğrulandı
+  iptalNedeni?: IptalNedeni;
+  bitis?: string; // tamamlanma veya iptal zamanı
 }

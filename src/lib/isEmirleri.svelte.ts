@@ -1,36 +1,38 @@
 // İş emirleri — kod ve fiyat dökümü Rust'tan (motor.ts), liste localStorage'da saklanır
-import type { CagriTaslagi, IsDurumu, IsEmri, Usta } from "../types/ustam";
-import { sorunBilgisi, tahminiFiyat, yerelIso } from "./data";
+import type { CagriTaslagi, IptalNedeni, IsEmri, OdemeTercihi, Usta } from "../types/ustam";
+import { mesafeKm, sorunBilgisi, tahminiFiyat, varisDk } from "./data";
 import { oku, yaz } from "./depo";
 import { fiyatHesapla, isEmriKoduUret } from "./motor";
+import { profil } from "./profil.svelte";
 
 const ANAHTAR = "is-emirleri";
 
-// İlk sürümde fiyat yerine tek "tutar" alanı vardı; eski kayıtlar okunurken dökümüne çevrilir
-type EskiIsEmri = Omit<IsEmri, "fiyat"> & { fiyat?: IsEmri["fiyat"]; tutar?: number };
+// Önceki sürümlerdeki kayıtlar (tek "tutar" alanı, "bekliyor"/"yolda" durumları) okunurken yeni biçime çevrilir
+type EskiKayit = Partial<IsEmri> & CagriTaslagi & { kod: string; tutar?: number; durum?: string };
 
-function yukle(): IsEmri[] {
-  return oku<EskiIsEmri[]>(ANAHTAR, []).map(({ tutar, ...e }) => ({
+function donustur(e: EskiKayit): IsEmri {
+  const tutar = e.tutar ?? 0;
+  return {
     ...e,
-    fiyat: e.fiyat ?? {
-      cikis: tutar ?? 0,
-      acil: 0,
-      gece: 0,
-      pazar: 0,
-      iscilikMin: 0,
-      iscilikMax: 0,
-      toplamMin: tutar ?? 0,
-      toplamMax: tutar ?? 0,
-    },
-  }));
+    ustaAd: e.ustaAd ?? "",
+    kategori: e.kategori ?? "tesisat",
+    fiyat: e.fiyat ?? { cikis: tutar, acil: 0, gece: 0, pazar: 0, iscilikMin: 0, iscilikMax: 0, toplamMin: tutar, toplamMax: tutar },
+    durum: e.durum === "tamamlandi" || e.durum === "iptal" ? e.durum : "aktif",
+    olusturma: e.olusturma ?? e.zaman,
+    varisDk: e.varisDk ?? 20,
+    odeme: e.odeme ?? "nakit",
+    telefon: e.telefon ?? "",
+  };
 }
 
 class IsEmirleri {
-  liste = $state<IsEmri[]>(yukle());
+  liste = $state<IsEmri[]>(oku<EskiKayit[]>(ANAHTAR, []).map(donustur));
 
-  aktifSayisi = $derived(this.liste.filter((i) => i.durum === "bekliyor" || i.durum === "yolda").length);
+  aktifler = $derived(this.liste.filter((i) => i.durum === "aktif"));
+  gecmis = $derived(this.liste.filter((i) => i.durum !== "aktif"));
+  aktifSayisi = $derived(this.aktifler.length);
 
-  async olustur(t: CagriTaslagi, usta: Usta): Promise<IsEmri> {
+  async olustur(t: CagriTaslagi, usta: Usta, ek: { odeme: OdemeTercihi; telefon: string }): Promise<IsEmri> {
     const [iscilikMin, iscilikMax] = sorunBilgisi[t.sorun]?.iscilik ?? [0, 0];
     const [kod, fiyat] = await Promise.all([
       isEmriKoduUret(usta.kategori, t.zaman),
@@ -40,28 +42,47 @@ class IsEmirleri {
     ]);
     const emir: IsEmri = {
       ...t,
+      ...ek,
       kod,
       ustaAd: usta.ad,
       kategori: usta.kategori,
       fiyat,
-      durum: t.aciliyet === "hemen" ? "yolda" : "bekliyor",
-      olusturma: yerelIso(new Date()),
+      durum: "aktif",
+      olusturma: new Date().toISOString(),
+      varisDk: varisDk(mesafeKm(usta, profil.bilgi.semt)),
     };
     this.liste.unshift(emir);
     this.kaydet();
     return emir;
   }
 
-  durumDegistir(kod: string, durum: IsDurumu) {
-    const emir = this.liste.find((i) => i.kod === kod);
-    if (!emir) return;
-    emir.durum = durum;
-    this.kaydet();
-  }
-
   bul(kod: string): IsEmri | undefined {
     const aranan = kod.trim().toUpperCase();
     return this.liste.find((i) => i.kod === aranan);
+  }
+
+  dogrula(kod: string) {
+    this.guncelle(kod, { dogrulandi: true });
+  }
+
+  tamamla(kod: string) {
+    this.guncelle(kod, { durum: "tamamlandi", bitis: new Date().toISOString() });
+  }
+
+  iptal(kod: string, neden: IptalNedeni) {
+    this.guncelle(kod, { durum: "iptal", iptalNedeni: neden, bitis: new Date().toISOString() });
+  }
+
+  hepsiniSil() {
+    this.liste = [];
+    this.kaydet();
+  }
+
+  private guncelle(kod: string, degisiklik: Partial<IsEmri>) {
+    const i = this.liste.findIndex((e) => e.kod === kod);
+    if (i === -1) return;
+    this.liste[i] = { ...this.liste[i], ...degisiklik };
+    this.kaydet();
   }
 
   private kaydet() {

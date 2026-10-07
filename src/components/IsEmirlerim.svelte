@@ -1,83 +1,166 @@
 <script lang="ts">
-  // İş Emirlerim — Rust'ın ürettiği kodlar, durum yönetimi ve kapıdaki ustayı doğrulama
+  // İş Emirlerim — Aktif / Geçmiş sekmeleri, canlı iş kartları, iptal nedeni ve iş sonu değerlendirmesi
   import Ikon from "$lib/components/Ikon.svelte";
-  import { aralikYaz, kategoriIkon, tarihYaz } from "$lib/data";
+  import Pencere from "$lib/components/Pencere.svelte";
+  import Yildizlar from "$lib/components/Yildizlar.svelte";
+  import YildizSecici from "$lib/components/YildizSecici.svelte";
+  import IsKarti from "./IsKarti.svelte";
+  import { aralikYaz, basHarfler, tarihYaz, ustaBul } from "$lib/data";
   import { isEmirleri } from "$lib/isEmirleri.svelte";
-  import { isEmriKoduDogrula } from "$lib/motor";
+  import { yorumlarim } from "$lib/yorumlar.svelte";
+  import { profil } from "$lib/profil.svelte";
   import { dil } from "$lib/i18n.svelte";
+  import { bildirim } from "$lib/bildirim.svelte";
   import type { Anahtar } from "$lib/ceviriler";
+  import type { IptalNedeni, IsEmri } from "../types/ustam";
 
-  let girilenKod = $state("");
-  let sonuc = $state<"dogru" | "yanlis" | "format" | "kontrol" | null>(null);
+  const nedenler: IptalNedeni[] = ["vazgectim", "gecikti", "baskasi", "cozuldu"];
 
-  async function dogrula(event: SubmitEvent) {
-    event.preventDefault();
-    const kod = girilenKod.trim().toUpperCase();
-    const durum = await isEmriKoduDogrula(kod);
-    if (durum === "bicim-hatali") sonuc = "format";
-    else if (durum === "kontrol-hatali") sonuc = "kontrol";
-    else sonuc = isEmirleri.bul(kod) ? "dogru" : "yanlis";
+  let sekme = $state<"aktif" | "gecmis">(isEmirleri.aktifSayisi > 0 || isEmirleri.gecmis.length === 0 ? "aktif" : "gecmis");
+
+  let iptalIs = $state<IsEmri | null>(null);
+  let iptalNedeni = $state<IptalNedeni>("vazgectim");
+  let iptalAcik = $state(false);
+
+  let degerlendirIs = $state<IsEmri | null>(null);
+  let puan = $state(0);
+  let yorum = $state("");
+  let degerlendirAcik = $state(false);
+
+  function iptalEt(i: IsEmri) {
+    iptalIs = i;
+    iptalNedeni = "vazgectim";
+    iptalAcik = true;
+  }
+
+  function iptalOnayla() {
+    if (!iptalIs) return;
+    isEmirleri.iptal(iptalIs.kod, iptalNedeni);
+    iptalAcik = false;
+    bildirim.goster(dil.t("is.iptalEdildi"), "bilgi");
+  }
+
+  function bitir(i: IsEmri) {
+    isEmirleri.tamamla(i.kod);
+    degerlendirmeAc(i);
+  }
+
+  function degerlendirmeAc(i: IsEmri) {
+    degerlendirIs = i;
+    puan = 5;
+    yorum = "";
+    degerlendirAcik = true;
+  }
+
+  function degerlendirmeGonder(e: SubmitEvent) {
+    e.preventDefault();
+    const i = degerlendirIs;
+    if (!i || puan < 1) return;
+    yorumlarim.ekle({
+      ustaId: i.ustaId,
+      isKodu: i.kod,
+      ad: profil.bilgi.ad.trim() || dil.t("profil.misafir"),
+      puan,
+      metin: yorum.trim(),
+      dil: dil.kod,
+      tarih: new Date().toISOString().slice(0, 10),
+    });
+    degerlendirAcik = false;
+    sekme = "gecmis";
+    bildirim.goster(dil.t("is.tesekkur"));
   }
 </script>
 
-<div class="sayfa">
+<div class="sayfa dar">
   <h1>{dil.t("is.baslik")}</h1>
 
-  {#if isEmirleri.liste.length > 0}
-    <form class="kart dogrula" onsubmit={dogrula}>
-      <strong>🛡️ {dil.t("is.dogrulaBaslik")}</strong>
-      <div class="satir">
-        <input
-          dir="ltr"
-          placeholder={dil.t("is.dogrulaYer")}
-          bind:value={girilenKod}
-          oninput={() => (sonuc = null)}
-          autocapitalize="characters"
-        />
-        <button class="btn" disabled={!girilenKod.trim()}>{dil.t("is.dogrulaBtn")}</button>
-      </div>
-      {#if sonuc === "dogru"}
-        <p class="sonuc basari">✓ {dil.t("is.dogru")}</p>
-      {:else if sonuc === "yanlis"}
-        <p class="sonuc hata">✗ {dil.t("is.yanlis")}</p>
-      {:else if sonuc === "format"}
-        <p class="sonuc hata">{dil.t("is.formatHatali")}</p>
-      {:else if sonuc === "kontrol"}
-        <p class="sonuc hata">{dil.t("is.kontrolHatali")}</p>
-      {/if}
-    </form>
-  {/if}
+  <div class="sekmeler" role="tablist">
+    <button role="tab" aria-selected={sekme === "aktif"} class:aktif={sekme === "aktif"} onclick={() => (sekme = "aktif")}>
+      {dil.t("is.aktif")} <span class="adet">{isEmirleri.aktifSayisi}</span>
+    </button>
+    <button role="tab" aria-selected={sekme === "gecmis"} class:aktif={sekme === "gecmis"} onclick={() => (sekme = "gecmis")}>
+      {dil.t("is.gecmis")} <span class="adet">{isEmirleri.gecmis.length}</span>
+    </button>
+  </div>
 
-  <div class="izgara">
-    {#each isEmirleri.liste as i (i.kod)}
-      <div class="kart emir" class:pasif={i.durum === "tamamlandi" || i.durum === "iptal"}>
-        <div class="ust">
-          <div class="baslik">
-            <Ikon ad={kategoriIkon[i.kategori]} boyut={18} />
-            <strong>{i.ustaAd}</strong>
-            <span class="durum {i.durum}">{dil.t(`durum.${i.durum}`)}</span>
-          </div>
-          <p>{dil.t(`sorun.${i.sorun}` as Anahtar)}</p>
-          <p>{dil.t(`aciliyet.${i.aciliyet}`)} · {tarihYaz(i.zaman, dil.kod)}</p>
-          <p>{aralikYaz(i.fiyat.toplamMin, i.fiyat.toplamMax, dil.kod)}</p>
-        </div>
-        <div class="kod">
-          <span>{dil.t("is.kod")}</span>
-          <code dir="ltr">{i.kod}</code>
-        </div>
-        {#if i.durum === "bekliyor" || i.durum === "yolda"}
-          <p class="kod-not">{dil.t("is.kodNot")}</p>
-          <div class="eylemler">
-            <button onclick={() => isEmirleri.durumDegistir(i.kod, "tamamlandi")}>✓ {dil.t("is.tamamla")}</button>
-            <button class="iptal" onclick={() => isEmirleri.durumDegistir(i.kod, "iptal")}>{dil.t("is.iptal")}</button>
-          </div>
-        {/if}
-      </div>
+  {#if sekme === "aktif"}
+    {#each isEmirleri.aktifler as i (i.kod)}
+      <IsKarti is={i} {iptalEt} {bitir} />
     {:else}
-      <p class="bos">{dil.t("is.bos")}<br /><a href="/">{dil.t("cagri.ustaSec")}</a></p>
+      <div class="bos">
+        <span class="bos-ikon"><Ikon ad="fis" boyut={32} /></span>
+        <p>{dil.t("is.aktifYok")}</p>
+        <a class="btn" href="/">{dil.t("cagri.ustaSec")}</a>
+      </div>
+    {/each}
+  {:else}
+    {#each isEmirleri.gecmis as i (i.kod)}
+      {@const benimYorum = yorumlarim.isIcin(i.kod)}
+      <article class="kart gecmis">
+        <header>
+          <span class="avatar" aria-hidden="true">{basHarfler(i.ustaAd)}</span>
+          <div class="kim">
+            <strong>{i.ustaAd}</strong>
+            <span>{dil.t(`sorun.${i.sorun}` as Anahtar)} · {tarihYaz(i.bitis ?? i.zaman, dil.kod)}</span>
+          </div>
+          <span class="durum {i.durum}">{dil.t(i.durum === "iptal" ? "durum.iptal" : "durum.tamamlandi")}</span>
+        </header>
+        <div class="alt">
+          <code dir="ltr">{i.kod}</code>
+          <b>{aralikYaz(i.fiyat.toplamMin, i.fiyat.toplamMax, dil.kod)}</b>
+        </div>
+        {#if i.durum === "iptal" && i.iptalNedeni}
+          <p class="neden">{dil.t(`iptal.${i.iptalNedeni}`)}</p>
+        {/if}
+        <div class="islemler">
+          {#if i.durum === "tamamlandi"}
+            {#if benimYorum}
+              <span class="puanim">{dil.t("is.puaniniz")}: <Yildizlar puan={benimYorum.puan} /></span>
+            {:else}
+              <button class="btn ikincil" onclick={() => degerlendirmeAc(i)}><Ikon ad="yildiz" boyut={16} /> {dil.t("is.degerlendir")}</button>
+            {/if}
+          {/if}
+          {#if ustaBul(i.ustaId)}
+            <a class="btn ikincil" href="/usta/{i.ustaId}?sorun={i.sorun}"><Ikon ad="roket" boyut={16} /> {dil.t("is.tekrar")}</a>
+          {/if}
+        </div>
+      </article>
+    {:else}
+      <div class="bos">
+        <span class="bos-ikon"><Ikon ad="fis" boyut={32} /></span>
+        <p>{dil.t("is.gecmisYok")}</p>
+      </div>
+    {/each}
+  {/if}
+</div>
+
+<Pencere bind:acik={iptalAcik} baslik={dil.t("is.iptalBaslik")} kapatEtiketi={dil.t("genel.kapat")}>
+  <p class="soru">{dil.t("is.iptalSoru")}</p>
+  <div class="nedenler">
+    {#each nedenler as n}
+      <label class:aktif={iptalNedeni === n}>
+        <input type="radio" name="iptal-nedeni" value={n} bind:group={iptalNedeni} />
+        {dil.t(`iptal.${n}`)}
+      </label>
     {/each}
   </div>
-</div>
+  <div class="pencere-dugmeleri">
+    <button class="btn ikincil" onclick={() => (iptalAcik = false)}>{dil.t("genel.vazgec")}</button>
+    <button class="btn tehlike" onclick={iptalOnayla}>{dil.t("is.iptalOnay")}</button>
+  </div>
+</Pencere>
+
+<Pencere
+  bind:acik={degerlendirAcik}
+  baslik={dil.t("is.degerlendirBaslik", { usta: degerlendirIs?.ustaAd ?? "" })}
+  kapatEtiketi={dil.t("genel.kapat")}
+>
+  <form class="degerlendirme" onsubmit={degerlendirmeGonder}>
+    <YildizSecici bind:puan />
+    <textarea rows="3" placeholder={dil.t("is.yorumYer")} bind:value={yorum}></textarea>
+    <button class="btn" disabled={puan < 1}>{dil.t("is.gonder")}</button>
+  </form>
+</Pencere>
 
 <style>
   h1 {
@@ -85,145 +168,221 @@
     font-size: 22px;
   }
 
-  .dogrula {
+  .sekmeler {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 4px;
+    border-radius: var(--radius);
+    background: var(--kart);
+    border: 1px solid var(--kenar);
+  }
+
+  .sekmeler button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    border: 0;
+    border-radius: var(--radius-kucuk);
+    background: none;
+    color: var(--yazi-soluk);
+    font-weight: 600;
+  }
+
+  .sekmeler button.aktif {
+    background: var(--renk-ana);
+    color: var(--renk-ana-ustu);
+  }
+
+  .adet {
+    min-width: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: var(--zemin);
+    color: var(--yazi-soluk);
+    font-size: 12px;
+  }
+
+  .sekmeler button.aktif .adet {
+    background: var(--koyu-cam);
+    color: var(--renk-ana-ustu);
+  }
+
+  .gecmis {
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 14px;
   }
 
-  .dogrula .satir {
+  .gecmis header {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: 12px;
   }
 
-  .dogrula input {
+  .avatar {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--zemin);
+    color: var(--yazi-soluk);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+  }
+
+  .kim {
     flex: 1;
     min-width: 0;
-    padding: 12px;
-    border: 1px solid var(--kenar);
-    border-radius: 10px;
-    background: var(--zemin);
-    font-family: ui-monospace, monospace;
-    letter-spacing: 1px;
-  }
-
-  .dogrula input:not(:placeholder-shown) {
-    text-transform: uppercase;
-  }
-
-  .dogrula .btn {
-    width: auto;
-  }
-
-  .sonuc {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .basari {
-    color: var(--basari);
-  }
-
-  .hata {
-    color: var(--hata);
-  }
-
-  .emir {
-    overflow: hidden;
-  }
-
-  .emir.pasif {
-    opacity: 0.6;
-  }
-
-  .ust {
-    padding: 14px;
-    border-inline-start: 6px solid var(--renk-ana);
-  }
-
-  .baslik {
     display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .baslik strong {
-    flex: 1;
-  }
-
-  .ust p {
-    margin: 2px 0;
-    font-size: 14px;
-    color: var(--yazi-soluk);
-  }
-
-  .durum {
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    background: var(--kenar);
-    color: var(--yazi-soluk);
-  }
-
-  .durum.yolda {
-    background: var(--basari-yumusak);
-    color: var(--basari);
-  }
-
-  .durum.bekliyor {
-    background: var(--vurgu-yumusak);
-    color: var(--yazi);
-  }
-
-  .kod {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 14px;
-    border-top: 2px dashed var(--kenar);
+    flex-direction: column;
     font-size: 13px;
     color: var(--yazi-soluk);
   }
 
-  code {
-    font-size: 16px;
-    font-weight: 700;
+  .kim strong {
+    font-size: 15px;
     color: var(--yazi);
-    letter-spacing: 1px;
   }
 
-  .kod-not {
-    margin: 0;
-    padding: 0 14px 10px;
-    font-size: 12px;
+  .durum {
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--kenar);
     color: var(--yazi-soluk);
   }
 
-  .eylemler {
-    display: flex;
-    border-top: 1px solid var(--kenar);
-  }
-
-  .eylemler button {
-    flex: 1;
-    padding: 12px;
-    border: 0;
-    background: none;
-    font-weight: 600;
+  .durum.tamamlandi {
+    background: var(--basari-yumusak);
     color: var(--basari);
   }
 
-  .eylemler .iptal {
-    color: var(--hata);
-    border-inline-start: 1px solid var(--kenar);
+  .alt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
   }
 
-  .bos a {
+  .alt code {
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--yazi-soluk);
+  }
+
+  .neden {
+    margin: 0;
+    font-size: 13px;
+    color: var(--yazi-soluk);
+  }
+
+  .islemler {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .islemler .btn {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .puanim {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--yazi-soluk);
+  }
+
+  .bos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bos p {
+    margin: 0;
+  }
+
+  .bos .btn {
+    width: auto;
+  }
+
+  .bos-ikon {
+    display: flex;
+    padding: 18px;
+    border-radius: 50%;
+    background: var(--renk-ana-yumusak);
     color: var(--renk-ana-yazi);
-    font-weight: 600;
+  }
+
+  .soru {
+    margin: 0;
+    color: var(--yazi-soluk);
+  }
+
+  .nedenler {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nedenler label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--kenar);
+    border-radius: var(--radius-kucuk);
+    cursor: pointer;
+  }
+
+  .nedenler label.aktif {
+    border-color: var(--renk-ana);
+    box-shadow: 0 0 0 1px var(--renk-ana);
+  }
+
+  .nedenler input {
+    accent-color: var(--renk-ana);
+  }
+
+  .pencere-dugmeleri {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .btn.tehlike {
+    background: var(--hata);
+    color: var(--kart);
+  }
+
+  .degerlendirme {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .degerlendirme textarea {
+    padding: 12px;
+    border: 1px solid var(--kenar);
+    border-radius: var(--radius-kucuk);
+    background: var(--zemin);
+    resize: vertical;
   }
 </style>
