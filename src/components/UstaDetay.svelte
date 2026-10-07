@@ -1,7 +1,8 @@
 <script lang="ts">
   // Detay ve seçim ekranı — sorun tipi, aciliyet, ziyaret zamanı ve adres notu
   import Ikon from "$lib/components/Ikon.svelte";
-  import { ACIL_UCRET, aciliyetler, kategoriIkon, paraYaz, saatDilimleri, sayiYaz, tutarHesapla, yerelIso } from "$lib/data";
+  import { aciliyetler, aralikYaz, kategoriIkon, paraYaz, saatDilimleri, sayiYaz, tahminiFiyat, yerelIso } from "$lib/data";
+  import { ACIL_UCRET } from "$lib/kurallar";
   import { cagri } from "$lib/cagri.svelte";
   import { dil } from "$lib/i18n.svelte";
   import type { Anahtar } from "$lib/ceviriler";
@@ -39,7 +40,7 @@
     izinli(aciliyet) && (aciliyet !== "bugun" || bugunSaatleri.length > 0) && (aciliyet !== "randevu" || tarih >= yarin),
   );
 
-  const tutar = $derived(tutarHesapla(u, aciliyet));
+  const fiyat = $derived(tahminiFiyat(u, sorun, aciliyet, zaman));
 
   function cagir() {
     if (!gonderilebilir) return;
@@ -124,7 +125,7 @@
   </label>
 
   <button class="btn" onclick={cagir} disabled={!gonderilebilir}>
-    {dil.t("detay.cagir", { tutar: paraYaz(tutar, dil.kod) })}
+    {dil.t("detay.cagir", { tutar: aralikYaz(fiyat.toplamMin, fiyat.toplamMax, dil.kod) })}
   </button>
 </div>
 

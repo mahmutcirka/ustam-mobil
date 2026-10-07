@@ -29,7 +29,7 @@ arasındaki kaydı netleştirir: usta kapıya geldiğinde kod doğrulanır.
 | Etkinlik kartları | Usta kartları |
 | Bilet kategorisi + adet seçimi | Sorun tipi + aciliyet + ziyaret saati seçimi |
 | Sepet | Çağrı özeti (`/cagri`) |
-| Bilet kodu `PSK-XXX-XXXXXXX` (Rust) | İş emri kodu `UST-ELK-1210-K7Q4` (Rust) |
+| Bilet kodu `PSK-XXX-XXXXXXX` (Rust) | İş emri kodu `UST-ELK-1210-K7QM` (Rust) |
 | Biletlerim | İş Emirlerim |
 
 ---
@@ -85,15 +85,33 @@ interface IsEmri {
 ### Rust iş emri kodu formatı
 
 ```
-UST-ELK-1210-K7Q4
-│   │   │    └── 4 haneli büyük harf/rakam (rastgele, 0/O ve 1/I hariç)
-│   │   └─────── gün + ay (12 Ekim → 1210)
-│   └─────────── kategori kodu: TES tesisat · ELK elektrik · CLN çilingir · KMB kombi · BYZ beyaz eşya
-└─────────────── sabit önek
+UST-ELK-1210-K7QM
+│   │   │    │  └─ kontrol karakteri: ağırlıklı toplam (konum × base-36 değer) mod 32
+│   │   │    └──── 3 karakter rastgele (0/O ve 1/I hariç 32 karakterlik alfabe)
+│   │   └───────── gün + ay (12 Ekim → 1210)
+│   └───────────── kategori kodu: TES tesisat · ELK elektrik · CLN çilingir · KMB kombi · BYZ beyaz eşya
+└───────────────── sabit önek
 ```
 
-Ön yüz `invoke("is_emri_uret", { kategori, zaman })` ile çağırır; Rust kategori kodunu doğrular
-ve kodu üretir.
+- **Üretim:** `invoke("is_emri_uret", { kategori, zaman })` → Rust kategori ve tarihi doğrular, kodu üretir.
+- **Doğrulama:** `invoke("is_emri_dogrula", { kod })` → `gecerli` · `bicim-hatali` · `kontrol-hatali`.
+  Kontrol karakteri sayesinde kapıdaki ustanın kodundaki tek karakterlik yazım hataları ve yan yana yer
+  değiştirmelerin çoğu, iş emirleri listesine bakılmadan yakalanır.
+
+### Rust fiyat motoru (`fiyat_hesapla`)
+
+| Kalem | Kural |
+|---|---|
+| Çıkış ücreti | Ustanın sabit ücreti |
+| Acil servis | Aciliyet "Hemen" ise +₺150 |
+| Gece ek ücreti | Ziyaret 22:00–07:59 arasındaysa çıkış ücretinin %25'i |
+| Pazar ek ücreti | Ziyaret Pazar günüyse çıkış ücretinin %15'i (gün, Sakamoto algoritmasıyla hesaplanır) |
+| İşçilik | Sorun tipine göre tahmini aralık (ör. su sızıntısı ₺250–₺600) |
+| Toplam | Sabit kalemler + işçilik aralığı → "₺650 – ₺950" |
+
+Aynı kurallar tarayıcı için `src/lib/kurallar.ts` içinde de vardır. İki uygulama
+[`src-tauri/test-vektorleri.json`](../src-tauri/test-vektorleri.json) dosyasındaki elle hesaplanmış ortak
+örneklerle test edilir (`cargo test` ve `bun run test`).
 
 ---
 

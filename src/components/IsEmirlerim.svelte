@@ -1,18 +1,21 @@
 <script lang="ts">
   // İş Emirlerim — Rust'ın ürettiği kodlar, durum yönetimi ve kapıdaki ustayı doğrulama
   import Ikon from "$lib/components/Ikon.svelte";
-  import { kategoriIkon, paraYaz, tarihYaz } from "$lib/data";
-  import { isEmirleri, kodBicimiGecerli } from "$lib/isEmirleri.svelte";
+  import { aralikYaz, kategoriIkon, tarihYaz } from "$lib/data";
+  import { isEmirleri } from "$lib/isEmirleri.svelte";
+  import { isEmriKoduDogrula } from "$lib/motor";
   import { dil } from "$lib/i18n.svelte";
   import type { Anahtar } from "$lib/ceviriler";
 
   let girilenKod = $state("");
-  let sonuc = $state<"dogru" | "yanlis" | "format" | null>(null);
+  let sonuc = $state<"dogru" | "yanlis" | "format" | "kontrol" | null>(null);
 
   async function dogrula(event: SubmitEvent) {
     event.preventDefault();
     const kod = girilenKod.trim().toUpperCase();
-    if (!(await kodBicimiGecerli(kod))) sonuc = "format";
+    const durum = await isEmriKoduDogrula(kod);
+    if (durum === "bicim-hatali") sonuc = "format";
+    else if (durum === "kontrol-hatali") sonuc = "kontrol";
     else sonuc = isEmirleri.bul(kod) ? "dogru" : "yanlis";
   }
 </script>
@@ -39,6 +42,8 @@
         <p class="sonuc hata">✗ {dil.t("is.yanlis")}</p>
       {:else if sonuc === "format"}
         <p class="sonuc hata">{dil.t("is.formatHatali")}</p>
+      {:else if sonuc === "kontrol"}
+        <p class="sonuc hata">{dil.t("is.kontrolHatali")}</p>
       {/if}
     </form>
   {/if}
@@ -54,7 +59,7 @@
           </div>
           <p>{dil.t(`sorun.${i.sorun}` as Anahtar)}</p>
           <p>{dil.t(`aciliyet.${i.aciliyet}`)} · {tarihYaz(i.zaman, dil.kod)}</p>
-          <p>{paraYaz(i.tutar, dil.kod)}</p>
+          <p>{aralikYaz(i.fiyat.toplamMin, i.fiyat.toplamMax, dil.kod)}</p>
         </div>
         <div class="kod">
           <span>{dil.t("is.kod")}</span>

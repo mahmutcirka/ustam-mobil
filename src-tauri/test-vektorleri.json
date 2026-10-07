@@ -1,0 +1,59 @@
+{
+  "aciklama": "Rust (src-tauri/src/lib.rs) ve TypeScript (src/lib/kurallar.ts) kurallarının ortak test örnekleri. Değerler elle hesaplanmıştır; iki uygulama da aynı sonucu vermek zorundadır.",
+  "kontrolKarakteri": [
+    { "govde": "ELK1210K7Q", "beklenen": "M" },
+    { "govde": "ELK12107KQ", "beklenen": "2" }
+  ],
+  "kodDurumu": [
+    { "kod": "UST-ELK-1210-K7QM", "durum": "gecerli" },
+    { "kod": "  ust-elk-1210-k7qm ", "durum": "gecerli" },
+    { "kod": "UST-ELK-1210-K7QA", "durum": "kontrol-hatali" },
+    { "kod": "UST-ELK-1210-7KQM", "durum": "kontrol-hatali" },
+    { "kod": "UST-ELK-1210-K0QM", "durum": "bicim-hatali" },
+    { "kod": "UST-ELK-3213-K7QM", "durum": "bicim-hatali" },
+    { "kod": "UST-BOY-1210-K7QM", "durum": "bicim-hatali" },
+    { "kod": "UST-ELK-1210-K7Q", "durum": "bicim-hatali" },
+    { "kod": "PSK-001-ABCDEFG", "durum": "bicim-hatali" },
+    { "kod": "UST-ELK-1210-ÜÜ", "durum": "bicim-hatali" },
+    { "kod": "", "durum": "bicim-hatali" }
+  ],
+  "haftaninGunu": [
+    { "tarih": "2026-10-07", "gun": 3 },
+    { "tarih": "2026-10-11", "gun": 0 },
+    { "tarih": "2026-01-01", "gun": 4 },
+    { "tarih": "2024-02-29", "gun": 4 },
+    { "tarih": "2000-01-01", "gun": 6 }
+  ],
+  "fiyat": [
+    {
+      "aciklama": "Hafta içi gündüz, bugün",
+      "girdi": { "cikisUcreti": 300, "aciliyet": "bugun", "zaman": "2026-10-07T14:00", "iscilikMin": 200, "iscilikMax": 400 },
+      "beklenen": { "cikis": 300, "acil": 0, "gece": 0, "pazar": 0, "iscilikMin": 200, "iscilikMax": 400, "toplamMin": 500, "toplamMax": 700 }
+    },
+    {
+      "aciklama": "Hafta içi gece, hemen: acil + %25 gece",
+      "girdi": { "cikisUcreti": 300, "aciliyet": "hemen", "zaman": "2026-10-07T23:30", "iscilikMin": 250, "iscilikMax": 500 },
+      "beklenen": { "cikis": 300, "acil": 150, "gece": 75, "pazar": 0, "iscilikMin": 250, "iscilikMax": 500, "toplamMin": 775, "toplamMax": 1025 }
+    },
+    {
+      "aciklama": "Pazar gündüz, randevu: %15 Pazar",
+      "girdi": { "cikisUcreti": 400, "aciliyet": "randevu", "zaman": "2026-10-11T10:00", "iscilikMin": 300, "iscilikMax": 600 },
+      "beklenen": { "cikis": 400, "acil": 0, "gece": 0, "pazar": 60, "iscilikMin": 300, "iscilikMax": 600, "toplamMin": 760, "toplamMax": 1060 }
+    },
+    {
+      "aciklama": "Pazar sabah 07:00, hemen: yarım kuruşlar yukarı yuvarlanır (87,5 → 88; 52,5 → 53)",
+      "girdi": { "cikisUcreti": 350, "aciliyet": "hemen", "zaman": "2026-10-11T07:00", "iscilikMin": 100, "iscilikMax": 200 },
+      "beklenen": { "cikis": 350, "acil": 150, "gece": 88, "pazar": 53, "iscilikMin": 100, "iscilikMax": 200, "toplamMin": 741, "toplamMax": 841 }
+    },
+    {
+      "aciklama": "22:00 gece sayılır",
+      "girdi": { "cikisUcreti": 320, "aciliyet": "bugun", "zaman": "2026-10-08T22:00", "iscilikMin": 0, "iscilikMax": 0 },
+      "beklenen": { "cikis": 320, "acil": 0, "gece": 80, "pazar": 0, "iscilikMin": 0, "iscilikMax": 0, "toplamMin": 400, "toplamMax": 400 }
+    },
+    {
+      "aciklama": "08:00 gündüz sayılır",
+      "girdi": { "cikisUcreti": 320, "aciliyet": "bugun", "zaman": "2026-10-08T08:00", "iscilikMin": 0, "iscilikMax": 0 },
+      "beklenen": { "cikis": 320, "acil": 0, "gece": 0, "pazar": 0, "iscilikMin": 0, "iscilikMax": 0, "toplamMin": 320, "toplamMax": 320 }
+    }
+  ]
+}

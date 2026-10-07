@@ -1,6 +1,7 @@
 // Mock veri — ustalar ve sorun şablonları (ileride bir API'den gelebilir)
 import type { Aciliyet, Dil, Kategori, Usta } from "../types/ustam";
 import type { IkonAdi } from "./ikonlar";
+import { fiyatHesapla, type FiyatDokumu } from "./kurallar";
 
 export const kategoriler: Kategori[] = ["tesisat", "elektrik", "cilingir", "kombi", "beyaz-esya"];
 
@@ -22,8 +23,24 @@ export const kategoriSorunlari: Record<Kategori, string[]> = {
 
 export const aciliyetler: Aciliyet[] = ["hemen", "bugun", "randevu"];
 
-// "Hemen" çağrılarında çıkış ücretine eklenen acil servis bedeli
-export const ACIL_UCRET = 150;
+// Her sorun için tahmini işçilik aralığı (TL) ve süresi (dk); "tehlikeli" sorunlarda güvenlik uyarısı gösterilir
+export const sorunBilgisi: Record<string, { iscilik: [number, number]; sureDk: number; tehlikeli?: boolean }> = {
+  "su-sizintisi": { iscilik: [250, 600], sureDk: 60, tehlikeli: true },
+  "tikali-gider": { iscilik: [200, 450], sureDk: 45 },
+  "musluk-ariza": { iscilik: [150, 350], sureDk: 30 },
+  "sigorta-atiyor": { iscilik: [200, 500], sureDk: 45 },
+  "priz-yanik": { iscilik: [150, 400], sureDk: 40, tehlikeli: true },
+  "elektrik-yok": { iscilik: [250, 700], sureDk: 60 },
+  "kapida-kaldim": { iscilik: [300, 600], sureDk: 20 },
+  "kilit-degisimi": { iscilik: [400, 900], sureDk: 40 },
+  "anahtar-kirildi": { iscilik: [250, 500], sureDk: 30 },
+  "sicak-su-yok": { iscilik: [300, 800], sureDk: 60 },
+  "basinc-dusuk": { iscilik: [150, 350], sureDk: 30 },
+  "petek-isinmiyor": { iscilik: [250, 600], sureDk: 60 },
+  "camasir-makinesi": { iscilik: [300, 700], sureDk: 60 },
+  buzdolabi: { iscilik: [400, 1200], sureDk: 75 },
+  "bulasik-makinesi": { iscilik: [300, 800], sureDk: 60 },
+};
 
 // Bugün / randevu için seçilebilen ziyaret saatleri
 export const saatDilimleri = ["10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
@@ -45,8 +62,10 @@ export function ustaBul(id: number): Usta | undefined {
   return ustalar.find((u) => u.id === id);
 }
 
-export function tutarHesapla(u: Usta, aciliyet: Aciliyet): number {
-  return u.cikisUcreti + (aciliyet === "hemen" ? ACIL_UCRET : 0);
+// Ekranda anlık gösterilen tahmin (TS kuralları); onayda kesin döküm Rust'tan alınır (motor.ts)
+export function tahminiFiyat(u: Usta, sorun: string, aciliyet: Aciliyet, zaman: string): FiyatDokumu {
+  const [iscilikMin, iscilikMax] = sorunBilgisi[sorun]?.iscilik ?? [0, 0];
+  return fiyatHesapla({ cikisUcreti: u.cikisUcreti, aciliyet, zaman, iscilikMin, iscilikMax });
 }
 
 // Biçimlendirme yardımcıları — seçili dile göre para, sayı ve tarih
@@ -71,3 +90,7 @@ export function yerelIso(d: Date): string {
   const p = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
 }
+
+// "₺450" ya da "₺450 – ₺850"
+export const aralikYaz = (min: number, max: number, dil: Dil) =>
+  min === max ? paraYaz(min, dil) : `${paraYaz(min, dil)} – ${paraYaz(max, dil)}`;
