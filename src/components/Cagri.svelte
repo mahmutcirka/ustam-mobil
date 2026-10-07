@@ -37,7 +37,7 @@
         <span class="avatar" aria-hidden="true"><Ikon ad={kategoriIkon[u.kategori]} boyut={24} /></span>
         <div>
           <strong>{u.ad}</strong>
-          <p>{dil.t(`kategori.${u.kategori}`)} · {u.bolge}</p>
+          <p>{dil.t(`kategori.${u.kategori}`)} · {u.semt}</p>
         </div>
       </div>
       <dl>

@@ -9,20 +9,59 @@ export type Aciliyet = "hemen" | "bugun" | "randevu";
 
 export type IsDurumu = "bekliyor" | "yolda" | "tamamlandi" | "iptal";
 
+export type Semt =
+  | "Sarıyer"
+  | "Beşiktaş"
+  | "Şişli"
+  | "Beyoğlu"
+  | "Fatih"
+  | "Bakırköy"
+  | "Beykoz"
+  | "Üsküdar"
+  | "Kadıköy"
+  | "Ataşehir"
+  | "Maltepe"
+  | "Kartal";
+
+export type Rozet = "dogrulanmis" | "sigortali" | "7-24" | "hizli-yanit";
+
+// Haritadaki konum — stilize İstanbul haritasının 100×110 birimlik koordinat sistemi
+export interface Konum {
+  x: number;
+  y: number;
+}
+
+export interface Yorum {
+  ad: string;
+  puan: number; // 1–5
+  metin: string;
+  dil: Dil; // yorumun yazıldığı dil (çevrilmez, kullanıcı içeriğidir)
+  tarih: string; // YYYY-MM-DD
+  benim?: boolean; // bu cihazda kullanıcının yazdığı yorum
+}
+
 export interface Usta {
   id: number;
   ad: string;
   kategori: Kategori;
-  puan: number; // 0–5
+  puan: number; // 0–5, örnek verideki ortalama
   yorumSayisi: number;
-  mesafeKm: number;
-  musait: boolean;
+  musait: boolean; // false → şu an başka bir işte
   cikisUcreti: number; // TL
   deneyimYil: number;
   tamamlananIs: number;
-  bolge: string;
+  semt: Semt;
+  konum: Konum;
+  diller: Dil[]; // ustanın konuştuğu diller
+  rozetler: Rozet[];
+  yanitDk: number; // ortalama ilk yanıt süresi
+  calisma: "7-24" | [string, string]; // "08:00"–"22:00"
   sorunlar: string[]; // ceviriler.ts içindeki "sorun.*" anahtarları
+  yorumlar: Yorum[];
 }
+
+// Ustanın şu anki hâli: çalışma saatleri ve meşguliyet birlikte değerlendirilir
+export type UstaDurumu = { tur: "musait" } | { tur: "mesgul" } | { tur: "kapali"; acilis: string };
 
 // Detay ekranında seçilen, henüz onaylanmamış çağrı
 export interface CagriTaslagi {
@@ -31,6 +70,7 @@ export interface CagriTaslagi {
   aciliyet: Aciliyet;
   zaman: string; // yerel ISO: "2026-10-12T14:30"
   adresNotu: string;
+  foto?: string; // küçültülmüş JPEG data URL (isteğe bağlı)
 }
 
 // Rust kodu üretildikten sonra kaydedilen iş emri
