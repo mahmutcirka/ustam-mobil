@@ -133,7 +133,7 @@
     /* İçerik .sayfa.dar (560px) ile aynı hizada başlasın */
     padding: 28px max(16px, calc((100% - 560px) / 2 + 16px)) 20px;
     background: var(--renk-koyu);
-    color: #fff;
+    color: var(--koyu-ustu);
   }
 
   .avatar {
@@ -141,7 +141,7 @@
     height: 72px;
     flex-shrink: 0;
     border-radius: 20px;
-    background: #ffffff1f;
+    background: var(--koyu-cam);
     display: flex;
     align-items: center;
     justify-content: center;

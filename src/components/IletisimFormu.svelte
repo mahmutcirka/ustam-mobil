@@ -113,6 +113,6 @@
     color: var(--basari);
     border: 1px solid var(--basari);
     font-weight: 600;
-    box-shadow: 0 8px 24px #0000002e;
+    box-shadow: 0 8px 24px var(--golge);
   }
 </style>

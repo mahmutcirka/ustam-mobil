@@ -29,6 +29,10 @@ Kontrast oranları WCAG 2.1 bağıl parlaklık formülüyle hesaplanmıştır; m
 | `--renk-ana-ustu` | `#ffffff` | `#1c1917` | Birincil renk üzerindeki yazı | — |
 | `--renk-ana-yumusak` | `#ffedd5` | `#3b1d0b` | Avatar zemini, bilgi kutusu | `--yazi` ile 15.58 · 14.69 |
 | `--renk-koyu` | `#1e293b` | `#020617` | Üst bar ve usta kapak alanı | beyaz yazı 14.63 · 20.17 |
+| `--koyu-ustu` | `#ffffff` | `#ffffff` | `--renk-koyu` üzerindeki yazı (logo, kapak) | 14.63 · 20.17 |
+| `--koyu-cam` | `#ffffff1f` | `#ffffff1f` | Koyu alan üstündeki yarı saydam düğme/avatar zemini | — (dekoratif) |
+| `--koyu-cizgi` | `#ffffff33` | `#ffffff33` | Koyu alan üstündeki düğme kenarlığı | — (dekoratif) |
+| `--golge` | `#0f172a2e` | `#0000005c` | Bildirim kutusu gölgesi | — (dekoratif) |
 | `--logo` | `#f97316` | `#f97316` | Logodaki "am" vurgusu (yalnızca `--renk-koyu` üstünde) | 5.22 · — |
 | `--vurgu` | `#f59e0b` | `#fbbf24` | Rozet / uyarı ikonu (metin rengi olarak kullanılmaz) | — |
 | `--vurgu-yumusak` | `#fef3c7` | `#3a2a06` | Uyarı kutusu, "Bekliyor" rozeti | `--yazi` ile 16.03 · 13.26 |

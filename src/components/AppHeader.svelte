@@ -54,7 +54,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #fff;
+    color: var(--koyu-ustu);
     font-size: 22px;
     font-weight: 800;
     letter-spacing: -0.5px;
@@ -78,24 +78,25 @@
   .dil-secici {
     height: 38px;
     padding: 0 8px;
-    border: 1px solid #ffffff33;
+    border: 1px solid var(--koyu-cizgi);
     border-radius: 19px;
-    background: #ffffff14;
-    color: #fff;
+    background: var(--koyu-cam);
+    color: var(--koyu-ustu);
     font-size: 13px;
     font-weight: 600;
   }
 
   .dil-secici option {
-    color: #000;
+    color: var(--yazi);
+    background: var(--kart);
   }
 
   .tema-dugme {
     width: 38px;
     height: 38px;
-    border: 1px solid #ffffff33;
+    border: 1px solid var(--koyu-cizgi);
     border-radius: 50%;
-    background: #ffffff14;
+    background: var(--koyu-cam);
     font-size: 18px;
     cursor: pointer;
     display: flex;
