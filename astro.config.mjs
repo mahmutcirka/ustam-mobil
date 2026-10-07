@@ -26,5 +26,9 @@ export default defineConfig({
       strictPort: true,
     },
     envPrefix: ['VITE_', 'TAURI_ENV_*'],
+    // QR kitaplığı ilk sayfa açılışında keşfedilirse dev sunucusu "Outdated Optimize Dep" verir; baştan hazırla
+    optimizeDeps: {
+      include: ['qrcode-generator'],
+    },
   },
 });

@@ -5,7 +5,8 @@
   import Yildizlar from "$lib/components/Yildizlar.svelte";
   import YildizSecici from "$lib/components/YildizSecici.svelte";
   import IsKarti from "./IsKarti.svelte";
-  import { aralikYaz, basHarfler, tarihYaz, ustaBul } from "$lib/data";
+  import { aralikYaz, basHarfler, kategoriIkon, tarihYaz, ustaBul } from "$lib/data";
+  import { yaz } from "$lib/depo";
   import { isEmirleri } from "$lib/isEmirleri.svelte";
   import { yorumlarim } from "$lib/yorumlar.svelte";
   import { profil } from "$lib/profil.svelte";
@@ -26,6 +27,12 @@
   let puan = $state(0);
   let yorum = $state("");
   let degerlendirAcik = $state(false);
+
+  // Aynı usta, sorun ve aciliyetle detaya gider; adres notu cihazda taşınır. Çağrıyı yine kullanıcı onaylar.
+  function tekrarCagir(i: IsEmri) {
+    yaz("tekrar-taslagi", { ustaId: i.ustaId, adresNotu: i.adresNotu });
+    window.location.assign(`/usta/${i.ustaId}?sorun=${i.sorun}&aciliyet=${i.aciliyet}`);
+  }
 
   function iptalEt(i: IsEmri) {
     iptalIs = i;
@@ -98,7 +105,7 @@
       {@const benimYorum = yorumlarim.isIcin(i.kod)}
       <article class="kart gecmis">
         <header>
-          <span class="avatar" aria-hidden="true">{basHarfler(i.ustaAd)}</span>
+          <span class="avatar" aria-hidden="true"><Ikon ad={kategoriIkon[i.kategori]} boyut={20} /></span>
           <div class="kim">
             <strong>{i.ustaAd}</strong>
             <span>{dil.t(`sorun.${i.sorun}` as Anahtar)} · {tarihYaz(i.bitis ?? i.zaman, dil.kod)}</span>
@@ -121,7 +128,7 @@
             {/if}
           {/if}
           {#if ustaBul(i.ustaId)}
-            <a class="btn ikincil" href="/usta/{i.ustaId}?sorun={i.sorun}"><Ikon ad="roket" boyut={16} /> {dil.t("is.tekrar")}</a>
+            <button class="btn ikincil" onclick={() => tekrarCagir(i)}><Ikon ad="roket" boyut={16} /> {dil.t("is.tekrar")}</button>
           {/if}
         </div>
       </article>
