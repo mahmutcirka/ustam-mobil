@@ -78,12 +78,6 @@ button {
   gap: 16px;
 }
 
-/* Form ve özet sayfaları geniş ekranda da okunabilir genişlikte kalır */
-.sayfa.dar {
-  max-width: 560px;
-  margin-inline: auto;
-}
-
 .izgara {
   display: grid;
   gap: 12px;
@@ -158,4 +152,50 @@ button {
 .metin .guncelleme {
   color: var(--yazi-soluk);
   font-size: 13px;
+}
+
+/* ── Responsive düzen (docs/mimari-agac.md §4) ──────────────────────────────
+   Telefon  < 768px    : tek sütun, alt menü sabit (varsayılan stiller)
+   Tablet   768–1199px : 2 sütunlu ızgara, içerik 960px'te ortalanır
+   Masaüstü 1200px+    : 3 sütunlu ızgara, 1200px max-width, menü yan şeride geçer (AppNav)
+   Büyük    1600px+    : 4 sütunlu ızgara, 1440px max-width */
+.sayfa {
+  width: 100%;
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .sayfa {
+    max-width: 960px;
+    padding: 24px;
+  }
+
+  .izgara {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .sayfa {
+    max-width: 1200px;
+  }
+
+  .izgara {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1600px) {
+  .sayfa {
+    max-width: 1440px;
+  }
+
+  .izgara {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* .dar her ekranda okunabilir form genişliğinde kalır (yukarıdaki max-width'leri ezer) */
+.sayfa.dar {
+  max-width: 560px;
 }

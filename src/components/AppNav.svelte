@@ -79,6 +79,42 @@
     font-size: 20px;
   }
 
+  /* Tablet: menü öğeleri geniş ekranda dağılmasın diye ortalanır */
+  @media (min-width: 768px) {
+    .alt-menu {
+      justify-content: center;
+    }
+
+    .alt-menu a {
+      flex: 0 1 140px;
+      font-size: 12px;
+    }
+  }
+
+  /* Masaüstü: alt menü, başlığın altında başlayan dikey yan şeride dönüşür (RTL'de sağda) */
+  @media (min-width: 1200px) {
+    .alt-menu {
+      top: 62px;
+      bottom: 0;
+      right: auto;
+      left: auto;
+      inset-inline-start: 0;
+      width: 96px;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 4px;
+      padding: 12px 0;
+      border-top: 0;
+      border-inline-end: 1px solid var(--kenar);
+    }
+
+    .alt-menu a {
+      flex: 0 0 auto;
+      padding: 14px 4px;
+      text-align: center;
+    }
+  }
+
   .rozet {
     position: absolute;
     top: 4px;

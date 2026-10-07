@@ -67,4 +67,12 @@ const sabitDil = Astro.props.dil ?? frontmatter?.dil;
     padding-bottom: calc(80px + env(safe-area-inset-bottom));
     min-height: 100vh;
   }
+
+  /* Masaüstünde menü yan şeritte olduğu için alt boşluk yerine kenar boşluğu bırakılır */
+  @media (min-width: 1200px) {
+    main {
+      padding-bottom: 32px;
+      padding-inline-start: 96px;
+    }
+  }
 </style>
