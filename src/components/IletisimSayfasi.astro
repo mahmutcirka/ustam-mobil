@@ -1,0 +1,35 @@
+---
+// İletişim sayfasının ortak gövdesi — /iletisim, /en/iletisim, /ar/iletisim, /fa/iletisim bunu kullanır
+import Layout from '../layouts/Layout.astro';
+import DilBaglantilari from './DilBaglantilari.astro';
+import IletisimFormu from './IletisimFormu.svelte';
+import type { Dil } from '../types/ustam';
+
+interface Props {
+  dil: Dil;
+}
+
+const { dil } = Astro.props;
+
+const baslik: Record<Dil, string> = {
+  tr: 'İletişim',
+  en: 'Contact',
+  ar: 'اتصل بنا',
+  fa: 'تماس با ما',
+};
+---
+
+<Layout title={`${baslik[dil]} — Ustam`} dil={dil}>
+  <div class="sayfa dar">
+    <DilBaglantilari sayfa="iletisim" dil={dil} />
+    <h1>{baslik[dil]}</h1>
+    <IletisimFormu client:only="svelte" />
+  </div>
+</Layout>
+
+<style>
+  h1 {
+    margin: 0;
+    font-size: 22px;
+  }
+</style>

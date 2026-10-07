@@ -121,6 +121,20 @@ const tr = {
   "sayfa.iletisim": "İletişim",
   "sayfa.kosullar": "Kullanım Koşulları",
   "sayfa.gizlilik": "Gizlilik Politikası",
+
+  "iletisim.aciklama": "Soru, öneri veya usta başvurusu için bize yazın. Genellikle 1 iş günü içinde yanıt veririz.",
+  "iletisim.ad": "Adınız",
+  "iletisim.eposta": "E-posta",
+  "iletisim.konu": "Konu",
+  "iletisim.mesaj": "Mesajınız",
+  "iletisim.ipucu": "Tüm alanları doldurun; mesaj en az 10 karakter olmalı.",
+  "iletisim.gonder": "Gönder",
+  "iletisim.gonderiliyor": "Gönderiliyor…",
+  "iletisim.basarili": "Mesajınız iletildi. Teşekkür ederiz!",
+  "konu.genel": "Genel soru",
+  "konu.usta": "Usta olarak katılmak istiyorum",
+  "konu.sikayet": "Şikayet",
+  "konu.oneri": "Öneri",
 } as const;
 
 export type Anahtar = keyof typeof tr;
@@ -244,6 +258,20 @@ const en: Record<Anahtar, string> = {
   "sayfa.iletisim": "Contact",
   "sayfa.kosullar": "Terms of Use",
   "sayfa.gizlilik": "Privacy Policy",
+
+  "iletisim.aciklama": "Write to us with questions, ideas or to join as a pro. We usually reply within 1 business day.",
+  "iletisim.ad": "Your name",
+  "iletisim.eposta": "Email",
+  "iletisim.konu": "Subject",
+  "iletisim.mesaj": "Your message",
+  "iletisim.ipucu": "Fill in all fields; the message must be at least 10 characters.",
+  "iletisim.gonder": "Send",
+  "iletisim.gonderiliyor": "Sending…",
+  "iletisim.basarili": "Your message has been sent. Thank you!",
+  "konu.genel": "General question",
+  "konu.usta": "I want to join as a pro",
+  "konu.sikayet": "Complaint",
+  "konu.oneri": "Suggestion",
 };
 
 const ar: Record<Anahtar, string> = {
@@ -365,6 +393,20 @@ const ar: Record<Anahtar, string> = {
   "sayfa.iletisim": "اتصل بنا",
   "sayfa.kosullar": "شروط الاستخدام",
   "sayfa.gizlilik": "سياسة الخصوصية",
+
+  "iletisim.aciklama": "راسلنا لأي سؤال أو اقتراح أو للانضمام كفنّي. نرد عادةً خلال يوم عمل واحد.",
+  "iletisim.ad": "اسمك",
+  "iletisim.eposta": "البريد الإلكتروني",
+  "iletisim.konu": "الموضوع",
+  "iletisim.mesaj": "رسالتك",
+  "iletisim.ipucu": "املأ جميع الحقول؛ يجب ألا تقل الرسالة عن 10 أحرف.",
+  "iletisim.gonder": "إرسال",
+  "iletisim.gonderiliyor": "جارٍ الإرسال…",
+  "iletisim.basarili": "تم إرسال رسالتك. شكرًا لك!",
+  "konu.genel": "سؤال عام",
+  "konu.usta": "أريد الانضمام كفنّي",
+  "konu.sikayet": "شكوى",
+  "konu.oneri": "اقتراح",
 };
 
 const fa: Record<Anahtar, string> = {
@@ -486,6 +528,20 @@ const fa: Record<Anahtar, string> = {
   "sayfa.iletisim": "تماس با ما",
   "sayfa.kosullar": "شرایط استفاده",
   "sayfa.gizlilik": "سیاست حریم خصوصی",
+
+  "iletisim.aciklama": "برای سؤال، پیشنهاد یا پیوستن به‌عنوان استادکار به ما پیام دهید. معمولاً ظرف ۱ روز کاری پاسخ می‌دهیم.",
+  "iletisim.ad": "نام شما",
+  "iletisim.eposta": "ایمیل",
+  "iletisim.konu": "موضوع",
+  "iletisim.mesaj": "پیام شما",
+  "iletisim.ipucu": "همه فیلدها را پر کنید؛ پیام باید دست‌کم ۱۰ کاراکتر باشد.",
+  "iletisim.gonder": "ارسال",
+  "iletisim.gonderiliyor": "در حال ارسال…",
+  "iletisim.basarili": "پیام شما ارسال شد. سپاسگزاریم!",
+  "konu.genel": "سؤال عمومی",
+  "konu.usta": "می‌خواهم به‌عنوان استادکار بپیوندم",
+  "konu.sikayet": "شکایت",
+  "konu.oneri": "پیشنهاد",
 };
 
 export const sozlukler: Record<Dil, Record<Anahtar, string>> = { tr, en, ar, fa };

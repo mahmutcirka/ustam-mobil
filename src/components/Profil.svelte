@@ -1,7 +1,7 @@
 <script lang="ts">
   // Profil — iletişim bilgileri (localStorage), dil ve tema ayarları
   import { tema } from "$lib/tema.svelte";
-  import { dil, diller, dilAdlari } from "$lib/i18n.svelte";
+  import { bilgiSayfalari, dil, diller, dilAdlari, sayfaYolu } from "$lib/i18n.svelte";
   import { isEmirleri } from "$lib/isEmirleri.svelte";
   import { oku, yaz } from "$lib/depo";
 
@@ -67,6 +67,16 @@
       <input type="checkbox" checked={tema.mod === "gece"} onchange={() => tema.degistir()} />
     </label>
   </div>
+
+  <h3>{dil.t("profil.bilgi")}</h3>
+  <nav class="kart baglantilar">
+    {#each bilgiSayfalari as s}
+      <a href={sayfaYolu(dil.kod, s)}>
+        <span>{dil.t(`sayfa.${s}`)}</span>
+        <span class="ok" aria-hidden="true">›</span>
+      </a>
+    {/each}
+  </nav>
 </div>
 
 <style>
@@ -169,6 +179,31 @@
     border-radius: 10px;
     background: var(--zemin);
     font-size: 13px;
+  }
+
+  .baglantilar {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .baglantilar a {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+
+  .baglantilar a + a {
+    border-top: 1px solid var(--kenar);
+  }
+
+  .ok {
+    display: inline-block;
+    color: var(--yazi-soluk);
+  }
+
+  :global([dir="rtl"]) .ok {
+    transform: scaleX(-1);
   }
 
   .diller button.aktif {

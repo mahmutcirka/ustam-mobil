@@ -1,0 +1,54 @@
+---
+layout: ../layouts/Layout.astro
+title: Gizlilik Politikası — Ustam
+dil: tr
+---
+
+import CanliRozet from '../components/react/CanliRozet';
+import DilBaglantilari from '../components/DilBaglantilari.astro';
+
+<div class="sayfa dar">
+<DilBaglantilari sayfa="gizlilik" dil="tr" />
+<div class="kart metin">
+
+# Gizlilik Politikası
+
+<p class="guncelleme">Son güncelleme: 07 Ekim 2026</p>
+
+Bu uygulama, İstinye Üniversitesi MYO063 Mobil Programlama dersi kapsamında geliştirilmiş bir eğitim
+projesidir. Gizliliğiniz bizim için önemlidir; bu sayfa hangi verilerin nerede tutulduğunu açıklar.
+
+## 1. Toplanan Veriler ve Yerel Depolama
+
+Ustam kişisel verilerinizi **harici bir sunucuya göndermez ve saklamaz**. Tüm tercihler yalnızca
+cihazınızdaki **localStorage** alanında tutulur:
+
+- `profil` — adınız, telefonunuz ve adresiniz (yalnızca siz girerseniz)
+- `cagri-taslagi` ve `is-emirleri` — oluşturduğunuz çağrılar ve iş emri kodları
+- `dil` ve `tema` — dil ve gece/gündüz modu tercihiniz
+
+İletişim formu bu eğitim sürümünde gerçek bir gönderim yapmaz; girdiğiniz bilgiler kaydedilmez.
+
+## 2. Veri Güvenliği
+
+İş emri kodları cihazınızdaki Rust çekirdeğinde (`is_emri_uret`) üretilir ve ağ üzerinden aktarılmaz.
+Tauri WebView ortamında çalışan uygulamamız harici izleme çerezleri, reklam veya analiz araçları kullanmaz.
+
+<div style="margin: 16px 0;">
+  <CanliRozet client:load etiket="Yerel depolama korumalı" />
+</div>
+
+## 3. KVKK Aydınlatma Bildirimi
+
+6698 sayılı **Kişisel Verilerin Korunması Kanunu (KVKK)** kapsamında: Uygulamaya girdiğiniz veriler
+yalnızca çağrı oluşturma amacıyla ve yalnızca sizin cihazınızda işlenir; üçüncü kişilere aktarılmaz.
+KVKK'nın 11. maddesi uyarınca verilerinize erişme, düzeltilmesini ve silinmesini isteme haklarına
+sahipsiniz. Verilerinizi dilediğiniz an **Profil** sayfasından değiştirebilir, uygulama verilerini
+temizleyerek veya uygulamayı kaldırarak tamamen silebilirsiniz.
+
+## 4. İletişim
+
+Gizlilikle ilgili sorularınız için [İletişim](/iletisim) sayfasını kullanabilirsiniz.
+
+</div>
+</div>

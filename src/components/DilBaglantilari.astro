@@ -1,0 +1,52 @@
+---
+// Bilgi sayfalarının üstünde: aynı sayfanın diğer dillerdeki sürümlerine bağlantılar
+import type { Dil } from '../types/ustam';
+
+interface Props {
+  sayfa: 'hakkinda' | 'iletisim' | 'kosullar' | 'gizlilik';
+  dil: Dil;
+}
+
+const { sayfa, dil } = Astro.props;
+
+const diller: { kod: Dil; ad: string }[] = [
+  { kod: 'tr', ad: 'Türkçe' },
+  { kod: 'en', ad: 'English' },
+  { kod: 'ar', ad: 'العربية' },
+  { kod: 'fa', ad: 'فارسی' },
+];
+
+const yol = (d: Dil) => (d === 'tr' ? `/${sayfa}` : `/${d}/${sayfa}`);
+---
+
+<nav class="dil-baglantilari" aria-label="Diller / Languages">
+  {diller.map((d) => (
+    <a href={yol(d.kod)} lang={d.kod} aria-current={d.kod === dil ? 'page' : undefined}>
+      {d.ad}
+    </a>
+  ))}
+</nav>
+
+<style>
+  .dil-baglantilari {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  a {
+    padding: 6px 12px;
+    border: 1px solid var(--kenar);
+    border-radius: 999px;
+    background: var(--kart);
+    font-size: 13px;
+    color: var(--yazi-soluk);
+  }
+
+  a[aria-current='page'] {
+    background: var(--renk-ana);
+    border-color: var(--renk-ana);
+    color: var(--renk-ana-ustu);
+    font-weight: 600;
+  }
+</style>
