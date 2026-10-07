@@ -34,6 +34,7 @@ ustam/
 │   ├── types/               # TypeScript tip tanımları ve arayüzler (.ts)
 │   └── styles/              # Global tema değişkenleri ve CSS stilleri (app.css)
 │
+├── araclar/                 # Geliştirme araçları: telefon.ts + telefon.html (bun run telefon — telefon çerçeveli önizleme)
 ├── tests/                   # bun test: ortak vektörler, çeviri tutarlılığı, veri bütünlüğü, canlı takip
 ├── .github/workflows/       # CI: derleme + TS testleri + tip kontrolü (Linux), cargo test (Windows)
 └── docs/                    # Proje dokümantasyonu, görevler ve mimari rehberler

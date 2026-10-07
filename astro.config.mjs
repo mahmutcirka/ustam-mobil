@@ -14,6 +14,10 @@ export default defineConfig({
     port: 1420,
     host: '127.0.0.1',
   },
+  // Geliştirme araç çubuğu telefon genişliğinde alt menünün üstüne biniyor (bun run telefon ile görülür)
+  devToolbar: {
+    enabled: false,
+  },
   vite: {
     resolve: {
       alias: {
