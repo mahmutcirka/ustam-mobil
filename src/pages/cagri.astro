@@ -1,8 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Iskelet from "../components/Iskelet.astro";
 import Cagri from '../components/Cagri.svelte';
 ---
 
 <Layout title="Çağrı — Ustam">
-  <Cagri client:only="svelte" />
+  <Cagri client:only="svelte" >
+    <Iskelet slot="fallback" tur="form" />
+  </Cagri>
 </Layout>

@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Iskelet from "../../components/Iskelet.astro";
 import UstaDetay from '../../components/UstaDetay.svelte';
 import { ustalar } from '$lib/data';
 import type { Usta } from '../../types/ustam';
@@ -19,5 +20,7 @@ const { usta } = Astro.props;
 ---
 
 <Layout title={`${usta.ad} — Ustam`}>
-  <UstaDetay client:only="svelte" usta={usta} />
+  <UstaDetay client:only="svelte" usta={usta} >
+    <Iskelet slot="fallback" tur="detay" />
+  </UstaDetay>
 </Layout>
