@@ -52,7 +52,10 @@ Rust ile `UST-ELK-1210-K7QM` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 2. **Kapsam koruma (Scope Guard):** Görev tanımında istenmeyen dosyalara dokunulmaz; izinsiz refactoring yapılmaz.
 3. **Derleme garantisi (Proof):** Her geliştirme bittiğinde `bun run build` çalıştırılır ve 0 hata doğrulanır;
    iş kuralları (`src/lib/kurallar.ts` veya `src-tauri/src/lib.rs`) değiştiyse `bun run test` ve `cargo test` de çalıştırılır.
-4. . . **Commit biçimi:** `feat:` / `fix:` / `docs:` / `refactor:` / `chore:` önekleri ([`docs/kurallar.md`](docs/kurallar.md)).
+4. **Kural eşliği:** Rust ve TypeScript kuralları birlikte değiştirilir; yeni bir kural için önce
+   `src-tauri/test-vektorleri.json` dosyasına elle hesaplanmış örnek eklenir.
+5. **Svelte 5 Runes:** Yeni Svelte bileşenlerinde yalnızca Runes kullanılır (`export let` ve `$:` yasak).
+6. **Commit biçimi:** `feat:` / `fix:` / `docs:` / `refactor:` / `chore:` önekleri ([`docs/kurallar.md`](docs/kurallar.md)).
 
 ## 4. Kırmızı Çizgiler
 
