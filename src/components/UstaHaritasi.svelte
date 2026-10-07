@@ -3,18 +3,21 @@
   // Harici harita kütüphanesi yoktur; koordinatlar data.ts'teki semtler ve usta konumlarıyla aynı sistemdedir.
   import Ikon from "$lib/components/Ikon.svelte";
   import Yildizlar from "$lib/components/Yildizlar.svelte";
-  import { kategoriIkon, mesafeKm, sayiYaz, semtler, semtListesi, ustaDurumu, varisDk } from "$lib/data";
+  import { basHarfler, mesafeKm, sayiYaz, semtler, semtListesi, ustaDurumu, varisDk } from "$lib/data";
   import { dil } from "$lib/i18n.svelte";
   import { profil } from "$lib/profil.svelte";
   import { saat } from "$lib/saat.svelte";
   import { yorumlarim } from "$lib/yorumlar.svelte";
   import type { Usta } from "../types/ustam";
 
-  let { ustalar }: { ustalar: Usta[] } = $props();
+  let { ustalar, sorun, listeyeDon }: { ustalar: Usta[]; sorun?: string; listeyeDon: () => void } = $props();
 
   let seciliId = $state<number | null>(null);
   const secili = $derived(ustalar.find((u) => u.id === seciliId));
   const ben = $derived(semtler[profil.bilgi.semt]);
+  const musait = (u: Usta) => ustaDurumu(u, saat.simdi).tur === "musait";
+  // Seçili pin en üstte çizilsin; müsaitler meşgullerin üstünde
+  const sirali = $derived([...ustalar].sort((a, b) => Number(a.id === seciliId) - Number(b.id === seciliId) || Number(musait(a)) - Number(musait(b))));
 
   // Kara parçaları: Boğaz'ın batı ve doğu kıyıları + Marmara kıyı şeridi
   const avrupa =
@@ -29,80 +32,94 @@
 
 <div class="harita-kutu">
   <!-- Coğrafya RTL dillerde aynalanmaz -->
-  <div dir="ltr">
-  <svg viewBox="0 0 100 110" role="group" aria-label={dil.t("harita.etiket")}>
-    <rect width="100" height="110" class="su" />
-    <path d={avrupa} class="kara" />
-    <path d={asya} class="kara" />
-    <!-- Adalar -->
-    <ellipse cx="70" cy="101" rx="2.6" ry="1.6" class="kara" />
-    <ellipse cx="75" cy="104.5" rx="1.8" ry="1.1" class="kara" />
+  <div class="tuval" dir="ltr">
+    <svg viewBox="0 0 100 110" role="group" aria-label={dil.t("harita.etiket")}>
+      <rect width="100" height="110" class="su" />
+      <path d={avrupa} class="kara" />
+      <path d={asya} class="kara" />
+      <ellipse cx="70" cy="101" rx="2.6" ry="1.6" class="kara" />
+      <ellipse cx="75" cy="104.5" rx="1.8" ry="1.1" class="kara" />
 
-    <text x="16" y="34" class="yaka">{dil.t("harita.avrupa")}</text>
-    <text x="86" y="44" class="yaka" text-anchor="middle">{dil.t("harita.asya")}</text>
+      <text x="16" y="34" class="yaka">{dil.t("harita.avrupa")}</text>
+      <text x="86" y="44" class="yaka" text-anchor="middle">{dil.t("harita.asya")}</text>
 
-    {#each semtListesi as s}
-      <text x={semtler[s].x} y={semtler[s].y + 5.4} class="semt" text-anchor="middle">{s}</text>
-    {/each}
+      {#each semtListesi as s}
+        <text x={semtler[s].x} y={semtler[s].y + 5.4} class="semt" text-anchor="middle">{s}</text>
+      {/each}
 
-    <!-- Kullanıcının semti -->
-    <g class="ben" aria-label={dil.t("harita.sen")}>
-      <circle cx={ben.x} cy={ben.y} r="4.5" class="ben-halka" />
-      <circle cx={ben.x} cy={ben.y} r="1.8" class="ben-nokta" />
-    </g>
-
-    {#each ustalar as u (u.id)}
-      {@const musait = ustaDurumu(u, saat.simdi).tur === "musait"}
-      <g
-        class="pin"
-        class:musait
-        class:secili={u.id === seciliId}
-        role="button"
-        tabindex="0"
-        aria-label="{u.ad}, {dil.t(`kategori.${u.kategori}`)}"
-        aria-pressed={u.id === seciliId}
-        onclick={() => sec(u.id)}
-        onkeydown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), sec(u.id))}
-      >
-        <circle cx={u.konum.x} cy={u.konum.y} r={u.id === seciliId ? 3.6 : 2.6} />
+      <g class="ben" aria-label={dil.t("harita.sen")}>
+        <circle cx={ben.x} cy={ben.y} r="4.5" class="ben-halka" />
+        <circle cx={ben.x} cy={ben.y} r="1.8" class="ben-nokta" />
       </g>
-    {/each}
-  </svg>
+
+      {#each sirali as u (u.id)}
+        <g
+          class="pin"
+          class:musait={musait(u)}
+          class:secili={u.id === seciliId}
+          role="button"
+          tabindex="0"
+          aria-label="{u.ad}, {dil.t(`kategori.${u.kategori}`)}"
+          aria-pressed={u.id === seciliId}
+          onclick={() => sec(u.id)}
+          onkeydown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), sec(u.id))}
+        >
+          <!-- Görünmez geniş dokunma alanı -->
+          <circle cx={u.konum.x} cy={u.konum.y} r="5" class="dokunma" />
+          <circle cx={u.konum.x} cy={u.konum.y} r={u.id === seciliId ? 3.4 : 2.4} class="nokta" />
+          {#if u.id === seciliId && musait(u)}
+            <g class="etiket">
+              <rect x={u.konum.x - 7} y={u.konum.y - 10.5} width="14" height="5.5" rx="2.75" />
+              <text x={u.konum.x} y={u.konum.y - 6.6} text-anchor="middle">
+                ~{sayiYaz(varisDk(mesafeKm(u, profil.bilgi.semt)), dil.kod)}′
+              </text>
+            </g>
+          {/if}
+        </g>
+      {/each}
+    </svg>
+
+    <button class="liste-dugme" onclick={listeyeDon}>
+      <Ikon ad="liste" boyut={16} /> {dil.t("harita.listeyeDon")}
+    </button>
   </div>
 
   {#if secili}
     {@const km = mesafeKm(secili, profil.bilgi.semt)}
     {@const ozet = yorumlarim.ustaIcin(secili)}
     <div class="kart secim">
-      <span class="ikon"><Ikon ad={kategoriIkon[secili.kategori]} boyut={22} /></span>
+      <span class="avatar" aria-hidden="true">{basHarfler(secili.ad)}</span>
       <div class="bilgi">
         <strong>{secili.ad}</strong>
         <span>{dil.t(`kategori.${secili.kategori}`)} · {secili.semt}</span>
         <span class="puan"><Yildizlar puan={ozet.puan} boyut={12} /> {sayiYaz(ozet.puan, dil.kod)}</span>
-        <span>
-          {dil.t("kart.km", { n: sayiYaz(km, dil.kod) })}
-          {#if ustaDurumu(secili, saat.simdi).tur === "musait"}· {dil.t("kart.dk", { dk: sayiYaz(varisDk(km), dil.kod) })}{/if}
+        <span class:yesil={musait(secili)}>
+          {#if musait(secili)}{dil.t("kart.simdiGelebilir", { dk: sayiYaz(varisDk(km), dil.kod) })}
+          {:else}{dil.t("kart.km", { n: sayiYaz(km, dil.kod) })}{/if}
         </span>
       </div>
-      <a class="btn" href="/usta/{secili.id}">{dil.t("harita.profil")}</a>
+      <a class="btn kucuk" href={sorun ? `/usta/${secili.id}?sorun=${sorun}` : `/usta/${secili.id}`}>{dil.t("harita.profil")}</a>
     </div>
   {/if}
 </div>
 
 <style>
   .harita-kutu {
-    position: relative;
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
 
+  .tuval {
+    position: relative;
+  }
+
   svg {
+    display: block;
     width: 100%;
-    max-height: 68vh;
+    max-height: 70dvh;
     border-radius: var(--radius-buyuk);
     border: 1px solid var(--kenar);
-    box-shadow: var(--golge-kart);
   }
 
   .su {
@@ -119,7 +136,6 @@
     fill: var(--yazi-soluk);
     font-size: 3px;
     font-weight: 700;
-    letter-spacing: 0.2px;
     opacity: 0.55;
   }
 
@@ -149,21 +165,52 @@
     outline: none;
   }
 
-  .pin circle {
+  .dokunma {
+    fill: transparent;
+  }
+
+  .nokta {
     fill: var(--yazi-soluk);
     stroke: var(--kart);
     stroke-width: 0.7;
     transition: r var(--sure-hizli) var(--egri);
   }
 
-  .pin.musait circle {
+  .pin.musait .nokta {
     fill: var(--renk-ana);
   }
 
-  .pin.secili circle,
-  .pin:focus-visible circle {
+  .pin.secili .nokta,
+  .pin:focus-visible .nokta {
     stroke: var(--yazi);
     stroke-width: 0.9;
+  }
+
+  .etiket rect {
+    fill: var(--yazi);
+  }
+
+  .etiket text {
+    fill: var(--zemin);
+    font-size: 3px;
+    font-weight: 700;
+  }
+
+  .liste-dugme {
+    position: absolute;
+    top: 10px;
+    inset-inline-start: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--kenar);
+    border-radius: 999px;
+    background: var(--kart);
+    box-shadow: var(--golge-kart);
+    font-size: var(--yz-sm);
+    font-weight: 700;
   }
 
   .secim {
@@ -175,12 +222,16 @@
     animation: sayfa-gir var(--sure-orta) var(--egri);
   }
 
-  .ikon {
-    display: flex;
-    padding: 10px;
+  .avatar {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
     border-radius: 14px;
-    background: var(--renk-ana-yumusak);
-    color: var(--renk-ana-yazi);
+    background: var(--yuzey-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
   }
 
   .bilgi {
@@ -188,12 +239,12 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    font-size: 13px;
+    font-size: var(--yz-sm);
     color: var(--yazi-soluk);
   }
 
   .bilgi strong {
-    font-size: 15px;
+    font-size: var(--yz-md);
     color: var(--yazi);
   }
 
@@ -203,10 +254,24 @@
     gap: 4px;
   }
 
-  .secim .btn {
-    width: auto;
-    padding: 10px 14px;
-    font-size: 14px;
+  .yesil {
+    color: var(--basari);
+    font-weight: 700;
+  }
+
+  /* Telefonda seçili usta kartı haritanın alt kenarında, başparmak erişiminde durur */
+  @media (max-width: 767px) {
+    .harita-kutu {
+      position: relative;
+    }
+
+    .secim {
+      position: sticky;
+      bottom: calc(76px + env(safe-area-inset-bottom));
+      z-index: 2;
+      margin-top: -84px;
+      margin-inline: 8px;
+    }
   }
 
   @keyframes nabiz {

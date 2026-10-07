@@ -54,6 +54,7 @@ export interface Usta {
   puan: number; // 0–5, örnek verideki ortalama
   yorumSayisi: number;
   musait: boolean; // false → şu an başka bir işte
+  musaitOlacakDk?: number; // meşgulse, elindeki işin tahmini bitişine kalan süre (örnek veri)
   cikisUcreti: number; // TL
   deneyimYil: number;
   tamamlananIs: number;
@@ -68,7 +69,7 @@ export interface Usta {
 }
 
 // Ustanın şu anki hâli: çalışma saatleri ve meşguliyet birlikte değerlendirilir
-export type UstaDurumu = { tur: "musait" } | { tur: "mesgul" } | { tur: "kapali"; acilis: string };
+export type UstaDurumu = { tur: "musait" } | { tur: "mesgul"; dk?: number } | { tur: "kapali"; acilis: string };
 
 // Detay ekranında seçilen, henüz onaylanmamış çağrı
 export interface CagriTaslagi {
