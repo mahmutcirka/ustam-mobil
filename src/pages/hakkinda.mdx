@@ -1,35 +1,48 @@
 ---
 layout: ../layouts/Layout.astro
-title: Proje Rehberi — PassoKlon
+title: Hakkında — Ustam
+dil: tr
 ---
 
 import CanliRozet from '../components/react/CanliRozet';
+import DilBaglantilari from '../components/DilBaglantilari.astro';
 
-<div class="sayfa">
-  <div class="kart" style="padding: 20px;">
-    <h1>🚀 Proje Mimarisi: Astro + Tauri v2</h1>
-    <p>
-      Bu proje, mobil ve masaüstü uygulama geliştirmede <strong>Astro</strong> altyapısına dönüştürülmüştür.
-    </p>
+<div class="sayfa dar">
+<DilBaglantilari sayfa="hakkinda" dil="tr" />
+<div class="kart metin">
 
-    <div style="margin: 16px 0;">
-      <CanliRozet client:load etiket="MDX içinde React Bileşeni" />
-    </div>
+# Ustam Hakkında
 
-    <h2>✨ Neden Astro?</h2>
-    <ul>
-      <li><strong>Svelte 5 Runes:</strong> Reaktif mobil arayüzler ve state yönetimi (<code>$state</code>, <code>$derived</code>).</li>
-      <li><strong>React Desteği:</strong> Zengin React bileşen ekosistemini doğrudan kullanabilme.</li>
-      <li><strong>MDX Desteği:</strong> Markdown ile zengin içerik ve bileşenleri bir arada yazabilme.</li>
-      <li><strong>Hafif & Hızlı:</strong> Statik derleme ve Tauri v2 WebView ile ultra hafif paket boyutu.</li>
-    </ul>
+*Arıza senden, usta bizden.*
 
-    <h2>📱 Sayfalar</h2>
-    <ul>
-      <li><strong>Keşfet (<code>/</code>):</strong> Etkinlik arama ve kategori filtreleri</li>
-      <li><strong>Biletlerim (<code>/biletlerim</code>):</strong> Satın alınan biletler ve Rust bilet kodları</li>
-      <li><strong>Sepet (<code>/sepet</code>):</strong> Sepet yönetimi ve ödeme tamamlama</li>
-      <li><strong>Profil (<code>/profil</code>):</strong> Kullanıcı bilgisi ve gece/gündüz modu</li>
-    </ul>
-  </div>
+## Neden Ustam?
+
+Gece yarısı patlayan bir boru, atan bir sigorta ya da kapıda kalmak… Böyle anlarda insanlar güvenilir ve
+**şu an müsait** bir ustaya ulaşmakta zorlanır. Ustam; yakındaki ustaları puanı, mesafesi ve müsaitlik
+durumuyla listeler, sorunu birkaç dokunuşla tarif etmenizi ve ustayı hemen çağırmanızı sağlar.
+
+Uygulama **Türkçe, İngilizce, Arapça ve Farsça** çalışır. Sorununuzu kendi dilinizde seçersiniz; usta
+aynı talebi Türkçe görür. Her çağrı için üretilen **iş emri kodu** sayesinde kapıya gelen kişinin sizin
+çağırdığınız usta olduğunu doğrulayabilirsiniz.
+
+<div style="margin: 16px 0;">
+  <CanliRozet client:load etiket="MDX içinde React bileşeni — tıkla!" />
+</div>
+
+## Geliştirici
+
+- **Ad Soyad:** Mahmut Çirka
+- **Öğrenci No:** 2520191026
+- **Kurum:** İstinye Üniversitesi · Meslek Yüksekokulu · Bilişim Güvenliği Teknolojisi
+- **Ders:** MYO063 Mobil Programlama (2026–2027 Güz) · Öğr. Gör. Keyvan Arasteh Abbasabad
+
+## Kullanılan Teknolojiler
+
+- **Tauri v2 (Rust):** Yerel uygulama çekirdeği; iş emri kodlarını üreten `is_emri_uret` komutu
+- **Astro:** Statik sayfa derleme ve dosya tabanlı rotalar
+- **Svelte 5 (Runes):** Reaktif ekranlar (`$state`, `$derived`, `$props`)
+- **React 19 ve MDX:** Bu sayfadaki etkileşimli rozet ve içerik sayfaları
+- **Bun:** Paket yöneticisi ve komut çalıştırıcı
+
+</div>
 </div>

@@ -1,0 +1,48 @@
+---
+layout: ../../layouts/Layout.astro
+title: About — Ustam
+dil: en
+---
+
+import CanliRozet from '../../components/react/CanliRozet';
+import DilBaglantilari from '../../components/DilBaglantilari.astro';
+
+<div class="sayfa dar">
+<DilBaglantilari sayfa="hakkinda" dil="en" />
+<div class="kart metin">
+
+# About Ustam
+
+*Your breakdown, our pro.*
+
+## Why Ustam?
+
+A pipe bursting at midnight, a tripping fuse, or being locked out… In moments like these it is hard to
+reach a trustworthy pro who is **available right now**. Ustam lists nearby pros with their rating, distance
+and availability, lets you describe the problem in a few taps and call a pro immediately.
+
+The app works in **Turkish, English, Arabic and Persian**. You pick your problem in your own language; the
+pro receives the same request in Turkish. Thanks to the **job code** generated for every request, you can
+verify that the person at your door is the pro you actually called.
+
+<div style="margin: 16px 0;">
+  <CanliRozet client:load etiket="React component inside MDX — click me!" />
+</div>
+
+## Developer
+
+- **Name:** Mahmut Çirka
+- **Student ID:** 2520191026
+- **Institution:** İstinye University · Vocational School · Information Security Technology
+- **Course:** MYO063 Mobile Programming (2026–2027 Fall) · Lecturer Keyvan Arasteh Abbasabad
+
+## Technologies
+
+- **Tauri v2 (Rust):** Native app core; the `is_emri_uret` command that generates job codes
+- **Astro:** Static site build and file-based routing
+- **Svelte 5 (Runes):** Reactive screens (`$state`, `$derived`, `$props`)
+- **React 19 and MDX:** The interactive badge on this page and the content pages
+- **Bun:** Package manager and script runner
+
+</div>
+</div>

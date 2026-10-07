@@ -1,8 +1,15 @@
 <script lang="ts">
   // Ortak başlık: logo, dil seçici ve gece / gündüz modu düğmesi
   import { tema } from "$lib/tema.svelte";
-  import { dil, diller } from "$lib/i18n.svelte";
+  import { bilgiSayfasiBul, dil, diller, sayfaYolu } from "$lib/i18n.svelte";
   import type { Dil } from "../types/ustam";
+
+  // Sabit dilli bilgi sayfasındaysak (ör. /en/gizlilik) seçilen dildeki karşılığına geç
+  function dilSec(d: Dil) {
+    dil.degistir(d);
+    const sayfa = bilgiSayfasiBul(window.location.pathname);
+    if (document.documentElement.dataset.sabitDil && sayfa) window.location.assign(sayfaYolu(d, sayfa));
+  }
 </script>
 
 <header class="ust">
@@ -15,7 +22,7 @@
       class="dil-secici"
       aria-label={dil.t("dil.sec")}
       value={dil.kod}
-      onchange={(e) => dil.degistir(e.currentTarget.value as Dil)}
+      onchange={(e) => dilSec(e.currentTarget.value as Dil)}
     >
       {#each diller as d}
         <option value={d}>{d.toUpperCase()}</option>

@@ -4,6 +4,7 @@ interface Props {
   etiket?: string;
 }
 
+// MDX sayfalarına gömülen etkileşimli React bileşeni — renkler branding token'larından gelir
 export default function CanliRozet({ etiket = "React Bileşeni" }: Props) {
   const [tikSayisi, setTikSayisi] = useState(0);
 
@@ -16,9 +17,9 @@ export default function CanliRozet({ etiket = "React Bileşeni" }: Props) {
         gap: '6px',
         padding: '6px 12px',
         borderRadius: '999px',
-        border: '1px solid #3b82f6',
-        background: '#eff6ff',
-        color: '#1d4ed8',
+        border: '1px solid var(--renk-ana)',
+        background: 'var(--renk-ana-yumusak)',
+        color: 'var(--renk-ana-yazi)',
         fontSize: '13px',
         fontWeight: 600,
         cursor: 'pointer',
@@ -29,8 +30,8 @@ export default function CanliRozet({ etiket = "React Bileşeni" }: Props) {
       {tikSayisi > 0 && (
         <span
           style={{
-            background: '#1d4ed8',
-            color: '#fff',
+            background: 'var(--renk-ana)',
+            color: 'var(--renk-ana-ustu)',
             borderRadius: '999px',
             padding: '1px 6px',
             fontSize: '11px',

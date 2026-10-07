@@ -16,6 +16,18 @@ const ANAHTAR = "dil";
 
 export const yonu = (d: Dil) => (RTL_DILLER.includes(d) ? "rtl" : "ltr");
 
+// Bilgi sayfaları her dilde ayrı rotadır: /hakkinda (TR), /en/hakkinda, /ar/hakkinda, /fa/hakkinda
+export const bilgiSayfalari = ["hakkinda", "iletisim", "kosullar", "gizlilik"] as const;
+export type BilgiSayfasi = (typeof bilgiSayfalari)[number];
+
+export const sayfaYolu = (d: Dil, sayfa: BilgiSayfasi) => (d === "tr" ? `/${sayfa}` : `/${d}/${sayfa}`);
+
+// "/ar/gizlilik" → "gizlilik"; bilgi sayfası değilse undefined
+export function bilgiSayfasiBul(yol: string): BilgiSayfasi | undefined {
+  const son = yol.replace(/\/+$/, "").split("/").pop();
+  return bilgiSayfalari.find((s) => s === son);
+}
+
 function gecerli(d: string | null | undefined): d is Dil {
   return !!d && (diller as string[]).includes(d);
 }
