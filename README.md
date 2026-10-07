@@ -102,7 +102,7 @@ uygulamasının dönüştürülmesiyle geliştirilmiştir (etkinlik → usta, se
 - 📷 Arızanın fotoğrafı (cihazda küçültülür, hiçbir yere gönderilmez), adres notu, Hemen / Bugün / Randevu.
 
 **Rust çekirdeği**
-- 🦀 **Kontrol karakterli iş emri kodu** `UST-ELK-1210-K7QM` — yanlış yazılmış kod iş listesine bakılmadan yakalanır.
+- 🦀 **Kontrol karakterli iş emri kodu** `UST-ELK-1210-K7QZ` — yanlış yazılmış kod iş listesine bakılmadan yakalanır.
 - 🧮 **Fiyat motoru** `fiyat_hesapla` — acil servis, gece (%25), Pazar (%15) ek ücretleri ve işçilik aralığı.
 - 🔁 Aynı kurallar tarayıcı için TypeScript'te; ikisi **ortak test vektörleriyle** doğrulanır.
 

@@ -61,11 +61,19 @@ export function haftaninGunu(yil: number, ay: number, gun: number): number {
   return ((sonuc % 7) + 7) % 7;
 }
 
+// Karakter değeri: 32'lik alfabedeki sırası; alfabede olmayan (tarihteki 0/1) için base-36 değeri
+function karakterDegeri(c: string): number {
+  const i = ALFABE.indexOf(c);
+  if (i !== -1) return i;
+  const d = parseInt(c, 36);
+  return Number.isNaN(d) ? 0 : d;
+}
+
+// Tek sayı ağırlıklar (1, 3, 5, …) 32 ile aralarında asal: alfabe içindeki her tek karakter hatası yakalanır
 export function kontrolKarakteri(govde: string): string {
   let toplam = 0;
   [...govde].forEach((c, i) => {
-    const deger = parseInt(c, 36);
-    toplam += (i + 1) * (Number.isNaN(deger) ? 0 : deger);
+    toplam += (2 * i + 1) * karakterDegeri(c);
   });
   return ALFABE[toplam % ALFABE.length];
 }

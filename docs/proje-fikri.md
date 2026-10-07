@@ -29,7 +29,7 @@ arasındaki kaydı netleştirir: usta kapıya geldiğinde kod doğrulanır.
 | Etkinlik kartları | Usta kartları |
 | Bilet kategorisi + adet seçimi | Sorun tipi + aciliyet + ziyaret saati seçimi |
 | Sepet | Çağrı özeti (`/cagri`) |
-| Bilet kodu `PSK-XXX-XXXXXXX` (Rust) | İş emri kodu `UST-ELK-1210-K7QM` (Rust) |
+| Bilet kodu `PSK-XXX-XXXXXXX` (Rust) | İş emri kodu `UST-ELK-1210-K7QZ` (Rust) |
 | Biletlerim | İş Emirlerim |
 
 ---
@@ -76,8 +76,8 @@ Tiplerin tek doğru kaynağı [`src/types/ustam.ts`](../src/types/ustam.ts) dosy
 ### Rust iş emri kodu formatı
 
 ```
-UST-ELK-1210-K7QM
-│   │   │    │  └─ kontrol karakteri: ağırlıklı toplam (konum × base-36 değer) mod 32
+UST-ELK-1210-K7QZ
+│   │   │    │  └─ kontrol karakteri: Σ (tek ağırlık 1,3,5… × karakter değeri) mod 32
 │   │   │    └──── 3 karakter rastgele (0/O ve 1/I hariç 32 karakterlik alfabe)
 │   │   └───────── gün + ay (12 Ekim → 1210)
 │   └───────────── kategori kodu: TES tesisat · ELK elektrik · CLN çilingir · KMB kombi · BYZ beyaz eşya
@@ -86,7 +86,7 @@ UST-ELK-1210-K7QM
 
 - **Üretim:** `invoke("is_emri_uret", { kategori, zaman })` → Rust kategori ve tarihi doğrular, kodu üretir.
 - **Doğrulama:** `invoke("is_emri_dogrula", { kod })` → `gecerli` · `bicim-hatali` · `kontrol-hatali`.
-  Kontrol karakteri sayesinde kapıdaki ustanın kodundaki tek karakterlik yazım hataları ve yan yana yer
+  Tek sayı ağırlıklar 32 ile aralarında asal olduğu için rastgele kısımdaki her tek karakter hatası kesin, yan yana yer
   değiştirmelerin çoğu, iş emirleri listesine bakılmadan yakalanır.
 
 ### Rust fiyat motoru (`fiyat_hesapla`)

@@ -4,7 +4,7 @@ Bu belge, bu depoda çalışan tüm yapay zekâ ajanları (Antigravity, Cursor, 
 sistem talimatlarını içerir. [`CLAUDE.md`](CLAUDE.md) ve [`GEMINI.md`](GEMINI.md) yalnızca bu dosyaya yönlendirir.
 
 **Ustam**, acil arızalarda yakındaki müsait ustayı 4 dilde (TR · EN · AR · FA) bulup çağıran ve her çağrı için
-Rust ile `UST-ELK-1210-K7QM` biçiminde iş emri kodu üreten bir Tauri v2 uygulamasıdır.
+Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygulamasıdır.
 
 ## 1. Temel Proje Haritası ve Tek Kaynak Kuralı (DRY Docs)
 
