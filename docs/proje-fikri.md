@@ -36,51 +36,42 @@ arasındaki kaydı netleştirir: usta kapıya geldiğinde kod doğrulanır.
 
 ## 3. Temel Ekranlar ve İşlevler
 
+Ayrıntılı rota ağacı: [`docs/mimari-agac.md`](mimari-agac.md).
+
 1. **Ana Liste Ekranı (Ustalar — `/`):**
-   - Usta kartları: ad, uzmanlık, puan, mesafe, "Şu an müsait" rozeti, çıkış ücreti.
-   - Canlı arama (usta adı / uzmanlık) ve kategori filtresi: Tesisat · Elektrik · Çilingir · Kombi · Beyaz Eşya.
-   - "Sadece müsait olanlar" anahtarı.
+   - Usta kartları: ad, doğrulama rozeti, uzmanlık, puan, **kullanıcının semtine göre mesafe ve varış süresi**,
+     konuştuğu diller, anlık durum (müsait / meşgul / kapalı), çıkış ücreti, favori.
+   - "Acil mi?" kısayolları: en sık 4 acil sorun için en yakın müsait usta.
+   - Canlı arama, kategori filtresi, "şu an müsait", favoriler, **"dilimi konuşan usta"**; 4 sıralama seçeneği.
+   - **Liste ⇄ Harita:** stilize İstanbul haritasında usta pinleri.
 2. **Detay ve Seçim Ekranı (`/usta/[id]`):**
-   - Usta profili: deneyim yılı, tamamlanan iş sayısı, hizmet bölgesi, yorumlar, fiyat aralığı.
-   - Sorun tipi seçimi (ör. "Su sızıntısı", "Priz yanık kokuyor"); aciliyet: **Hemen / Bugün / Randevu**.
-   - Ziyaret saati ve adres notu; **"Ustayı Çağır"** butonu.
+   - Usta profili: rozetler, deneyim, tamamlanan iş, yanıt süresi, çalışma saatleri, konuştuğu diller, yorumlar ve puan dağılımı.
+   - Sorun tipi seçimi (işçilik aralığı ve süresiyle) ve **"usta gelene kadar" güvenlik ipucu**; aciliyet: **Hemen / Bugün / Randevu**.
+   - Arızanın fotoğrafı, adres notu; ekranın altında sabit **"Ustayı çağır"** çubuğu.
 3. **Kayıt / Kod Üretme Ekranı (`/cagri` → `/is-emirlerim`):**
-   - Çağrı özeti ve tahmini ücret; onaylanınca Rust komutu `is_emri_uret` çağrılır.
-   - Üretilen kod "İş Emirlerim" sayfasında usta, sorun, saat ve durum (Bekliyor / Yolda / Tamamlandı) ile listelenir.
+   - Çağrı özeti: Rust `fiyat_hesapla` dökümü, iletişim telefonu, ödeme tercihi, koşulların onayı.
+   - Onayda Rust `is_emri_uret` kontrol karakterli kodu üretir.
+   - **İş Emirlerim:** canlı aşamalar (Talep alındı → Onaylandı → Yolda → Kapıda → Tamamlandı), varış geri sayımı,
+     QR kod, kapıdaki ustanın kodunu doğrulama, iptal nedeni, iş sonu puan ve yorum.
 4. **Profil ve Ayarlar (`/profil`):**
-   - Ad, telefon, adres; uygulama dili (TR / EN / AR / FA, AR ve FA sağdan sola); gece / gündüz modu.
-   - Bilgi sayfalarına bağlantılar (Hakkında, İletişim, Koşullar, Gizlilik).
+   - İstatistikler, ad / telefon / semt / adres, favori ustalar; dil (TR / EN / AR / FA, AR ve FA sağdan sola) ve tema.
+   - KVKK: verileri dışa aktarma ve cihazdan tamamen silme; bilgi sayfalarına bağlantılar.
 
 ---
 
 ## 4. Veri Modeli ve Kod Üretimi
 
-```ts
-type Kategori = "tesisat" | "elektrik" | "cilingir" | "kombi" | "beyaz-esya";
+Tiplerin tek doğru kaynağı [`src/types/ustam.ts`](../src/types/ustam.ts) dosyasıdır; burada yalnızca özetlenir.
 
-interface Usta {
-  id: number;
-  ad: string;
-  kategori: Kategori;
-  puan: number;          // 0–5
-  yorumSayisi: number;
-  mesafeKm: number;
-  musait: boolean;
-  cikisUcreti: number;   // TL
-  deneyimYil: number;
-  bolge: string;
-  sorunlar: SorunTipi[]; // ustanın çözdüğü sorun şablonları
-}
+| Tip | Önemli alanlar |
+|---|---|
+| `Usta` | kategori, puan ve yorum sayısı, `musait`, çıkış ücreti, **semt + harita konumu**, **konuştuğu diller**, rozetler, yanıt süresi, çalışma saatleri (`"7-24"` ya da `["08:00","22:00"]`), örnek yorumlar |
+| `Yorum` | ad, 1–5 puan, metin, **yazıldığı dil** (çevrilmez), tarih |
+| `CagriTaslagi` | usta, sorun, aciliyet, ziyaret zamanı, adres notu, isteğe bağlı fotoğraf |
+| `IsEmri` | taslak + Rust kodu, **Rust fiyat dökümü**, durum (`aktif` / `tamamlandi` / `iptal`), varış süresi, ödeme tercihi, telefon, doğrulandı mı, iptal nedeni |
 
-interface IsEmri {
-  kod: string;           // Rust tarafından üretilir
-  ustaId: number;
-  sorun: string;
-  aciliyet: "hemen" | "bugun" | "randevu";
-  zaman: string;         // ISO tarih-saat
-  durum: "bekliyor" | "yolda" | "tamamlandi";
-}
-```
+İşin anlık aşaması saklanmaz; oluşturma zamanı, ziyaret zamanı ve doğrulama bilgisinden
+[`src/lib/takip.ts`](../src/lib/takip.ts) ile hesaplanır.
 
 ### Rust iş emri kodu formatı
 

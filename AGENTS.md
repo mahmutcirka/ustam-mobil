@@ -65,6 +65,10 @@ Rust ile `UST-ELK-1210-K7QM` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 - `localStorage`'a korumasız erişim — yerine `src/lib/depo.ts` (`oku`, `yaz`).
 - Dizin ağacını, renk tablosunu veya sayfa ağacını README / AGENTS.md içine kopyalamak.
 - `docs/tasks/` altındaki eğitmen dosyalarını düzenlemek.
+- Bileşen içinde genel `app.css` sınıflarıyla aynı adı kullanmak (`.sayfa`, `.kart`, `.btn`, `.bos`, `.izgara`, `.metin`, `.dar`)
+  — Svelte kapsamlı stilleri genel sınıfı ezmez, ikisi birleşir ve beklenmedik boşluk/taşma oluşur.
+- Bileşenlerde emoji ikon kullanmak — yerine `<Ikon ad="…" />` (`src/lib/ikonlar.ts`).
+- İş kuralını yalnızca bir tarafta değiştirmek — Rust (`lib.rs`) ve TS (`kurallar.ts`) birlikte, ortak vektörlerle.
 
 ## 5. Sık Görevler İçin Tarifler
 

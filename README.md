@@ -30,6 +30,7 @@
   <a href="https://svelte.dev/"><img alt="Svelte 5" src="https://img.shields.io/badge/Svelte-5-FF3E00?style=for-the-badge&logo=svelte&logoColor=white"></a>
   <a href="https://react.dev/"><img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black"></a>
   <a href="https://bun.sh/"><img alt="Bun" src="https://img.shields.io/badge/Bun-1.x-000000?style=for-the-badge&logo=bun&logoColor=white"></a>
+  <a href="https://github.com/KULLANICI-ADIN/hello-mobil/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/KULLANICI-ADIN/hello-mobil/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="License Apache-2.0" src="https://img.shields.io/badge/License-Apache--2.0-blue?style=for-the-badge"></a>
 </p>
 <p>
@@ -87,16 +88,38 @@ uygulamasının dönüştürülmesiyle geliştirilmiştir (etkinlik → usta, se
 
 ## ✨ Temel Özellikler
 
-- 🔧 **Ustalar:** Canlı arama, 5 kategori çipi (Tesisat, Elektrik, Çilingir, Kombi, Beyaz Eşya) ve "sadece müsait olanlar" filtresi.
-- 📋 **Usta detayı:** Sorun tipi, aciliyet (Hemen / Bugün / Randevu), ziyaret saati ve adres notu seçimi; tahmini tutar.
-- 🦀 **Rust iş emri kodu:** `is_emri_uret` ve `is_emri_dogrula` Tauri komutları, birim testleriyle.
-- 🛡️ **Kapıda doğrulama:** Ustanın söylediği kod iş emirlerinizde yoksa "Kapıyı açmayın!" uyarısı.
-- 🌍 **4 dil + RTL:** Türkçe, İngilizce, Arapça, Farsça; AR ve FA'da `dir="rtl"`. Yabancı kullanıcının seçtiği sorun ustaya Türkçe iletilir.
-- 🌗 **Gece / gündüz modu:** WCAG AA kontrastlı marka renkleri ([`docs/branding.md`](docs/branding.md)).
-- 📱 **Responsive:** Telefon, tablet, masaüstü ve büyük ekran için 1–4 sütunlu ızgara; masaüstünde yan menü.
-- 📖 **Bilgi sayfaları:** Hakkında, İletişim (reaktif form), Kullanım Koşulları ve Gizlilik (KVKK) — 4 dilde.
+**Ustaları bulma**
+- 🗺️ **Liste ve harita:** 17 usta; stilize İstanbul haritasında (Boğaz, iki yaka, Adalar) pinler ve seçilen ustanın kartı.
+- 📍 **Semte göre mesafe ve varış süresi:** İlk açılışta seçilen semtten her ustaya km ve trafikli tahmini varış süresi hesaplanır.
+- 🚨 **"Acil mi?" kısayolları:** Su sızıntısı, elektrik kesintisi, kapıda kalma ve sıcak su için en yakın müsait usta tek dokunuşta açılır.
+- 🔎 **Filtre ve sıralama:** Canlı arama, kategori çipleri, şu an müsait, favoriler, **"dilimi konuşan usta"** filtresi; önerilen / en yakın / en yüksek puan / en uygun fiyat sıralaması.
+- 🕘 **Canlı müsaitlik:** Çalışma saatleri ve meşguliyete göre "Şu an müsait", "Meşgul" ya da "Kapalı · 09:00 açılır".
+
+**Usta detayı ve çağrı**
+- ⭐ Rozetler (kimliği doğrulandı, sigortalı, 7/24, hızlı yanıt), deneyim, yanıt süresi, konuştuğu diller.
+- 💬 Dört dilden gelebilen yorumlar, 5→1 yıldız puan dağılımı, kullanıcının kendi yorumları.
+- 🧰 Sorun başına tahmini işçilik aralığı ve süresi; 15 sorunun her biri için **"usta gelene kadar"** güvenlik ipucu.
+- 📷 Arızanın fotoğrafı (cihazda küçültülür, hiçbir yere gönderilmez), adres notu, Hemen / Bugün / Randevu.
+
+**Rust çekirdeği**
+- 🦀 **Kontrol karakterli iş emri kodu** `UST-ELK-1210-K7QM` — yanlış yazılmış kod iş listesine bakılmadan yakalanır.
+- 🧮 **Fiyat motoru** `fiyat_hesapla` — acil servis, gece (%25), Pazar (%15) ek ücretleri ve işçilik aralığı.
+- 🔁 Aynı kurallar tarayıcı için TypeScript'te; ikisi **ortak test vektörleriyle** doğrulanır.
+
+**Canlı takip ve güvenlik**
+- 🛵 Talep alındı → Usta onayladı → Yolda (geri sayım ve ilerleme çubuğu) → Kapıda → Tamamlandı.
+- 🛡️ Kapıdaki ustanın kodu kart içinde doğrulanır; kod listede yoksa **"Kapıyı açmayın!"** uyarısı. QR kod ve kopyalama.
+- ✅ İş bitince 1–5 yıldız ve yorum; iptalde neden sorulur; geçmişten "Tekrar çağır".
+
+**Dil, erişilebilirlik ve gizlilik**
+- 🌍 **TR · EN · AR · FA** (259 anahtar × 4 dil), AR/FA'da `dir="rtl"` ve mantıksal CSS; yabancı kullanıcının seçtiği sorun ustaya **Türkçe** iletilir.
+- 🎨 SVG ikon seti, Sistem / Gündüz / Gece teması, WCAG AA kontrast, klavye odağı ve `prefers-reduced-motion` desteği.
+- 🔐 Tüm veriler cihazda (localStorage); profilde KVKK için **dışa aktarma** ve **tümünü silme**.
+- 📱 Telefon / tablet / masaüstü / büyük ekran için 1–4 sütun; masaüstünde yan menü.
+- 📖 Hakkında, İletişim, Kullanım Koşulları ve Gizlilik sayfaları — 4 dilde.
 
 ---
+
 
 ## 🧩 Mimari
 
@@ -119,6 +142,8 @@ Klasör yapısı [`docs/klasor-mimarisi.md`](docs/klasor-mimarisi.md), sayfa ağ
 | Arayüz | [Svelte 5](https://svelte.dev/) | Runes ile reaktif ekranlar |
 | Bileşen entegrasyonu | [React 19](https://react.dev/) | MDX içindeki etkileşimli bileşenler |
 | İçerik | [MDX](https://mdxjs.com/) | Bilgi ve yasal sayfalar |
+| QR kod | [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) | İş emri kodunun QR karşılığı (MIT) |
+| Testler | [Bun test](https://bun.sh/docs/cli/test) + `cargo test` | Ortak test vektörleriyle TS ve Rust kuralları |
 | Paket yöneticisi | [Bun](https://bun.sh/) | Bağımlılık kurulumu ve script çalıştırma |
 
 ---
@@ -148,6 +173,20 @@ bun run build
 # Rust birim testleri
 cd src-tauri && cargo test
 ```
+
+---
+
+## 🧪 Testler ve CI
+
+| Katman | Komut | Kapsam |
+|---|---|---|
+| Rust kuralları | `cd src-tauri && cargo test` | Kod üretimi ve kontrol karakteri, kod doğrulama, haftanın günü, fiyat dökümü (7 test) |
+| TypeScript | `bun run test` | Ortak test vektörleri, 4 dilli sözlük tutarlılığı, örnek veri bütünlüğü, canlı takip aşamaları (70 test) |
+| Tip kontrolü | `bunx svelte-check --tsconfig ./tsconfig.json` | Tüm Svelte bileşenleri ve TS modülleri |
+
+Rust ve TypeScript aynı iş kurallarını uygular; [`src-tauri/test-vektorleri.json`](src-tauri/test-vektorleri.json) dosyasındaki
+elle hesaplanmış örnekler iki tarafta da çalıştırılır. [`.github/workflows/ci.yml`](.github/workflows/ci.yml) her push ve
+PR'da derlemeyi, TS testlerini ve tip kontrolünü (Linux), Rust testlerini (Windows) çalıştırır.
 
 ---
 

@@ -13,28 +13,45 @@ Her satır bir rotadır; `src/pages/` altındaki dosya adı URL'yi belirler.
 
 ```
 Ustam
-├── / (Ustalar — ana liste)                          src/pages/index.astro
-│   ├── Canlı arama (ad, uzmanlık, semt — seçili dilde ve Türkçe)
-│   ├── Kategori çipleri: Tesisat · Elektrik · Çilingir · Kombi · Beyaz Eşya
-│   ├── "Sadece müsait olanlar" anahtarı
-│   └── Usta kartları (müsait olanlar önce, mesafeye göre sıralı)
+├── (ilk açılış) Karşılama penceresi                 src/components/Karsilama.svelte
+│   ├── 1. adım: dil seçimi (TR / EN / AR / FA) ve uygulamanın 3 özelliği
+│   └── 2. adım: semt seçimi → mesafe ve varış süreleri bu semtten hesaplanır
 │
-├── /usta/[id] (Usta detayı ve seçim)                 src/pages/usta/[id].astro
-│   ├── Profil: deneyim, tamamlanan iş, bölge, puan
-│   ├── Sorun tipi seçimi (+ "ustaya Türkçe iletilecek" önizlemesi)
-│   ├── Aciliyet: Hemen (+acil ücret) / Bugün (saat dilimi) / Randevu (tarih + saat)
-│   └── Adres notu → "Ustayı çağır"
+├── / (Ustalar — ana sayfa)                          src/pages/index.astro
+│   ├── Selamlama + semt düğmesi (Semt seçici penceresi)
+│   ├── Aktif iş bandı: "{usta} yolda · ~9 dk" → /is-emirlerim
+│   ├── "Acil mi?" kısayolları: en yakın müsait usta + varış süresi → /usta/[id]?sorun=…&aciliyet=hemen
+│   ├── Canlı arama · kategori çipleri (adetli) · Şu an müsait · Favoriler · Dilimi konuşan
+│   ├── Sıralama: Önerilen / En yakın / En yüksek puan / En uygun fiyat
+│   └── Görünüm: Liste (usta kartları) ⇄ Harita (stilize İstanbul, pinler, seçili usta kartı)
+│
+├── /usta/[id] (Usta detayı ve çağrı hazırlama)       src/pages/usta/[id].astro
+│   ├── Kapak: ad, doğrulama rozeti, puan, anlık durum (müsait / meşgul / kapalı), favori
+│   ├── Rozetler · istatistikler (deneyim, tamamlanan iş, yanıt süresi, uzaklık) · saatler · diller
+│   ├── Sorun seçimi: işçilik aralığı + süre; "ustaya Türkçe iletilecek" önizlemesi; güvenlik ipucu
+│   ├── Aciliyet: Hemen (+acil ücret) / Bugün (çalışma saatleri içinde) / Randevu (tarih + saat)
+│   ├── Fotoğraf (cihazda küçültülür) · adres notu (profil adresinden dolar)
+│   ├── Yorumlar: puan dağılımı, 4 dilden yorumlar, kullanıcının kendi yorumu
+│   └── Sabit çağrı çubuğu: tahmini toplam + "Ustayı çağır"
 │
 ├── /cagri (Çağrı özeti ve onay)                      src/pages/cagri.astro
-│   └── Tahmini tutar → Rust: invoke("is_emri_uret", { kategori, zaman })
+│   ├── Fiyat dökümü → Rust: invoke("fiyat_hesapla", { girdi })  (acil · gece · Pazar · işçilik)
+│   ├── İletişim telefonu · ödeme tercihi (kapıda nakit / kart) · koşulların onayı
+│   └── Onay → Rust: invoke("is_emri_uret", { kategori, zaman }) → /is-emirlerim
 │
-├── /is-emirlerim (İş emirleri ve kodlar)             src/pages/is-emirlerim.astro
-│   ├── Rust'ın ürettiği kod: UST-ELK-1210-K7QM, durum (Bekliyor / Yolda / Tamamlandı / İptal)
-│   └── Kapıdaki ustayı doğrula → Rust: invoke("is_emri_dogrula", { kod })
+├── /is-emirlerim (İş emirleri)                       src/pages/is-emirlerim.astro
+│   ├── Aktif sekmesi — canlı iş kartı (src/components/IsKarti.svelte)
+│   │   ├── Aşamalar: Talep alındı → Usta onayladı → Yolda (geri sayım) → Kapıda
+│   │   ├── Kod UST-ELK-1210-K7QM · kopyala · QR kod
+│   │   ├── Kapıdaki ustayı doğrula → Rust: invoke("is_emri_dogrula", { kod })
+│   │   └── İptal (neden penceresi) · İş tamamlandı (doğrulamadan sonra) → değerlendirme penceresi
+│   └── Geçmiş sekmesi — tamamlanan / iptal edilen işler, puanım, "Tekrar çağır"
 │
-├── /profil (Kullanıcı ve ayarlar)                    src/pages/profil.astro
-│   ├── Ad, telefon, adres (localStorage)
-│   ├── Uygulama dili (TR / EN / AR / FA) ve gece / gündüz modu
+├── /profil (Kullanıcı, ayarlar, veri hakları)        src/pages/profil.astro
+│   ├── İstatistikler: toplam iş, tamamlanan, harcama, yorumlar
+│   ├── Ad, telefon, adres · semt · favori ustalar
+│   ├── Dil (4) · tema (Sistem / Gündüz / Gece)
+│   ├── KVKK: verilerimi dışa aktar (JSON) · tüm verilerimi sil
 │   └── Bilgi sayfalarına bağlantılar (seçili dilde)
 │
 └── Bilgi ve yasal sayfalar — her biri 4 dilde (AR ve FA: dir="rtl")
@@ -47,19 +64,27 @@ Ustam
 ### Ekranlar arası akış
 
 ```
-Ustalar ──► Usta detayı ──► Çağrı özeti ──[Rust: is_emri_uret]──► İş Emirlerim
-   ▲                                                                   │
-   └──────────────── alt menü / yan şerit (Ustalar · Çağrı · İş Emirlerim · Profil) ◄┘
+Karşılama ─► Ustalar ─► Usta detayı ─► Çağrı özeti ─[Rust: fiyat_hesapla, is_emri_uret]─► İş Emirlerim
+                ▲  │                                                                         │
+                │  └─ Acil kısayol (sorun + "hemen" önceden seçili) ─────► Usta detayı         │
+                └──────── alt menü / yan şerit (Ustalar · Çağrı · İş Emirlerim · Profil) ◄─────┘
 ```
 
 ### Paylaşılan durum (store'lar — `src/lib/`)
 
-| Store | İçerik | Kalıcılık |
+| Store / modül | İçerik | Kalıcılık |
 |---|---|---|
-| `cagri.svelte.ts` | Onaylanmamış çağrı taslağı | `localStorage["cagri-taslagi"]` |
-| `isEmirleri.svelte.ts` | İş emirleri listesi, Rust çağrıları | `localStorage["is-emirleri"]` |
+| `profil.svelte.ts` | Ad, telefon, **semt**, adres; karşılama tamamlandı mı | `localStorage["profil"]`, `["karsilama-tamam"]` |
+| `cagri.svelte.ts` | Onaylanmamış çağrı taslağı (foto dahil) ve anlık fiyat tahmini | `localStorage["cagri-taslagi"]` |
+| `isEmirleri.svelte.ts` | İş emirleri; doğrulama, tamamlama, iptal | `localStorage["is-emirleri"]` |
+| `favoriler.svelte.ts` | Favori usta kimlikleri | `localStorage["favoriler"]` |
+| `yorumlar.svelte.ts` | Kullanıcının yorumları; usta puanına eklenir | `localStorage["yorumlarim"]` |
 | `i18n.svelte.ts` | Seçili dil, `t()` çevirisi, RTL yönü | `localStorage["dil"]` |
-| `tema.svelte.ts` | Gece / gündüz modu | `localStorage["tema"]` |
+| `tema.svelte.ts` | Sistem / Gündüz / Gece tercihi | `localStorage["tema"]` |
+| `bildirim.svelte.ts` | Kısa bildirimler; sayfa geçişi için kuyruk | `sessionStorage["bildirim-kuyrugu"]` |
+| `saat.svelte.ts` | 15 sn'de bir güncellenen saat (müsaitlik, geri sayım) | — |
+| `motor.ts` → `kurallar.ts` / Rust | Kod üretimi, kod doğrulama, fiyat (Tauri'de Rust, tarayıcıda TS) | — |
+| `takip.ts` | İşin anlık aşaması, kalan süre, ilerleme | — |
 
 ---
 
