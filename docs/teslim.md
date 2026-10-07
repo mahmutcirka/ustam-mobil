@@ -12,8 +12,8 @@
 
 | Alan | Format | Ustam için değer |
 |---|---|---|
-| GitHub kullanıcı adı | Yalnızca ad — `@` veya URL yok | `KULLANICI-ADIN` |
-| Fork repo linki | Tam URL | `https://github.com/KULLANICI-ADIN/hello-mobil` |
+| GitHub kullanıcı adı | Yalnızca ad — `@` veya URL yok | `mahmutcirka` |
+| Fork repo linki | Tam URL | `https://github.com/mahmutcirka/ustam-mobil` |
 | Proje fikri | 1–2 cümle | Ustam, tesisat, elektrik, çilingir ve kombi gibi acil arızalarda yakındaki müsait ustayı bulup sorunu tarif ederek hızlıca çağırmayı sağlayan 4 dilli bir uygulamadır. Rust tarafı her çağrı için `UST-XXX-GGAA-XXXX` formatında bir iş emri kodu üretir. |
 | Hedef platformlar | En az 1 | Android, iOS, Windows (macOS ve Linux da desteklenir) |
 | Dosya | Yalnızca `.zip` | Reponun tamamı (Code → Download ZIP) |
