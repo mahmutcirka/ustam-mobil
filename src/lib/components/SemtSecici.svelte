@@ -66,9 +66,9 @@
   }
 
   button.aktif {
-    border-color: var(--renk-ana);
-    background: var(--renk-ana);
-    color: var(--renk-ana-ustu);
+    border-color: var(--secili);
+    background: var(--secili);
+    color: var(--secili-ustu);
     font-weight: 700;
   }
 </style>

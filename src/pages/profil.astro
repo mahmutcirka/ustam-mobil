@@ -1,8 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Iskelet from "../components/Iskelet.astro";
 import Profil from '../components/Profil.svelte';
 ---
 
 <Layout title="Profil — Ustam">
-  <Profil client:only="svelte" />
+  <Profil client:only="svelte" >
+    <Iskelet slot="fallback" tur="form" />
+  </Profil>
 </Layout>

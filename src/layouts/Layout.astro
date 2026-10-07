@@ -4,6 +4,7 @@ import AppHeader from '../components/AppHeader.svelte';
 import AppNav from '../components/AppNav.svelte';
 import Bildirimler from '../components/Bildirimler.svelte';
 import Karsilama from '../components/Karsilama.svelte';
+import CevrimdisiBant from '../components/CevrimdisiBant.svelte';
 import type { Dil } from '../types/ustam';
 import '../styles/app.css';
 
@@ -59,6 +60,7 @@ const sabitDil = Astro.props.dil ?? frontmatter?.dil;
   <body>
     <!-- Metinler seçili dile göre tarayıcıda çizildiği için ada bileşenler client:only çalışır -->
     <AppHeader client:only="svelte" />
+    <CevrimdisiBant client:only="svelte" />
     <main>
       <slot />
     </main>

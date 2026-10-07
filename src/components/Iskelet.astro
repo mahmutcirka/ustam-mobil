@@ -1,0 +1,103 @@
+---
+// Yükleme iskeleti — client:only adalar tarayıcıda çizilene kadar sunucu HTML'inde gösterilir (fallback slot).
+// Gerçek bir yükleme anını kapsar; yapay gecikme eklenmez.
+interface Props {
+  tur?: "liste" | "detay" | "form";
+  adet?: number;
+}
+
+const { tur = "liste", adet = 4 } = Astro.props;
+---
+
+<div class={`iskelet ${tur}`} aria-hidden="true">
+  {tur === "detay" && <div class="kapak" />}
+  <div class="ic">
+    <div class="cizgi genis" />
+    <div class="cizgi" />
+    {Array.from({ length: adet }).map(() => (
+      <div class="kutu">
+        <div class="avatar" />
+        <div class="satirlar">
+          <div class="cizgi" />
+          <div class="cizgi kisa" />
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .iskelet {
+    min-height: 60vh;
+  }
+
+  .ic {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 560px;
+    margin-inline: auto;
+    padding: 16px;
+  }
+
+  .liste .ic {
+    max-width: 960px;
+  }
+
+  .kapak {
+    height: 180px;
+    background: var(--renk-koyu);
+  }
+
+  .kutu {
+    display: flex;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid var(--kenar);
+    border-radius: var(--radius);
+    background: var(--kart);
+  }
+
+  .avatar {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    border-radius: 16px;
+  }
+
+  .satirlar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .cizgi {
+    height: 12px;
+    width: 70%;
+    border-radius: 6px;
+  }
+
+  .cizgi.genis {
+    height: 22px;
+    width: 55%;
+  }
+
+  .cizgi.kisa {
+    width: 40%;
+  }
+
+  .avatar,
+  .cizgi {
+    background: linear-gradient(90deg, var(--yuzey-2) 25%, var(--kenar) 50%, var(--yuzey-2) 75%);
+    background-size: 200% 100%;
+    animation: parilti 1.2s linear infinite;
+  }
+
+  @keyframes parilti {
+    to {
+      background-position: -200% 0;
+    }
+  }
+</style>

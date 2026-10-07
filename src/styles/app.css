@@ -23,6 +23,24 @@
   --yazi: #0f172a;
   --yazi-soluk: #475569;
   --kenar: #e2e8f0;
+  --yuzey-2: #f1f5f9;
+  --secili: #0f172a;
+  --secili-ustu: #ffffff;
+  --hata-yumusak: #fee2e2;
+  --basili: #0f172a0d;
+  --b-1: 4px;
+  --b-2: 8px;
+  --b-3: 12px;
+  --b-4: 16px;
+  --b-5: 24px;
+  --b-6: 32px;
+  --yz-xs: 12px;
+  --yz-sm: 13px;
+  --yz-md: 15px;
+  --yz-lg: 17px;
+  --yz-xl: 22px;
+  --yz-2xl: 28px;
+  --dokunma: 44px;
   --radius: 14px;
   --radius-kucuk: 10px;
   --radius-buyuk: 20px;
@@ -60,6 +78,11 @@
   --yazi: #f8fafc;
   --yazi-soluk: #94a3b8;
   --kenar: #334155;
+  --yuzey-2: #273449;
+  --secili: #f8fafc;
+  --secili-ustu: #0f172a;
+  --hata-yumusak: #3b1414;
+  --basili: #ffffff14;
   --golge-kart: 0 1px 2px #00000066;
   --golge-yuksek: 0 16px 40px #000000a6;
   --perde: #000000a6;
@@ -277,4 +300,71 @@ main > * {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+/* ── Ortak bileşen sınıfları ────────────────────────────────────────────────
+   Turuncu (--renk-ana) yalnızca birincil aksiyonlarda; seçili durumlar nötr --secili kullanır. */
+.btn {
+  min-height: 48px;
+}
+
+.btn.hayalet {
+  background: transparent;
+  color: var(--renk-ana-yazi);
+  border: 0;
+}
+
+.btn.kucuk {
+  width: auto;
+  min-height: 36px;
+  padding: 8px 14px;
+  font-size: var(--yz-sm);
+}
+
+.cip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--kenar);
+  border-radius: 999px;
+  background: var(--kart);
+  color: var(--yazi);
+  font-size: var(--yz-sm);
+  font-weight: 600;
+  transition:
+    background var(--sure-hizli) var(--egri),
+    border-color var(--sure-hizli) var(--egri);
+}
+
+.cip:active {
+  transform: scale(0.97);
+}
+
+.cip[aria-pressed="true"],
+.cip.secili {
+  background: var(--secili);
+  border-color: var(--secili);
+  color: var(--secili-ustu);
+}
+
+.bolum-baslik {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--b-2);
+  margin: var(--b-2) 0 0;
+  font-size: var(--yz-md);
+  font-weight: 700;
+}
+
+/* Kartın tamamı basılabilir olduğunda hafif basma geri bildirimi */
+.basilabilir {
+  transition: transform var(--sure-hizli) var(--egri);
+}
+
+.basilabilir:active {
+  transform: scale(0.985);
 }

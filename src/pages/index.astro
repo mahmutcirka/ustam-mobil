@@ -1,8 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Iskelet from "../components/Iskelet.astro";
 import Ustalar from '../components/Ustalar.svelte';
 ---
 
 <Layout title="Ustam — Ustalar">
-  <Ustalar client:only="svelte" />
+  <Ustalar client:only="svelte" >
+    <Iskelet slot="fallback" tur="liste" />
+  </Ustalar>
 </Layout>

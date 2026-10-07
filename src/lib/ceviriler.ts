@@ -205,15 +205,13 @@ const tr = {
   "harita.asya": "Anadolu Yakası",
 
   "karsilama.baslik": "Ustam'a hoş geldiniz",
+  "karsilama.slogan": "Arıza senden, usta bizden.",
   "karsilama.alt": "Evdeki arızaya en yakın müsait ustayı, kendi dilinizde çağırın.",
   "karsilama.dilSec": "Dilinizi seçin",
   "karsilama.semtSec": "Hangi semttesiniz?",
   "karsilama.semtNot": "En yakın ustaları göstermek için kullanılır; cihazınızdan çıkmaz.",
   "karsilama.devam": "Devam",
   "karsilama.basla": "Başla",
-  "karsilama.ozellik1": "Yakındaki müsait ustalar ve varış süresi",
-  "karsilama.ozellik2": "Sorununuzu kendi dilinizde anlatın",
-  "karsilama.ozellik3": "Kapıda iş emri koduyla güvenli doğrulama",
 
   "genel.vazgec": "Vazgeç",
 
@@ -287,6 +285,17 @@ const tr = {
   "profil.surum": "Sürüm {surum} · Çekirdek: {motor}",
   "motor.rust": "Rust (Tauri)",
   "motor.ts": "Tarayıcı (TypeScript)",
+
+  "karsilama.atla": "Atla",
+  "karsilama.ileri": "İleri",
+  "karsilama.adim1Baslik": "Arızanı seç",
+  "karsilama.adim1Metin": "Su kaçağı, elektrik, kilit, kombi… Ne olduğunu iki dokunuşla anlat.",
+  "karsilama.adim2Baslik": "Yakınındaki müsait ustayı bul",
+  "karsilama.adim2Metin": "Mesafeyi, varış süresini, puanı ve fiyat aralığını çağırmadan önce gör.",
+  "karsilama.adim3Baslik": "İş emrini güvenle takip et",
+  "karsilama.adim3Metin": "Kapıdaki ustanın kodunu doğrula; kod tutmazsa kapıyı açma.",
+  "karsilama.adim": "Adım {n} / {toplam}",
+  "genel.cevrimdisi": "Çevrimdışısınız. Verileriniz bu cihazda olduğu için uygulama çalışmaya devam eder.",
 } as const;
 
 export type Anahtar = keyof typeof tr;
@@ -494,15 +503,13 @@ const en: Record<Anahtar, string> = {
   "harita.asya": "Asian side",
 
   "karsilama.baslik": "Welcome to Ustam",
+  "karsilama.slogan": "Your breakdown, our pro.",
   "karsilama.alt": "Call the nearest available pro for any breakdown at home, in your own language.",
   "karsilama.dilSec": "Choose your language",
   "karsilama.semtSec": "Which district are you in?",
   "karsilama.semtNot": "Used to show the nearest pros; it never leaves your device.",
   "karsilama.devam": "Continue",
   "karsilama.basla": "Get started",
-  "karsilama.ozellik1": "Nearby available pros and arrival time",
-  "karsilama.ozellik2": "Describe your problem in your own language",
-  "karsilama.ozellik3": "Safe check at the door with a job code",
 
   "genel.vazgec": "Cancel",
 
@@ -576,6 +583,17 @@ const en: Record<Anahtar, string> = {
   "profil.surum": "Version {surum} · Core: {motor}",
   "motor.rust": "Rust (Tauri)",
   "motor.ts": "Browser (TypeScript)",
+
+  "karsilama.atla": "Skip",
+  "karsilama.ileri": "Next",
+  "karsilama.adim1Baslik": "Pick the problem",
+  "karsilama.adim1Metin": "Leak, power, lock, boiler… describe what happened in two taps.",
+  "karsilama.adim2Baslik": "Find an available pro nearby",
+  "karsilama.adim2Metin": "See distance, arrival time, rating and price range before you call.",
+  "karsilama.adim3Baslik": "Track the job safely",
+  "karsilama.adim3Metin": "Verify the code of the pro at your door; if it does not match, do not open.",
+  "karsilama.adim": "Step {n} of {toplam}",
+  "genel.cevrimdisi": "You are offline. The app keeps working because your data is on this device.",
 };
 
 const ar: Record<Anahtar, string> = {
@@ -781,15 +799,13 @@ const ar: Record<Anahtar, string> = {
   "harita.asya": "الجانب الآسيوي",
 
   "karsilama.baslik": "مرحبًا بك في Ustam",
+  "karsilama.slogan": "العطل عليك، والفنّي علينا.",
   "karsilama.alt": "اطلب أقرب فنّي متاح لأي عطل في منزلك، وبلغتك.",
   "karsilama.dilSec": "اختر لغتك",
   "karsilama.semtSec": "في أي حيّ تسكن؟",
   "karsilama.semtNot": "يُستخدم لعرض أقرب الفنّيين، ولا يغادر جهازك.",
   "karsilama.devam": "متابعة",
   "karsilama.basla": "ابدأ",
-  "karsilama.ozellik1": "فنّيون متاحون بالقرب منك مع وقت الوصول",
-  "karsilama.ozellik2": "صف مشكلتك بلغتك",
-  "karsilama.ozellik3": "تحقّق آمن عند الباب برمز الطلب",
 
   "genel.vazgec": "إلغاء",
 
@@ -863,6 +879,17 @@ const ar: Record<Anahtar, string> = {
   "profil.surum": "الإصدار {surum} · النواة: {motor}",
   "motor.rust": "Rust (Tauri)",
   "motor.ts": "المتصفح (TypeScript)",
+
+  "karsilama.atla": "تخطٍّ",
+  "karsilama.ileri": "التالي",
+  "karsilama.adim1Baslik": "اختر العطل",
+  "karsilama.adim1Metin": "تسرّب، كهرباء، قفل، غلاية… صف ما حدث بلمستين.",
+  "karsilama.adim2Baslik": "اعثر على فنّي متاح قريب منك",
+  "karsilama.adim2Metin": "شاهد المسافة ووقت الوصول والتقييم ونطاق السعر قبل الطلب.",
+  "karsilama.adim3Baslik": "تابع الطلب بأمان",
+  "karsilama.adim3Metin": "تحقّق من رمز الفنّي عند الباب؛ إن لم يطابق فلا تفتح.",
+  "karsilama.adim": "الخطوة {n} من {toplam}",
+  "genel.cevrimdisi": "أنت غير متصل. يواصل التطبيق العمل لأن بياناتك محفوظة على هذا الجهاز.",
 };
 
 const fa: Record<Anahtar, string> = {
@@ -1068,15 +1095,13 @@ const fa: Record<Anahtar, string> = {
   "harita.asya": "بخش آسیایی",
 
   "karsilama.baslik": "به Ustam خوش آمدید",
+  "karsilama.slogan": "خرابی با شما، استادکار با ما.",
   "karsilama.alt": "برای هر خرابی در خانه، نزدیک‌ترین استادکار در دسترس را به زبان خودتان خبر کنید.",
   "karsilama.dilSec": "زبان خود را انتخاب کنید",
   "karsilama.semtSec": "در کدام محله هستید؟",
   "karsilama.semtNot": "برای نشان دادن نزدیک‌ترین استادکاران استفاده می‌شود و از دستگاه شما خارج نمی‌شود.",
   "karsilama.devam": "ادامه",
   "karsilama.basla": "شروع",
-  "karsilama.ozellik1": "استادکاران در دسترس نزدیک شما و زمان رسیدن",
-  "karsilama.ozellik2": "مشکل خود را به زبان خودتان بگویید",
-  "karsilama.ozellik3": "تأیید امن دم در با کد سفارش",
 
   "genel.vazgec": "انصراف",
 
@@ -1150,6 +1175,17 @@ const fa: Record<Anahtar, string> = {
   "profil.surum": "نسخه {surum} · هسته: {motor}",
   "motor.rust": "Rust (Tauri)",
   "motor.ts": "مرورگر (TypeScript)",
+
+  "karsilama.atla": "رد شدن",
+  "karsilama.ileri": "بعدی",
+  "karsilama.adim1Baslik": "خرابی را انتخاب کن",
+  "karsilama.adim1Metin": "نشت آب، برق، قفل، پکیج… با دو لمس بگو چه شده.",
+  "karsilama.adim2Baslik": "استادکار در دسترس نزدیک را پیدا کن",
+  "karsilama.adim2Metin": "پیش از درخواست، فاصله، زمان رسیدن، امتیاز و بازه قیمت را ببین.",
+  "karsilama.adim3Baslik": "سفارش را با خیال راحت دنبال کن",
+  "karsilama.adim3Metin": "کد استادکار پشت در را بررسی کن؛ اگر مطابقت نداشت در را باز نکن.",
+  "karsilama.adim": "مرحله {n} از {toplam}",
+  "genel.cevrimdisi": "آفلاین هستید. برنامه کار می‌کند چون داده‌هایتان روی همین دستگاه است.",
 };
 
 export const sozlukler: Record<Dil, Record<Anahtar, string>> = { tr, en, ar, fa };
