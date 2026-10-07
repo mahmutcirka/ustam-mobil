@@ -162,7 +162,9 @@ cd src-tauri && cargo test
 | [`docs/kurulum.md`](docs/kurulum.md) | Kurulum ve çalıştırma |
 | [`docs/kurallar.md`](docs/kurallar.md) | Git akışı ve kod yazım kuralları |
 | [`docs/kaynaklar.md`](docs/kaynaklar.md) | Tasarım ve teknik kaynaklar |
-| [`docs/teslim.md`](docs/teslim.md) | Teslim adımları |
+| [`docs/teslim.md`](docs/teslim.md) | Teslim adımları ve görev → PR eşlemesi |
+| [`docs/ilerleme-batch-01.md`](docs/ilerleme-batch-01.md) | Batch 01 kontrol matrisi ve derleme kanıtı |
+| [`docs/ajan-uyum-testi.md`](docs/ajan-uyum-testi.md) | Ajan uyum testi protokolü |
 | [`docs/tasks/week-3/`](docs/tasks/week-3/) | Hafta 3 görev tanımları |
 | [`AGENTS.md`](AGENTS.md) | Yapay zekâ ajanları için bağlayıcı kurallar |
 

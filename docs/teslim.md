@@ -44,3 +44,5 @@
 | 09 | Batch 01 denetimi ve git tag | 10 | `feature/batch-01` + `v0.1.0-batch-01` |
 
 Dallar sırayla birbirinin üzerine kurulmuştur; PR'lar yukarıdaki sırayla merge edilmelidir.
+
+Batch 01 denetim tablosu: [`ilerleme-batch-01.md`](ilerleme-batch-01.md).
