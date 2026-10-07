@@ -17,22 +17,27 @@
 | 8 | Mimari ağaç | Sayfa ağacı, platform matrisi, breakpoint'ler | [`mimari-agac.md`](mimari-agac.md) | ☑ |
 | 9 | Derleme doğrulaması | `bun run build` 0 hata | Aşağıdaki çıktı | ☑ |
 
-## 2. Derleme Kanıtı
+## 2. Derleme ve Test Kanıtı (v0.2.0)
 
 ```text
 $ bun run build
  generating static routes
-  ├─ /ar/gizlilik/index.html · /ar/hakkinda/index.html · /ar/iletisim/index.html · /ar/kosullar/index.html
-  ├─ /en/gizlilik/index.html · /en/hakkinda/index.html · /en/iletisim/index.html · /en/kosullar/index.html
-  ├─ /fa/gizlilik/index.html · /fa/hakkinda/index.html · /fa/iletisim/index.html · /fa/kosullar/index.html
+  ├─ /ar/… · /en/… · /fa/… (gizlilik, hakkinda, iletisim, kosullar — 12 sayfa)
   ├─ /gizlilik · /hakkinda · /iletisim · /kosullar
   ├─ /cagri · /is-emirlerim · /profil · /index.html
-  └─ /usta/1 … /usta/8
-[build] 28 page(s) built
+  └─ /usta/1 … /usta/17
+[build] 37 page(s) built
 [build] Complete!
 
+$ bun run test
+ 70 pass
+ 0 fail
+
+$ bunx svelte-check --tsconfig ./tsconfig.json
+COMPLETED 0 ERRORS
+
 $ cd src-tauri && cargo test
-test result: ok. 4 passed; 0 failed
+test result: ok. 7 passed; 0 failed
 ```
 
 Ekran görüntüleri (`bun run build` ve `bun run tauri dev`) teslim ZIP'ine eklenir.
@@ -46,4 +51,11 @@ git checkout master
 git pull origin master
 git tag -a v0.1.0-batch-01 -m "Hafta 3: Batch 01 - Proje altyapısı, markalama ve sayfalar tamamlandı"
 git push origin v0.1.0-batch-01
+```
+
+Yeni özellik dalları (v0.2.0) da merge edildikten sonra ikinci sürüm etiketi:
+
+```bash
+git tag -a v0.2.0 -m "Ustam 0.2.0: harita, canlı takip, Rust fiyat motoru, testler ve CI"
+git push origin v0.2.0
 ```

@@ -63,3 +63,19 @@ Merge'den önce **Files changed** sekmesinde yalnızca istenen dosyaların deği
 - **Rust:** Yeni komutlar `src-tauri/src/lib.rs` içinde `#[tauri::command]` ile tanımlanır, `generate_handler!` listesine
   eklenir ve birim testiyle (`cargo test`) doğrulanır.
 - **Yeni sayfa:** Önce [`docs/mimari-agac.md`](mimari-agac.md) güncellenir, sonra `src/pages/` altına eklenir.
+
+## 5. Testler
+
+Her PR'dan önce yerelde, her push'ta CI'da ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml)):
+
+```bash
+bun run build                                   # 0 hata
+bun run test                                    # TS: ortak vektörler, çeviriler, veri, canlı takip
+bunx svelte-check --tsconfig ./tsconfig.json    # tip kontrolü
+cd src-tauri && cargo test                      # Rust kuralları
+```
+
+- **İş kuralı değişikliği:** Önce [`src-tauri/test-vektorleri.json`](../src-tauri/test-vektorleri.json)'a elle hesaplanmış
+  örnek eklenir, sonra `lib.rs` ve `kurallar.ts` birlikte değiştirilir; iki test grubu da geçmeden PR açılmaz.
+- **Yeni arayüz metni:** 4 dile eklenir; `tests/ceviriler.test.ts` eksik anahtarı, boş metni ve uyuşmayan `{yer tutucuyu}` yakalar.
+- **Yeni usta veya sorun:** `tests/data.test.ts` fiyat bilgisi, çeviri ve güvenlik ipucu olmayan sorunu yakalar.

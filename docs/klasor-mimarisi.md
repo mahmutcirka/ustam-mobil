@@ -23,16 +23,19 @@ ustam/
 │   ├── tauri.conf.json      # Masaüstü/mobil pencere ayarları ve frontendDist hedefi
 │   ├── Cargo.toml           # Rust kütüphaneleri ve bağımlılıkları
 │   ├── icons/               # tauri icon ile üretilen macOS / Windows / Linux / iOS / Android ikonları
-│   └── src/lib.rs           # Rust backend komutları ve uygulama giriş noktası
+│   ├── test-vektorleri.json # Rust ve TS kurallarının ortak, elle hesaplanmış test örnekleri
+│   └── src/lib.rs           # Rust komutları (kod üretimi/doğrulama, fiyat), testleri ve giriş noktası
 │
 ├── src/                     # Ön yüz kaynak kodları (Frontend)
-│   ├── layouts/             # Sayfa iskeleti: Layout.astro (header, alt menü, tema + dil/RTL başlatma)
+│   ├── layouts/             # Sayfa iskeleti: Layout.astro (header, alt menü, bildirimler, karşılama, tema + dil/RTL)
 │   ├── pages/               # Dosya tabanlı rotalar (.astro, .mdx); en/ ar/ fa/ alt klasörleri bilgi sayfalarının diğer dilleri
-│   ├── components/          # Yeniden kullanılabilir UI bileşenleri (.svelte, .tsx)
-│   ├── lib/                 # İş mantığı, mock veri, çeviri sözlükleri, Svelte 5 store'ları ($state)
+│   ├── components/          # Sayfa düzeyindeki bileşenler (.svelte, .tsx, .astro)
+│   ├── lib/                 # İş kuralları, mock veri, çeviriler, ikonlar, Svelte 5 store'ları; components/ altında küçük UI parçaları
 │   ├── types/               # TypeScript tip tanımları ve arayüzler (.ts)
 │   └── styles/              # Global tema değişkenleri ve CSS stilleri (app.css)
 │
+├── tests/                   # bun test: ortak vektörler, çeviri tutarlılığı, veri bütünlüğü, canlı takip
+├── .github/workflows/       # CI: derleme + TS testleri + tip kontrolü (Linux), cargo test (Windows)
 └── docs/                    # Proje dokümantasyonu, görevler ve mimari rehberler
 ```
 
@@ -77,3 +80,10 @@ ustam/
 
 ### 10. `docs/` (Dokümantasyon)
 - **Ne konur?** Mimari kararlar, marka renkleri, görev kılavuzları ve proje planları.
+
+### 11. `tests/` (TypeScript Testleri)
+- **Ne konur?** `bun test` ile çalışan `*.test.ts` dosyaları; yalnızca saf modülleri (`kurallar.ts`, `data.ts`, `takip.ts`, `ceviriler.ts`) test eder.
+- **Kural:** Yeni bir iş kuralı eklenince önce `src-tauri/test-vektorleri.json`'a örnek eklenir; Rust (`cargo test`) ve TS (`bun run test`) aynı örnekleri çalıştırır. Testlerin kendi `tsconfig.json`'u `bun` tiplerini içerir.
+
+### 12. `.github/workflows/` (Sürekli Entegrasyon)
+- **Ne konur?** `ci.yml` — her push ve PR'da derleme, testler ve tip kontrolü.

@@ -1,0 +1,35 @@
+# Her push ve PR'da: web derlemesi + TS testleri + tip kontrolü (Linux) ve Rust birim testleri (Windows)
+name: CI
+
+on:
+  push:
+    branches: ["master", "feature/**", "fix/**"]
+  pull_request:
+
+jobs:
+  web:
+    name: Derleme, TS testleri ve tip kontrolü
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - run: bun run test
+      - run: bunx svelte-check --tsconfig ./tsconfig.json --threshold error
+
+  rust:
+    name: Rust kuralları (cargo test)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      # tauri::generate_context! derleme sırasında ../dist klasörünü okur
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - run: cargo test --lib
+        working-directory: src-tauri

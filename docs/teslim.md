@@ -42,6 +42,11 @@
 | 04 | AGENTS.md / CLAUDE.md / GEMINI.md | 10 | `feature/agents` |
 | 08 | İleri AGENTS.md ve doküman indeksi | 10 | `feature/agents-pro` |
 | 09 | Batch 01 denetimi ve git tag | 10 | `feature/batch-01` + `v0.1.0-batch-01` |
+| — | Tasarım sistemi (SVG ikonlar, bildirim, modal, 3'lü tema) | — | `feature/tasarim-sistemi` |
+| — | Rust kural motoru (kontrol karakteri, fiyat, ortak vektörler) | — | `feature/rust-kurallar` |
+| — | Ustalar v2 (harita, semt, yorumlar, favoriler, karşılama) | — | `feature/ustalar-v2` |
+| — | Çağrı ve canlı takip (aşamalar, QR, değerlendirme, profil) | — | `feature/cagri-takip` |
+| — | Testler, CI ve belgeler (v0.2.0) | — | `feature/test-ci-belgeler` |
 
 Dallar sırayla birbirinin üzerine kurulmuştur; PR'lar yukarıdaki sırayla merge edilmelidir.
 
