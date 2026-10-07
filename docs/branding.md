@@ -1,34 +1,85 @@
-# Marka ve Tasarım Kılavuzu
+# Ustam — Marka ve Tasarım Kılavuzu
 
-> ✍️ **Öğrenci Görevi:** Bu taslağı belirlediğiniz marka kimliği ve renklerine göre doldurun. Ayrıntılı yönerge için [`docs/tasks/week-3/05-branding.task.md`](tasks/week-3/05-branding.task.md) dosyasını inceleyin.
+> Görev tanımı: [`docs/tasks/week-3/05-branding.task.md`](tasks/week-3/05-branding.task.md)
+>
+> Bu belge renklerin **tek doğru kaynağıdır**. Aynı değerler [`src/styles/app.css`](../src/styles/app.css)
+> içinde `:root` (gündüz) ve `:root[data-tema="gece"]` (gece) altında birebir tanımlıdır. Arayüzde
+> ad-hoc renk yazılmaz; yalnızca aşağıdaki CSS değişkenleri kullanılır.
 
 ---
 
-## 1. Marka Renk Paleti
+## 1. Marka Kimliği
 
-Aşağıdaki tabloyu doldurun ve belirlediğiniz renkleri `src/styles/app.css` içerisine aktarın:
+- **Ad:** Ustam
+- **Slogan:** *Arıza senden, usta bizden.*
+- **Kişilik:** Hızlı, güvenilir, yardımsever. Turuncu, iş güvenliği yeleklerinin ve "acil ama kontrol altında"
+  hissinin rengidir; lacivert güven ve profesyonellik verir.
 
-| Kullanım Alanı | CSS Değişkeni | Açık Mod (Gündüz) | Koyu Mod (Gece) | Açıklama |
+---
+
+## 2. Renk Token'ları
+
+Kontrast oranları WCAG 2.1 bağıl parlaklık formülüyle hesaplanmıştır; metin/zemin çiftlerinin tamamı
+**AA (≥ 4.5:1)** eşiğini geçer.
+
+| Token | Gündüz (light) | Gece (dark) | Kullanım yeri | Kontrast (gündüz · gece) |
 |---|---|---|---|---|
-| **Ana Renk (Primary)** | `--renk-ana` | `#[Renk Kodu]` | `#[Renk Kodu]` | Butonlar, aktif sekme, marka vurgusu |
-| **Koyu / Üst Bar** | `--renk-koyu` | `#[Renk Kodu]` | `#[Renk Kodu]` | Başlık alanı arka planı |
-| **Sayfa Zemini** | `--zemin` | `#[Renk Kodu]` | `#[Renk Kodu]` | Sayfa genel arka planı |
-| **Kart Yüzeyi** | `--kart` | `#[Renk Kodu]` | `#[Renk Kodu]` | Liste kartları, form alanları |
-| **Ana Yazı** | `--yazi` | `#[Renk Kodu]` | `#[Renk Kodu]` | Başlıklar ve okunabilir metin |
-| **Soluk Yazı** | `--yazi-soluk` | `#[Renk Kodu]` | `#[Renk Kodu]` | Açıklamalar, tarihler, etiketler |
-| **Kenarlık** | `--kenar` | `#[Renk Kodu]` | `#[Renk Kodu]` | Çizgiler, input sınırları |
+| `--renk-ana` | `#c2410c` | `#f97316` | Birincil buton, aktif çip/sekme, seçili kenarlık | `--renk-ana-ustu` ile 5.18 · 6.24 |
+| `--renk-ana-yazi` | `#c2410c` | `#fb923c` | Vurgulu metin (fiyat, bağlantı) | kart üzerinde 5.18 · 6.46 |
+| `--renk-ana-ustu` | `#ffffff` | `#1c1917` | Birincil renk üzerindeki yazı | — |
+| `--renk-ana-yumusak` | `#ffedd5` | `#3b1d0b` | Avatar zemini, bilgi kutusu | `--yazi` ile 15.58 · 14.69 |
+| `--renk-koyu` | `#1e293b` | `#020617` | Üst bar ve usta kapak alanı | beyaz yazı 14.63 · 20.17 |
+| `--logo` | `#f97316` | `#f97316` | Logodaki "am" vurgusu (yalnızca `--renk-koyu` üstünde) | 5.22 · — |
+| `--vurgu` | `#f59e0b` | `#fbbf24` | Rozet / uyarı ikonu (metin rengi olarak kullanılmaz) | — |
+| `--vurgu-yumusak` | `#fef3c7` | `#3a2a06` | Uyarı kutusu, "Bekliyor" rozeti | `--yazi` ile 16.03 · 13.26 |
+| `--basari` | `#15803d` | `#4ade80` | "Şu an müsait", "Usta yolda", doğrulama başarılı | rozet zemininde 4.57 · 8.45 |
+| `--basari-yumusak` | `#dcfce7` | `#0f2e1b` | Başarı rozeti zemini | — |
+| `--hata` | `#b91c1c` | `#f87171` | İptal, hatalı kod uyarısı | kart üzerinde 6.47 · 5.29 |
+| `--zemin` | `#f8fafc` | `#0f172a` | Sayfa arka planı | `--yazi` ile 17.06 · 17.06 |
+| `--kart` | `#ffffff` | `#1e293b` | Kartlar, form alanları, alt menü | `--yazi` ile 17.85 · 13.98 |
+| `--yazi` | `#0f172a` | `#f8fafc` | Başlık ve gövde metni | — |
+| `--yazi-soluk` | `#475569` | `#94a3b8` | İkincil bilgi (semt, tarih, açıklama) | zemin 7.24 · 6.96, kart 7.58 · 5.71 |
+| `--kenar` | `#e2e8f0` | `#334155` | Kart ve input sınırları, ayırıcılar | — (dekoratif) |
+
+> Neden gündüz modunda `#f97316` değil `#c2410c`? Beyaz yazı `#f97316` üzerinde yalnızca 2.8:1 kontrast
+> verir ve AA'yı geçemez. Parlak turuncu yalnızca koyu zeminde (logo, gece modu) kullanılır.
 
 ---
 
-## 2. Tipografi ve Yuvarlaklık
+## 3. Tipografi, Boşluk ve Köşe
 
-- **Yazı Tipi (Font):** System UI (`-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`)
-- **Köşe Yuvarlaklığı (`--radius`):** `[Örn: 12px / 14px / 16px]`
+- **Yazı tipi:** Sistem yazı tipi yığını — `system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`
+  (Arapça ve Farsça için işletim sisteminin yerel yazı tipine otomatik düşer).
+- **Ölçek:** Sayfa başlığı 22px/700 · kart başlığı 17px/700 · gövde 14–16px/400 · rozet 11px/600.
+- **Köşe yuvarlaklığı (`--radius`):** `14px` (kart, buton, input). Avatarlar 16–20px, çipler ve rozetler `999px`.
+- **Boşluk:** 4'ün katları — kart iç boşluğu 14–16px, liste aralığı 12px, sayfa kenarı 16px.
 
 ---
 
-## 3. Logo ve İkon Tanımı
+## 4. Logo ve İkon
 
-- **Logo Metni / Simgesi:** [Uygulamanızın logosu ne olacak?]
-- **Logo Dosyası:** `public/[logo-adi.svg]`
-- **Tauri Launcher İkonu:** `src-tauri/icons/`
+- **Sembol:** Konum işareti içinde İngiliz anahtarı → "yakınındaki usta".
+- **Kelime işareti:** `ust` beyaz + `am` turuncu (`--logo`), 22px / 800, üst barda `public/logo.svg` ile birlikte.
+- **Kaynak dosya:** [`app-icon.svg`](../app-icon.svg) (1024×1024, köşeleri şeffaf). Tüm platform ikonları bu tek
+  dosyadan üretilir; renkler yalnızca bu belgedeki token'lardan alınır (`#f97316 → #c2410c` gradyan, `#1e293b` çekirdek).
+
+### Platform ikon ve launcher tablosu
+
+| Platform | Dosya / Konum | Boyut ve format | Üretim |
+|---|---|---|---|
+| macOS | `src-tauri/icons/icon.icns` | 1024×1024 kaynak, `.icns` | `bun run tauri icon app-icon.svg` |
+| Windows | `src-tauri/icons/icon.ico`, `Square*Logo.png`, `StoreLogo.png` | Çok boyutlu `.ico` (16–256) | `bun run tauri icon app-icon.svg` |
+| Linux | `src-tauri/icons/32x32.png`, `128x128.png`, `128x128@2x.png`, `icon.png` | 32, 128, 256, 512 px | `bun run tauri icon app-icon.svg` |
+| iOS | `src-tauri/icons/ios/` | AppIcon seti (20–1024 px) | `bun run tauri icon app-icon.svg` |
+| Android | `src-tauri/icons/android/` | `mipmap-*` (mdpi–xxxhdpi), adaptive icon | `bun run tauri icon app-icon.svg` |
+| Web | `public/favicon.png`, `public/apple-touch-icon.png`, `public/logo.svg` | 64 px, 180 px PNG, SVG | `bun run tauri icon app-icon.svg -o <dizin> -p 64 -p 180` |
+
+---
+
+## 5. Uygulama Kimliği (Tauri)
+
+| Alan | Değer | Dosya |
+|---|---|---|
+| `productName` | `Ustam` | [`src-tauri/tauri.conf.json`](../src-tauri/tauri.conf.json) |
+| `identifier` | `edu.istinye.ustam` | [`src-tauri/tauri.conf.json`](../src-tauri/tauri.conf.json) |
+| Pencere başlığı | `Ustam — Acil Usta` (420×820) | [`src-tauri/tauri.conf.json`](../src-tauri/tauri.conf.json) |

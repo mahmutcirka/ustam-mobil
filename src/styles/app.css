@@ -1,21 +1,22 @@
 /* Global stil — tüm sayfaların ortak renkleri ve yardımcı sınıfları.
    Renk değerleri docs/branding.md ile birebir aynı tutulur. */
 :root {
-  --renk-ana: #e4002b;
-  --renk-ana-yazi: #e4002b;
+  --renk-ana: #c2410c;
+  --renk-ana-yazi: #c2410c;
   --renk-ana-ustu: #ffffff;
-  --renk-ana-yumusak: #fde8ec;
-  --renk-koyu: #1a1a2e;
+  --renk-ana-yumusak: #ffedd5;
+  --renk-koyu: #1e293b;
+  --logo: #f97316;
   --vurgu: #f59e0b;
   --vurgu-yumusak: #fef3c7;
   --basari: #15803d;
   --basari-yumusak: #dcfce7;
   --hata: #b91c1c;
-  --zemin: #f4f5f7;
+  --zemin: #f8fafc;
   --kart: #ffffff;
-  --yazi: #1a1a2e;
-  --yazi-soluk: #6b7280;
-  --kenar: #e5e7eb;
+  --yazi: #0f172a;
+  --yazi-soluk: #475569;
+  --kenar: #e2e8f0;
   --radius: 14px;
   color-scheme: light;
 
@@ -27,17 +28,21 @@
 
 /* Gece modu — <html data-tema="gece"> olunca değişkenler koyulaşır */
 :root[data-tema="gece"] {
-  --renk-ana-yazi: #ff5c77;
-  --renk-ana-yumusak: #3a1520;
-  --vurgu-yumusak: #3d2e0a;
+  --renk-ana: #f97316;
+  --renk-ana-yazi: #fb923c;
+  --renk-ana-ustu: #1c1917;
+  --renk-ana-yumusak: #3b1d0b;
+  --renk-koyu: #020617;
+  --vurgu: #fbbf24;
+  --vurgu-yumusak: #3a2a06;
   --basari: #4ade80;
-  --basari-yumusak: #12301d;
+  --basari-yumusak: #0f2e1b;
   --hata: #f87171;
-  --zemin: #0f1117;
-  --kart: #1a1d26;
-  --yazi: #f3f4f6;
-  --yazi-soluk: #9ca3af;
-  --kenar: #2a2e3a;
+  --zemin: #0f172a;
+  --kart: #1e293b;
+  --yazi: #f8fafc;
+  --yazi-soluk: #94a3b8;
+  --kenar: #334155;
   color-scheme: dark;
 }
 

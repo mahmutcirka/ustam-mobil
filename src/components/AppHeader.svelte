@@ -6,7 +6,10 @@
 </script>
 
 <header class="ust">
-  <a href="/" class="logo">passo<span>klon</span></a>
+  <a href="/" class="logo">
+    <img src="/logo.svg" alt="" width="28" height="28" />
+    <b>ust<span>am</span></b>
+  </a>
   <div class="araclar">
     <select
       class="dil-secici"
@@ -41,6 +44,9 @@
   }
 
   .logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     color: #fff;
     font-size: 22px;
     font-weight: 800;
@@ -48,8 +54,12 @@
     text-decoration: none;
   }
 
+  .logo b {
+    font-weight: inherit;
+  }
+
   .logo span {
-    color: var(--renk-ana);
+    color: var(--logo);
   }
 
   .araclar {
