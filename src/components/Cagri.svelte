@@ -1,5 +1,6 @@
 <script lang="ts">
   // Çağrı özeti — "Çağrıyı onayla" Rust'taki is_emri_uret komutunu çağırır
+  import Ikon from "$lib/components/Ikon.svelte";
   import { ACIL_UCRET, kategoriIkon, paraYaz, tarihYaz } from "$lib/data";
   import { cagri } from "$lib/cagri.svelte";
   import { isEmirleri } from "$lib/isEmirleri.svelte";
@@ -33,7 +34,7 @@
     {@const u = cagri.usta}
     <div class="kart ozet">
       <div class="usta">
-        <span class="avatar" aria-hidden="true">{kategoriIkon[u.kategori]}</span>
+        <span class="avatar" aria-hidden="true"><Ikon ad={kategoriIkon[u.kategori]} boyut={24} /></span>
         <div>
           <strong>{u.ad}</strong>
           <p>{dil.t(`kategori.${u.kategori}`)} · {u.bolge}</p>

@@ -10,8 +10,11 @@ const tr = {
   "nav.isEmirleri": "İş Emirlerim",
   "nav.profil": "Profil",
 
-  "tema.gunduzeGec": "Gündüz moduna geç",
-  "tema.geceyeGec": "Gece moduna geç",
+  "tema.degistir": "Tema: {ad} (değiştirmek için dokunun)",
+  "tema.sistem": "Sistem",
+  "tema.gunduz": "Gündüz",
+  "tema.gece": "Gece",
+  "genel.kapat": "Kapat",
   "dil.sec": "Dil seçin",
 
   "kategori.tesisat": "Tesisat",
@@ -114,7 +117,7 @@ const tr = {
   "profil.kaydedildi": "Kaydedildi ✓",
   "profil.ayarlar": "Ayarlar",
   "profil.dil": "Uygulama dili",
-  "profil.tema": "Gece modu",
+  "profil.tema": "Tema",
   "profil.bilgi": "Bilgi ve yasal",
 
   "sayfa.hakkinda": "Hakkında",
@@ -147,8 +150,11 @@ const en: Record<Anahtar, string> = {
   "nav.isEmirleri": "My Jobs",
   "nav.profil": "Profile",
 
-  "tema.gunduzeGec": "Switch to light mode",
-  "tema.geceyeGec": "Switch to dark mode",
+  "tema.degistir": "Theme: {ad} (tap to change)",
+  "tema.sistem": "System",
+  "tema.gunduz": "Light",
+  "tema.gece": "Dark",
+  "genel.kapat": "Close",
   "dil.sec": "Choose language",
 
   "kategori.tesisat": "Plumbing",
@@ -251,7 +257,7 @@ const en: Record<Anahtar, string> = {
   "profil.kaydedildi": "Saved ✓",
   "profil.ayarlar": "Settings",
   "profil.dil": "App language",
-  "profil.tema": "Dark mode",
+  "profil.tema": "Theme",
   "profil.bilgi": "Info & legal",
 
   "sayfa.hakkinda": "About",
@@ -282,8 +288,11 @@ const ar: Record<Anahtar, string> = {
   "nav.isEmirleri": "طلباتي",
   "nav.profil": "حسابي",
 
-  "tema.gunduzeGec": "التبديل إلى الوضع الفاتح",
-  "tema.geceyeGec": "التبديل إلى الوضع الداكن",
+  "tema.degistir": "المظهر: {ad} (اضغط للتغيير)",
+  "tema.sistem": "النظام",
+  "tema.gunduz": "فاتح",
+  "tema.gece": "داكن",
+  "genel.kapat": "إغلاق",
   "dil.sec": "اختر اللغة",
 
   "kategori.tesisat": "سباكة",
@@ -386,7 +395,7 @@ const ar: Record<Anahtar, string> = {
   "profil.kaydedildi": "تمّ الحفظ ✓",
   "profil.ayarlar": "الإعدادات",
   "profil.dil": "لغة التطبيق",
-  "profil.tema": "الوضع الداكن",
+  "profil.tema": "المظهر",
   "profil.bilgi": "معلومات وشروط",
 
   "sayfa.hakkinda": "حول التطبيق",
@@ -417,8 +426,11 @@ const fa: Record<Anahtar, string> = {
   "nav.isEmirleri": "سفارش‌های من",
   "nav.profil": "پروفایل",
 
-  "tema.gunduzeGec": "رفتن به حالت روشن",
-  "tema.geceyeGec": "رفتن به حالت تاریک",
+  "tema.degistir": "پوسته: {ad} (برای تغییر لمس کنید)",
+  "tema.sistem": "سیستم",
+  "tema.gunduz": "روشن",
+  "tema.gece": "تاریک",
+  "genel.kapat": "بستن",
   "dil.sec": "انتخاب زبان",
 
   "kategori.tesisat": "لوله‌کشی",
@@ -521,7 +533,7 @@ const fa: Record<Anahtar, string> = {
   "profil.kaydedildi": "ذخیره شد ✓",
   "profil.ayarlar": "تنظیمات",
   "profil.dil": "زبان برنامه",
-  "profil.tema": "حالت تاریک",
+  "profil.tema": "پوسته",
   "profil.bilgi": "اطلاعات و قوانین",
 
   "sayfa.hakkinda": "درباره ما",

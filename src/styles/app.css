@@ -22,6 +22,16 @@
   --yazi-soluk: #475569;
   --kenar: #e2e8f0;
   --radius: 14px;
+  --radius-kucuk: 10px;
+  --radius-buyuk: 20px;
+  --golge-kart: 0 1px 2px #0f172a0f, 0 2px 8px #0f172a0a;
+  --golge-yuksek: 0 12px 32px #0f172a29;
+  --perde: #0f172a73;
+  --su: #bfdbfe;
+  --kara: #e9eef4;
+  --sure-hizli: 150ms;
+  --sure-orta: 260ms;
+  --egri: cubic-bezier(0.2, 0.8, 0.2, 1);
   color-scheme: light;
 
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -48,6 +58,11 @@
   --yazi: #f8fafc;
   --yazi-soluk: #94a3b8;
   --kenar: #334155;
+  --golge-kart: 0 1px 2px #00000066;
+  --golge-yuksek: 0 16px 40px #000000a6;
+  --perde: #000000a6;
+  --su: #1e3a5f;
+  --kara: #1a2536;
   color-scheme: dark;
 }
 
@@ -57,6 +72,8 @@
 
 body {
   margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {
@@ -92,6 +109,7 @@ button {
   background: var(--kart);
   border: 1px solid var(--kenar);
   border-radius: var(--radius);
+  box-shadow: var(--golge-kart);
 }
 
 .btn {
@@ -104,6 +122,18 @@ button {
   color: var(--renk-ana-ustu);
   font-weight: 600;
   text-align: center;
+}
+
+.btn {
+  transition: transform var(--sure-hizli) var(--egri), filter var(--sure-hizli);
+}
+
+.btn:not(:disabled):hover {
+  filter: brightness(1.06);
+}
+
+.btn:not(:disabled):active {
+  transform: scale(0.98);
 }
 
 .btn:disabled {
@@ -203,4 +233,45 @@ button {
 /* .dar her ekranda okunabilir form genişliğinde kalır (yukarıdaki max-width'leri ezer) */
 .sayfa.dar {
   max-width: 560px;
+}
+
+/* ── Erişilebilirlik ve hareket ─────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--renk-ana);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Sayfa içeriği hafifçe belirerek gelir */
+main > * {
+  animation: sayfa-gir var(--sure-orta) var(--egri);
+}
+
+@keyframes sayfa-gir {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Hareket hassasiyeti olan kullanıcılar için tüm animasyonlar kapatılır */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Ekran okuyucuya özel metin */
+.gorunmez {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

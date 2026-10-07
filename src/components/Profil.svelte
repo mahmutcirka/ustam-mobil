@@ -62,10 +62,14 @@
         {/each}
       </div>
     </div>
-    <label class="ayar satir">
+    <div class="ayar">
       <span>{dil.t("profil.tema")}</span>
-      <input type="checkbox" checked={tema.mod === "gece"} onchange={() => tema.degistir()} />
-    </label>
+      <div class="diller temalar">
+        {#each ["sistem", "gunduz", "gece"] as const as t}
+          <button class:aktif={tema.tercih === t} onclick={() => tema.sec(t)}>{dil.t(`tema.${t}`)}</button>
+        {/each}
+      </div>
+    </div>
   </div>
 
   <h3>{dil.t("profil.bilgi")}</h3>
@@ -171,6 +175,10 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
+  }
+
+  .diller.temalar {
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .diller button {

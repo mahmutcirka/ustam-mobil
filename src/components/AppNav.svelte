@@ -1,6 +1,8 @@
 <script lang="ts">
   // Alt menü navigasyonu — bekleyen çağrı ve aktif iş emri rozetleri
   import { onMount } from "svelte";
+  import Ikon from "$lib/components/Ikon.svelte";
+  import type { IkonAdi } from "$lib/ikonlar";
   import { cagri } from "$lib/cagri.svelte";
   import { isEmirleri } from "$lib/isEmirleri.svelte";
   import { dil } from "$lib/i18n.svelte";
@@ -8,11 +10,11 @@
 
   let yol = $state(typeof window !== "undefined" ? window.location.pathname : "/");
 
-  const menu: { href: string; ad: Anahtar; ikon: string }[] = [
-    { href: "/", ad: "nav.ustalar", ikon: "🔧" },
-    { href: "/cagri", ad: "nav.cagri", ikon: "📋" },
-    { href: "/is-emirlerim", ad: "nav.isEmirleri", ikon: "🧾" },
-    { href: "/profil", ad: "nav.profil", ikon: "👤" },
+  const menu: { href: string; ad: Anahtar; ikon: IkonAdi }[] = [
+    { href: "/", ad: "nav.ustalar", ikon: "ara" },
+    { href: "/cagri", ad: "nav.cagri", ikon: "pano" },
+    { href: "/is-emirlerim", ad: "nav.isEmirleri", ikon: "fis" },
+    { href: "/profil", ad: "nav.profil", ikon: "kisi" },
   ];
 
   const rozet = (href: string) =>
@@ -34,8 +36,8 @@
 
 <nav class="alt-menu">
   {#each menu as m}
-    <a href={m.href} class:aktif={aktif(m.href)}>
-      <span class="ikon">{m.ikon}</span>
+    <a href={m.href} class:aktif={aktif(m.href)} aria-current={aktif(m.href) ? "page" : undefined}>
+      <span class="ikon"><Ikon ad={m.ikon} boyut={22} /></span>
       {dil.t(m.ad)}
       {#if rozet(m.href) > 0}
         <b class="rozet">{rozet(m.href)}</b>
@@ -76,7 +78,17 @@
   }
 
   .ikon {
-    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 28px;
+    border-radius: 14px;
+    transition: background var(--sure-hizli) var(--egri);
+  }
+
+  .alt-menu a.aktif .ikon {
+    background: var(--renk-ana-yumusak);
   }
 
   /* Tablet: menü öğeleri geniş ekranda dağılmasın diye ortalanır */

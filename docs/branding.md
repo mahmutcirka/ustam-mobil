@@ -45,6 +45,22 @@ Kontrast oranları WCAG 2.1 bağıl parlaklık formülüyle hesaplanmıştır; m
 | `--yazi-soluk` | `#475569` | `#94a3b8` | İkincil bilgi (semt, tarih, açıklama) | zemin 7.24 · 6.96, kart 7.58 · 5.71 |
 | `--kenar` | `#e2e8f0` | `#334155` | Kart ve input sınırları, ayırıcılar | — (dekoratif) |
 
+### Yüzey, harita ve hareket token'ları
+
+| Token | Gündüz (light) | Gece (dark) | Kullanım yeri |
+|---|---|---|---|
+| `--golge-kart` | `0 1px 2px #0f172a0f, 0 2px 8px #0f172a0a` | `0 1px 2px #00000066` | Kartların hafif gölgesi |
+| `--golge-yuksek` | `0 12px 32px #0f172a29` | `0 16px 40px #000000a6` | Modal pencere, bildirim, harita kartı |
+| `--perde` | `#0f172a73` | `#000000a6` | Modal arkasındaki karartma |
+| `--su` | `#bfdbfe` | `#1e3a5f` | Harita: Boğaz ve Marmara |
+| `--kara` | `#e9eef4` | `#1a2536` | Harita: kara parçası |
+| `--radius-kucuk` / `--radius` / `--radius-buyuk` | `10px` / `14px` / `20px` | aynı | Input · kart ve buton · modal |
+| `--sure-hizli` / `--sure-orta` | `150ms` / `260ms` | aynı | Basma geri bildirimi · giriş animasyonları |
+| `--egri` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | aynı | Tüm geçişlerin hız eğrisi |
+
+`prefers-reduced-motion: reduce` açık olan cihazlarda tüm animasyonlar kapatılır. Klavye odağı her öğede
+`--renk-ana` renginde 2px `:focus-visible` halkasıyla gösterilir.
+
 > Neden gündüz modunda `#f97316` değil `#c2410c`? Beyaz yazı `#f97316` üzerinde yalnızca 2.8:1 kontrast
 > verir ve AA'yı geçemez. Parlak turuncu yalnızca koyu zeminde (logo, gece modu) kullanılır.
 
@@ -66,6 +82,13 @@ Kontrast oranları WCAG 2.1 bağıl parlaklık formülüyle hesaplanmıştır; m
 - **Kelime işareti:** `ust` beyaz + `am` turuncu (`--logo`), 22px / 800, üst barda `public/logo.svg` ile birlikte.
 - **Kaynak dosya:** [`app-icon.svg`](../app-icon.svg) (1024×1024, köşeleri şeffaf). Tüm platform ikonları bu tek
   dosyadan üretilir; renkler yalnızca bu belgedeki token'lardan alınır (`#f97316 → #c2410c` gradyan, `#1e293b` çekirdek).
+
+### Arayüz ikon seti
+
+Arayüzde emoji kullanılmaz; tüm ikonlar [`src/lib/ikonlar.ts`](../src/lib/ikonlar.ts) içindeki 24×24, 2px çizgili,
+yuvarlak uçlu SVG path'lerinden `<Ikon ad="…" />` bileşeniyle çizilir. Renk her zaman `currentColor`'dan, yani
+çevredeki metnin token'ından gelir. Kategori ikonları: Tesisat `damla` · Elektrik `simsek` · Çilingir `anahtar` ·
+Kombi `alev` · Beyaz Eşya `camasir`.
 
 ### Platform ikon ve launcher tablosu
 
