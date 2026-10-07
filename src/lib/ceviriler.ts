@@ -362,6 +362,21 @@ const tr = {
   "fiyat.kuralGece": "Ziyaret 22:00–08:00 arasındaysa çıkış ücretinin %25'i eklenir.",
   "fiyat.kuralPazar": "Ziyaret Pazar günüyse çıkış ücretinin %15'i eklenir.",
   "fiyat.kuralIscilik": "İşçilik sorun tipine göre tahmini bir aralıktır; kesin tutarı usta yerinde söyler.",
+
+  "is.guvenlikKodu": "Güvenlik kodu",
+  "is.yanlisBaslik": "Kapıyı açmayın",
+  "is.yanlisMetin": "Bu kod sizin iş emrinize ait değil. Ustadan kodu tekrar söylemesini isteyin; şüpheniz sürerse 112'yi arayın.",
+  "is.dogruBaslik": "Kod doğru",
+  "is.dogruMetin": "Bu, sizin çağırdığınız usta. Kapıyı açabilirsiniz.",
+  "is.ustaBilgi": "{kategori} · {semt}",
+  "profil.hesabim": "Hesabım",
+  "profil.konum": "Konum",
+  "profil.gorunum": "Görünüm",
+  "profil.gizlilik": "Gizlilik",
+  "profil.verilenPuan": "Verdiğin puan",
+  "profil.favoriBosBaslik": "Henüz favori ustan yok",
+  "profil.favoriBosMetin": "Beğendiğin ustaları kaydet; bir sonraki arızada daha hızlı ulaş.",
+  "profil.ustalaraGoz": "Ustalara göz at",
 } as const;
 
 export type Anahtar = keyof typeof tr;
@@ -726,6 +741,21 @@ const en: Record<Anahtar, string> = {
   "fiyat.kuralGece": "Visits between 22:00 and 08:00 add 25% of the call-out fee.",
   "fiyat.kuralPazar": "Sunday visits add 15% of the call-out fee.",
   "fiyat.kuralIscilik": "Labour is an estimated range for this problem type; the pro confirms the exact amount on site.",
+
+  "is.guvenlikKodu": "Security code",
+  "is.yanlisBaslik": "Do not open the door",
+  "is.yanlisMetin": "This code does not belong to your job. Ask the pro to repeat it; if you are still unsure, call 112.",
+  "is.dogruBaslik": "Code is correct",
+  "is.dogruMetin": "This is the pro you called. You can open the door.",
+  "is.ustaBilgi": "{kategori} · {semt}",
+  "profil.hesabim": "My account",
+  "profil.konum": "Location",
+  "profil.gorunum": "Appearance",
+  "profil.gizlilik": "Privacy",
+  "profil.verilenPuan": "Your avg. rating",
+  "profil.favoriBosBaslik": "No favourite pros yet",
+  "profil.favoriBosMetin": "Save the pros you like to reach them faster next time something breaks.",
+  "profil.ustalaraGoz": "Browse pros",
 };
 
 const ar: Record<Anahtar, string> = {
@@ -1088,6 +1118,21 @@ const ar: Record<Anahtar, string> = {
   "fiyat.kuralGece": "إذا كانت الزيارة بين 22:00 و08:00 تُضاف 25% من رسوم الزيارة.",
   "fiyat.kuralPazar": "إذا كانت الزيارة يوم الأحد تُضاف 15% من رسوم الزيارة.",
   "fiyat.kuralIscilik": "أجر العمل نطاق تقديري حسب نوع المشكلة؛ ويحدّد الفنّي المبلغ النهائي في الموقع.",
+
+  "is.guvenlikKodu": "رمز الأمان",
+  "is.yanlisBaslik": "لا تفتح الباب",
+  "is.yanlisMetin": "هذا الرمز لا يخص طلبك. اطلب من الفنّي تكراره؛ وإن بقيت تشك فاتصل بـ 112.",
+  "is.dogruBaslik": "الرمز صحيح",
+  "is.dogruMetin": "هذا هو الفنّي الذي طلبته. يمكنك فتح الباب.",
+  "is.ustaBilgi": "{kategori} · {semt}",
+  "profil.hesabim": "حسابي",
+  "profil.konum": "الموقع",
+  "profil.gorunum": "المظهر",
+  "profil.gizlilik": "الخصوصية",
+  "profil.verilenPuan": "متوسط تقييمك",
+  "profil.favoriBosBaslik": "لا يوجد فنّيون في المفضّلة بعد",
+  "profil.favoriBosMetin": "احفظ الفنّيين الذين أعجبوك لتصل إليهم أسرع عند العطل القادم.",
+  "profil.ustalaraGoz": "تصفّح الفنّيين",
 };
 
 const fa: Record<Anahtar, string> = {
@@ -1450,6 +1495,21 @@ const fa: Record<Anahtar, string> = {
   "fiyat.kuralGece": "اگر بازدید بین ۲۲:۰۰ تا ۰۸:۰۰ باشد، ۲۵٪ هزینه ایاب و ذهاب اضافه می‌شود.",
   "fiyat.kuralPazar": "اگر بازدید یکشنبه باشد، ۱۵٪ هزینه ایاب و ذهاب اضافه می‌شود.",
   "fiyat.kuralIscilik": "دستمزد، بازه‌ای تقریبی بر اساس نوع مشکل است؛ مبلغ دقیق را استادکار در محل می‌گوید.",
+
+  "is.guvenlikKodu": "کد امنیتی",
+  "is.yanlisBaslik": "در را باز نکنید",
+  "is.yanlisMetin": "این کد مربوط به سفارش شما نیست. از استادکار بخواهید دوباره بگوید؛ اگر همچنان شک دارید با ۱۱۲ تماس بگیرید.",
+  "is.dogruBaslik": "کد درست است",
+  "is.dogruMetin": "این همان استادکاری است که درخواست داده‌اید. می‌توانید در را باز کنید.",
+  "is.ustaBilgi": "{kategori} · {semt}",
+  "profil.hesabim": "حساب من",
+  "profil.konum": "موقعیت",
+  "profil.gorunum": "ظاهر",
+  "profil.gizlilik": "حریم خصوصی",
+  "profil.verilenPuan": "میانگین امتیاز شما",
+  "profil.favoriBosBaslik": "هنوز استادکار مورد علاقه‌ای ندارید",
+  "profil.favoriBosMetin": "استادکاران دلخواه را ذخیره کنید تا دفعه بعد سریع‌تر به آن‌ها برسید.",
+  "profil.ustalaraGoz": "دیدن استادکاران",
 };
 
 export const sozlukler: Record<Dil, Record<Anahtar, string>> = { tr, en, ar, fa };

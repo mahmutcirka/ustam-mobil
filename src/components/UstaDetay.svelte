@@ -29,6 +29,7 @@
   import { yorumlarim } from "$lib/yorumlar.svelte";
   import { bildirim } from "$lib/bildirim.svelte";
   import { fotoKucult } from "$lib/foto";
+  import { oku, yaz } from "$lib/depo";
   import type { Anahtar } from "$lib/ceviriler";
   import type { IkonAdi } from "$lib/ikonlar";
   import type { Aciliyet, Rozet, Usta } from "../types/ustam";
@@ -87,6 +88,9 @@
     const s = p.get("sorun");
     const a = p.get("aciliyet") as Aciliyet | null;
     if (s && u.sorunlar.includes(s)) sorun = s;
+    const tekrar = oku<{ ustaId: number; adresNotu: string } | null>("tekrar-taslagi", null);
+    if (tekrar?.ustaId === u.id && tekrar.adresNotu) adresNotu = tekrar.adresNotu;
+    yaz("tekrar-taslagi", null);
     if (a && aciliyetler.includes(a) && izinli(a)) aciliyet = a;
   });
 

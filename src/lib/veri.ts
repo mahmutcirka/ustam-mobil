@@ -9,6 +9,7 @@ const KISISEL_ANAHTARLAR = [
   "favoriler",
   "yorumlarim",
   "liste-gorunum",
+  "tekrar-taslagi",
 ];
 
 export function verileriDisaAktar() {
