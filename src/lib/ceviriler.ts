@@ -344,6 +344,24 @@ const tr = {
   "sihirbaz.sonucYok": "Şu an bu koşullara uyan usta yok. Randevu seçeneğini deneyin.",
   "sihirbaz.sec": "Bu ustayı seç",
   "harita.listeyeDon": "Listeye dön",
+
+  "detay.hemenVaris": "Usta yaklaşık {dk} dk içinde kapınızda olabilir.",
+  "detay.acilAra": "Duman, alev ya da yaralanma varsa önce 112'yi arayın",
+  "detay.fotoGizlilik": "Fotoğraf yalnızca bu cihazda kalır ve küçültülerek kaydedilir; hiçbir sunucuya gönderilmez.",
+  "detay.fotoHata": "Bu dosya kullanılamıyor. 15 MB'tan küçük bir fotoğraf seçin.",
+  "detay.fotoSec": "Fotoğraf çek ya da seç",
+  "detay.varis": "Varış",
+  "detay.yarin": "Yarın",
+  "cagri.adimUsta": "Usta",
+  "cagri.adimOnay": "Onay",
+  "cagri.degistir": "Değiştir",
+  "cagri.tekrarDene": "Tekrar dene",
+  "fiyat.nasil": "Nasıl hesaplandı?",
+  "fiyat.kuralCikis": "Çıkış ücreti ustanın sabit ücretidir.",
+  "fiyat.kuralAcil": "\"Hemen\" çağrılarında {tutar} acil servis ücreti eklenir.",
+  "fiyat.kuralGece": "Ziyaret 22:00–08:00 arasındaysa çıkış ücretinin %25'i eklenir.",
+  "fiyat.kuralPazar": "Ziyaret Pazar günüyse çıkış ücretinin %15'i eklenir.",
+  "fiyat.kuralIscilik": "İşçilik sorun tipine göre tahmini bir aralıktır; kesin tutarı usta yerinde söyler.",
 } as const;
 
 export type Anahtar = keyof typeof tr;
@@ -690,6 +708,24 @@ const en: Record<Anahtar, string> = {
   "sihirbaz.sonucYok": "No pro matches right now. Try the appointment option.",
   "sihirbaz.sec": "Choose this pro",
   "harita.listeyeDon": "Back to list",
+
+  "detay.hemenVaris": "The pro could be at your door in about {dk} min.",
+  "detay.acilAra": "If there is smoke, fire or an injury, call 112 first",
+  "detay.fotoGizlilik": "The photo stays only on this device and is saved in a reduced size; it is never sent to a server.",
+  "detay.fotoHata": "This file cannot be used. Choose a photo smaller than 15 MB.",
+  "detay.fotoSec": "Take or choose a photo",
+  "detay.varis": "Arrival",
+  "detay.yarin": "Tomorrow",
+  "cagri.adimUsta": "Pro",
+  "cagri.adimOnay": "Confirm",
+  "cagri.degistir": "Change",
+  "cagri.tekrarDene": "Try again",
+  "fiyat.nasil": "How is this calculated?",
+  "fiyat.kuralCikis": "The call-out fee is the pro's fixed fee.",
+  "fiyat.kuralAcil": "\"Right now\" requests add a {tutar} emergency fee.",
+  "fiyat.kuralGece": "Visits between 22:00 and 08:00 add 25% of the call-out fee.",
+  "fiyat.kuralPazar": "Sunday visits add 15% of the call-out fee.",
+  "fiyat.kuralIscilik": "Labour is an estimated range for this problem type; the pro confirms the exact amount on site.",
 };
 
 const ar: Record<Anahtar, string> = {
@@ -1034,6 +1070,24 @@ const ar: Record<Anahtar, string> = {
   "sihirbaz.sonucYok": "لا يوجد فنّي مطابق الآن. جرّب خيار الموعد.",
   "sihirbaz.sec": "اختر هذا الفنّي",
   "harita.listeyeDon": "العودة إلى القائمة",
+
+  "detay.hemenVaris": "قد يصل الفنّي إلى بابك خلال {dk} دقيقة تقريبًا.",
+  "detay.acilAra": "إن كان هناك دخان أو نار أو إصابة فاتصل بـ 112 أولًا",
+  "detay.fotoGizlilik": "تبقى الصورة على هذا الجهاز فقط وتُحفظ بحجم مصغّر؛ ولا تُرسل إلى أي خادم.",
+  "detay.fotoHata": "لا يمكن استخدام هذا الملف. اختر صورة أصغر من 15 ميغابايت.",
+  "detay.fotoSec": "التقط صورة أو اخترها",
+  "detay.varis": "الوصول",
+  "detay.yarin": "غدًا",
+  "cagri.adimUsta": "الفنّي",
+  "cagri.adimOnay": "التأكيد",
+  "cagri.degistir": "تغيير",
+  "cagri.tekrarDene": "أعد المحاولة",
+  "fiyat.nasil": "كيف حُسب السعر؟",
+  "fiyat.kuralCikis": "رسوم الزيارة هي الأجر الثابت للفنّي.",
+  "fiyat.kuralAcil": "تُضاف رسوم طوارئ قدرها {tutar} للطلبات \"فورًا\".",
+  "fiyat.kuralGece": "إذا كانت الزيارة بين 22:00 و08:00 تُضاف 25% من رسوم الزيارة.",
+  "fiyat.kuralPazar": "إذا كانت الزيارة يوم الأحد تُضاف 15% من رسوم الزيارة.",
+  "fiyat.kuralIscilik": "أجر العمل نطاق تقديري حسب نوع المشكلة؛ ويحدّد الفنّي المبلغ النهائي في الموقع.",
 };
 
 const fa: Record<Anahtar, string> = {
@@ -1378,6 +1432,24 @@ const fa: Record<Anahtar, string> = {
   "sihirbaz.sonucYok": "الان استادکاری با این شرایط نیست. گزینه نوبت را امتحان کنید.",
   "sihirbaz.sec": "انتخاب این استادکار",
   "harita.listeyeDon": "بازگشت به فهرست",
+
+  "detay.hemenVaris": "استادکار ممکن است حدود {dk} دقیقه دیگر دم در شما باشد.",
+  "detay.acilAra": "اگر دود، آتش یا آسیب‌دیدگی هست، اول با ۱۱۲ تماس بگیرید",
+  "detay.fotoGizlilik": "عکس فقط روی همین دستگاه می‌ماند و کوچک‌شده ذخیره می‌شود؛ به هیچ سروری فرستاده نمی‌شود.",
+  "detay.fotoHata": "این فایل قابل استفاده نیست. عکسی کمتر از ۱۵ مگابایت انتخاب کنید.",
+  "detay.fotoSec": "عکس بگیرید یا انتخاب کنید",
+  "detay.varis": "رسیدن",
+  "detay.yarin": "فردا",
+  "cagri.adimUsta": "استادکار",
+  "cagri.adimOnay": "تأیید",
+  "cagri.degistir": "تغییر",
+  "cagri.tekrarDene": "دوباره امتحان کنید",
+  "fiyat.nasil": "چطور محاسبه شد؟",
+  "fiyat.kuralCikis": "هزینه ایاب و ذهاب، دستمزد ثابت استادکار است.",
+  "fiyat.kuralAcil": "برای درخواست‌های «همین الان» هزینه فوری {tutar} اضافه می‌شود.",
+  "fiyat.kuralGece": "اگر بازدید بین ۲۲:۰۰ تا ۰۸:۰۰ باشد، ۲۵٪ هزینه ایاب و ذهاب اضافه می‌شود.",
+  "fiyat.kuralPazar": "اگر بازدید یکشنبه باشد، ۱۵٪ هزینه ایاب و ذهاب اضافه می‌شود.",
+  "fiyat.kuralIscilik": "دستمزد، بازه‌ای تقریبی بر اساس نوع مشکل است؛ مبلغ دقیق را استادکار در محل می‌گوید.",
 };
 
 export const sozlukler: Record<Dil, Record<Anahtar, string>> = { tr, en, ar, fa };
