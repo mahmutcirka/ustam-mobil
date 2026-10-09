@@ -1,12 +1,20 @@
 // Ustam iş kuralları — src-tauri/src/lib.rs'teki Rust kurallarının birebir TypeScript karşılığı.
 // Tauri içinde Rust kullanılır; tarayıcıda (bun run dev) bu dosya devreye girer.
 // İki uygulama da src-tauri/test-vektorleri.json'daki ortak örneklerle test edilir.
-import type { FiyatDokumu, FiyatGirdisi, Kategori, KodDurumu } from "./types";
+import { ACILIYETLER, type FiyatDokumu, type FiyatGirdisi, type Kategori, type KodDurumu, type KomutHatasi } from "./types";
 
 export const ALFABE = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 export const ACIL_UCRET = 150;
 export const GECE_ORANI = 0.25; // 22:00–07:59
 export const PAZAR_ORANI = 0.15;
+export const UST_TUTAR = 1_000_000; // TL — Rust: UST_TUTAR
+
+// Kural ihlali — Rust'taki KomutHatasi ile aynı tür ve ayrıntıyı taşır (tarayıcıda native.ts bunu iletir)
+export class KuralHatasi extends Error {
+  constructor(readonly hata: KomutHatasi) {
+    super(hata.tur);
+  }
+}
 
 export const KATEGORI_KODU: Record<Kategori, string> = {
   tesisat: "TES",
@@ -58,9 +66,10 @@ export function kontrolKarakteri(govde: string): string {
 }
 
 export function kodUret(kategori: Kategori, zaman: string, rastgele = rastgeleEk(3)): string {
+  const kat = Object.hasOwn(KATEGORI_KODU, kategori) ? KATEGORI_KODU[kategori] : undefined;
+  if (!kat) throw new KuralHatasi({ tur: "bilinmeyen-kategori", ayrinti: kategori });
   const z = zamanCoz(zaman);
-  if (!z) throw new Error(`geçersiz tarih: ${zaman}`);
-  const kat = KATEGORI_KODU[kategori];
+  if (!z) throw new KuralHatasi({ tur: "gecersiz-tarih", ayrinti: zaman });
   const tarih = String(z.gun).padStart(2, "0") + String(z.ay).padStart(2, "0");
   return `UST-${kat}-${tarih}-${rastgele}${kontrolKarakteri(kat + tarih + rastgele)}`;
 }
@@ -72,9 +81,22 @@ export function kodDurumu(ham: string): KodDurumu {
   return ek.endsWith(kontrolKarakteri(kat + tarih + ek.slice(0, 3))) ? "gecerli" : "kontrol-hatali";
 }
 
+// Rust fiyat_dokumu ile aynı sıra: tarih → aciliyet → tutarlar → aralık. Sorun yoksa null.
+export function fiyatGirdisiDenetle(g: FiyatGirdisi): KomutHatasi | null {
+  if (!zamanCoz(g.zaman)) return { tur: "gecersiz-tarih", ayrinti: g.zaman };
+  if (!(ACILIYETLER as readonly string[]).includes(g.aciliyet)) return { tur: "bilinmeyen-aciliyet", ayrinti: g.aciliyet };
+  for (const ad of ["cikisUcreti", "iscilikMin", "iscilikMax"] as const) {
+    const d = g[ad];
+    if (!Number.isInteger(d) || d < 0 || d > UST_TUTAR) return { tur: "gecersiz-tutar", ayrinti: ad };
+  }
+  if (g.iscilikMin > g.iscilikMax) return { tur: "aralik-ters" };
+  return null;
+}
+
 export function fiyatHesapla(g: FiyatGirdisi): FiyatDokumu {
-  const z = zamanCoz(g.zaman);
-  if (!z) throw new Error(`geçersiz tarih: ${g.zaman}`);
+  const hata = fiyatGirdisiDenetle(g);
+  if (hata) throw new KuralHatasi(hata);
+  const z = zamanCoz(g.zaman)!;
   const oran = (o: number) => yuvarla(g.cikisUcreti * o);
   const acil = g.aciliyet === "hemen" ? ACIL_UCRET : 0;
   const gece = z.saat >= 22 || z.saat < 8 ? oran(GECE_ORANI) : 0;

@@ -12,7 +12,8 @@ const KISISEL_ANAHTARLAR = [
   "tekrar-taslagi",
 ];
 
-export function verileriDisaAktar() {
+// Dışa aktarılacak JSON metni. Kaydetme yolu platforma göre native.ts → verileriKaydet içinde seçilir.
+export function kisiselVeriler(): string {
   const veri: Record<string, unknown> = { uygulama: "Ustam", tarih: new Date().toISOString() };
   for (const anahtar of KISISEL_ANAHTARLAR) {
     try {
@@ -22,10 +23,7 @@ export function verileriDisaAktar() {
       // okunamayan anahtar atlanır
     }
   }
-  const url = URL.createObjectURL(new Blob([JSON.stringify(veri, null, 2)], { type: "application/json" }));
-  const a = Object.assign(document.createElement("a"), { href: url, download: "ustam-verilerim.json" });
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  return JSON.stringify(veri, null, 2);
 }
 
 export function tumVerileriSil() {

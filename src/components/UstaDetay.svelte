@@ -31,6 +31,7 @@
   import { fotoKucult } from "$lib/foto";
   import { oku, yaz } from "$lib/depo";
   import { sonListeAdresi } from "$lib/listeAdresi";
+  import { destekleniyorMu, telefonAc } from "$lib/native";
   import type { Anahtar } from "$lib/ceviriler";
   import type { IkonAdi } from "$lib/ikonlar";
   import type { Aciliyet, Rozet, Usta } from "../lib/types";
@@ -248,7 +249,12 @@
         <b>{dil.t("detay.guvenlik")}</b>
         <p>{dil.t(`ipucu.${sorun}` as Anahtar)}</p>
         {#if sorunBilgisi[sorun]?.tehlikeli}
-          <a class="acil-ara" href="tel:112"><Ikon ad="telefon" boyut={14} /> {dil.t("detay.acilAra")}</a>
+          <!-- Masaüstünde arayacak hat yok: düğme hiç gösterilmez (docs/platform-destegi.md → acil-arama) -->
+          {#if destekleniyorMu("acil-arama")}
+            <button type="button" class="acil-ara" onclick={() => telefonAc("112")}>
+              <Ikon ad="telefon" boyut={14} /> {dil.t("detay.acilAra")}
+            </button>
+          {/if}
         {/if}
       </div>
     </div>
@@ -762,9 +768,11 @@
     margin-top: 8px;
     min-height: 36px;
     padding: 0 12px;
-    border-radius: 999px;
+    border: 0;
+    border-radius: var(--radius-hap);
     background: var(--hata);
     color: var(--kart);
+    font: inherit;
     font-size: var(--yz-sm);
     font-weight: 700;
   }

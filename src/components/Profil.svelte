@@ -12,8 +12,8 @@
   import { yorumlarim } from "$lib/yorumlar.svelte";
   import { profil } from "$lib/profil.svelte";
   import { bildirim } from "$lib/bildirim.svelte";
-  import { rustIcinde } from "$lib/motor";
-  import { tumVerileriSil, verileriDisaAktar } from "$lib/veri";
+  import { hataAnahtari, NativeHata, rustIcinde, veriKayitYolu, verileriKaydet } from "$lib/native";
+  import { kisiselVeriler, tumVerileriSil } from "$lib/veri";
   import type { IkonAdi } from "$lib/ikonlar";
   import type { Anahtar } from "$lib/ceviriler";
 
@@ -47,6 +47,21 @@
     event.preventDefault();
     profil.guncelle({ ad: ad.trim().slice(0, 80), telefon: telefon.trim().slice(0, 20), adres: adres.trim().slice(0, 300) });
     bildirim.goster(dil.t("profil.kaydedildi"));
+  }
+
+  // Tarayıcıda indirir, masaüstünde İndirilenler'e kaydeder, telefonda panoya kopyalar (native.ts)
+  const disaAktarPano = veriKayitYolu() === "pano";
+
+  async function disaAktar() {
+    try {
+      const sonuc = await verileriKaydet(kisiselVeriler(), "ustam-verilerim.json");
+      if (sonuc.yol === "dosya") bildirim.goster(dil.t("profil.disaAktarDosya", { yol: sonuc.dosya }), "basari", 5000);
+      else if (sonuc.yol === "pano") bildirim.goster(dil.t("profil.disaAktarPano"), "basari");
+      else bildirim.goster(dil.t("profil.disaAktarIndirildi"), "basari");
+    } catch (e) {
+      const h = e instanceof NativeHata ? e.hata : ({ tur: "ic-hata", ayrinti: String(e) } as const);
+      bildirim.goster(dil.t(hataAnahtari(h)), "hata", 5000);
+    }
   }
 
   function sil() {
@@ -148,7 +163,7 @@
 
   <h2 class="bolum-baslik">{dil.t("profil.gizlilik")}</h2>
   <div class="kart liste">
-    <button onclick={verileriDisaAktar}><Ikon ad="kopyala" boyut={18} /> <span>{dil.t("profil.disaAktar")}</span></button>
+    <button onclick={disaAktar}><Ikon ad="kopyala" boyut={18} /> <span>{dil.t(disaAktarPano ? "profil.disaAktarKopyala" : "profil.disaAktar")}</span></button>
     <button class="tehlike" onclick={() => (silPenceresi = true)}><Ikon ad="cop" boyut={18} /> <span>{dil.t("profil.sil")}</span></button>
   </div>
 

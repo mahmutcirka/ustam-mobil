@@ -94,7 +94,7 @@ Karşılama ─► Ustalar ─► Usta detayı ─► Çağrı özeti ─[Rust: 
 | `tema.svelte.ts` | Sistem / Gündüz / Gece tercihi | `localStorage["tema"]` |
 | `bildirim.svelte.ts` | Kısa bildirimler; sayfa geçişi için kuyruk | `sessionStorage["bildirim-kuyrugu"]` |
 | `saat.svelte.ts` | 15 sn'de bir güncellenen saat (müsaitlik, geri sayım) | — |
-| `motor.ts` → `kurallar.ts` / Rust | Kod üretimi, kod doğrulama, fiyat (Tauri'de Rust, tarayıcıda TS) | — |
+| `native.ts` → Rust / `kurallar.ts` | Rust'a ve işletim sistemine tek kapı: kod üretimi, doğrulama, fiyat, veri dışa aktarma, 112 arama, pano; `platform()` ve `destekleniyorMu()` ([`docs/komutlar.md`](komutlar.md), [`docs/platform-destegi.md`](platform-destegi.md)) | — |
 | `takip.ts` | İşin anlık aşaması, kalan süre, ilerleme (**simülasyon**: sunucu yok, zamana göre hesaplanır) | — |
 | `arama.ts` | Normalleştirilmiş, 4 dilli arama ve sorun önerileri | — |
 | `eslestirme.ts` | "Önerilen" sıralamanın sabit ağırlıklı kuralı ve nedenleri | — |

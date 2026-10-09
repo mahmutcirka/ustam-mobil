@@ -9,13 +9,15 @@
   import { dil, sayfaYolu } from "$lib/i18n.svelte";
   import { profil } from "$lib/profil.svelte";
   import { bildirim } from "$lib/bildirim.svelte";
-  import { fiyatHesapla, rustIcinde } from "$lib/motor";
+  import { fiyatHesapla, hataAnahtari, NativeHata, rustIcinde } from "$lib/native";
+  import HataDurumu from "$lib/components/ui/HataDurumu.svelte";
   import { ACIL_UCRET } from "$lib/kurallar";
   import type { Anahtar } from "$lib/ceviriler";
-  import type { FiyatDokumu, OdemeTercihi } from "../lib/types";
+  import type { FiyatDokumu, KomutHatasi, OdemeTercihi } from "../lib/types";
 
   let isleniyor = $state(false);
-  let hata = $state("");
+  // Rust (ya da tarayıcıdaki TS kuralları) tipli hata döndürürse ekranda HataDurumu ile gösterilir
+  let hata = $state<KomutHatasi | null>(null);
   let telefon = $state(profil.bilgi.telefon);
   let adres = $state(cagri.taslak?.adresNotu ?? "");
   let odeme = $state<OdemeTercihi>("nakit");
@@ -43,7 +45,7 @@
   async function onayla() {
     if (!cagri.taslak || !cagri.usta || !gonderilebilir) return;
     isleniyor = true;
-    hata = "";
+    hata = null;
     try {
       profil.guncelle({ telefon: telefon.trim() });
       const taslak = { ...$state.snapshot(cagri.taslak), adresNotu: adres.trim().slice(0, 300) };
@@ -52,7 +54,7 @@
       bildirim.sonrakiSayfada(dil.t("cagri.olusturuldu", { kod: emir.kod }));
       window.location.assign("/is-emirlerim"); // iş emri localStorage'a yazıldı, tam sayfa geçişinde kaybolmaz
     } catch (e) {
-      hata = String(e);
+      hata = e instanceof NativeHata ? e.hata : { tur: "ic-hata", ayrinti: String(e) };
       isleniyor = false;
     }
   }
@@ -155,10 +157,14 @@
     </label>
 
     {#if hata}
-      <div class="hata-kutu" role="alert">
-        <Ikon ad="uyari" boyut={18} />
-        <span>{dil.t("cagri.hata")} {hata}</span>
-        <button class="btn ikincil kucuk" onclick={onayla}>{dil.t("cagri.tekrarDene")}</button>
+      <div class="kart hata-alani">
+        <HataDurumu
+          baslik={dil.t("cagri.hata")}
+          mesaj={dil.t(hataAnahtari(hata))}
+          ayrinti={"ayrinti" in hata ? hata.ayrinti : undefined}
+          tekrarMetni={dil.t("cagri.tekrarDene")}
+          tekrarDene={onayla}
+        />
       </div>
     {/if}
 
@@ -420,22 +426,6 @@
   .onay a {
     font-weight: 700;
     text-decoration: underline;
-  }
-
-  .hata-kutu {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    padding: 12px;
-    border-radius: var(--radius-kucuk);
-    background: var(--hata-yumusak);
-    color: var(--hata);
-    font-size: var(--yz-sm);
-  }
-
-  .hata-kutu span {
-    flex: 1;
   }
 
   /* Onay çubuğu: telefonda alt menünün hemen üstünde sabit */
