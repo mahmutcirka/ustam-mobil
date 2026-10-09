@@ -1,18 +1,11 @@
 // Canlı iş takibi — aktif bir iş emrinin anlık aşaması zamandan hesaplanır (sunucu yok, simülasyon).
 // Alındı → (20 sn) Onaylandı → (yola çıkış) Yolda → (varış veya kod doğrulama) Kapıda → Tamamlandı
-import type { IsAsamasi, IsEmri } from "../types/ustam";
+import { IS_ASAMALARI, type IsAsamasi, type IsEmri, type TakipBilgisi } from "./types";
 
 export const ONAY_SN = 20; // ustanın çağrıyı onaylaması
 export const YOLA_CIKIS_EN_ERKEN_SN = 45; // "hemen" çağrılarında yola çıkış
 
-export const asamalar: IsAsamasi[] = ["alindi", "onaylandi", "yolda", "kapida", "tamamlandi"];
-
-export interface TakipBilgisi {
-  asama: IsAsamasi;
-  kalanDk: number; // varışa kalan dakika
-  ilerleme: number; // 0–1, yola çıkıştan varışa
-  varis: Date;
-}
+export const asamalar: readonly IsAsamasi[] = IS_ASAMALARI;
 
 export function takip(is: Pick<IsEmri, "durum" | "olusturma" | "zaman" | "varisDk" | "dogrulandi">, simdi: Date): TakipBilgisi {
   const olusma = new Date(is.olusturma).getTime();

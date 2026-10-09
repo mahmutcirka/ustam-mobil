@@ -1,6 +1,6 @@
 // Arayüz metinleri — 4 dil (TR · EN · AR · FA). AR ve FA sağdan sola (RTL) gösterilir.
 // Türkçe sözlük kaynak kabul edilir; diğer diller aynı anahtarların tamamını içermek zorundadır.
-import type { Dil } from "../types/ustam";
+import type { Dil } from "./types";
 
 const tr = {
 

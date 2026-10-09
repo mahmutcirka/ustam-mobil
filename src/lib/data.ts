@@ -1,9 +1,26 @@
-// Mock veri ve yardımcılar — ustalar, semtler, sorun şablonları (ileride bir API'den gelebilir)
-import type { Aciliyet, Dil, Kategori, Konum, Semt, Usta, UstaDurumu, Yorum } from "../types/ustam";
+// Örnek veri — ustalar, hizmetler, semtler ve örnek iş emirleri tek dosyada (ileride bir API'den gelebilir).
+// Tipler: src/lib/types/ · alan açıklamaları: docs/veri-modeli.md
+import {
+  ACILIYETLER,
+  KATEGORILER,
+  type AcilKisayol,
+  type Dil,
+  type FiyatDokumu,
+  type Hizmet,
+  type IsEmri,
+  type Kategori,
+  type Konum,
+  type Semt,
+  type Usta,
+  type UstaDurumu,
+  type Yaka,
+  type Yorum,
+  type Aciliyet,
+} from "./types";
 import type { IkonAdi } from "./ikonlar";
-import { fiyatHesapla, type FiyatDokumu } from "./kurallar";
+import { fiyatHesapla, kodUret } from "./kurallar";
 
-export const kategoriler: Kategori[] = ["tesisat", "elektrik", "cilingir", "kombi", "beyaz-esya"];
+export const kategoriler: readonly Kategori[] = KATEGORILER;
 
 export const kategoriIkon: Record<Kategori, IkonAdi> = {
   tesisat: "damla",
@@ -13,37 +30,36 @@ export const kategoriIkon: Record<Kategori, IkonAdi> = {
   "beyaz-esya": "camasir",
 };
 
-export const kategoriSorunlari: Record<Kategori, string[]> = {
-  tesisat: ["su-sizintisi", "tikali-gider", "musluk-ariza"],
-  elektrik: ["sigorta-atiyor", "priz-yanik", "elektrik-yok"],
-  cilingir: ["kapida-kaldim", "kilit-degisimi", "anahtar-kirildi"],
-  kombi: ["sicak-su-yok", "basinc-dusuk", "petek-isinmiyor"],
-  "beyaz-esya": ["camasir-makinesi", "buzdolabi", "bulasik-makinesi"],
-};
+export const aciliyetler: readonly Aciliyet[] = ACILIYETLER;
 
-export const aciliyetler: Aciliyet[] = ["hemen", "bugun", "randevu"];
+// Hizmetler: her sorun için tahmini işçilik aralığı (TL) ve süresi (dk); "tehlikeli" sorunlarda uyarı vurgulanır
+export const hizmetler: Hizmet[] = [
+  { sorun: "su-sizintisi", kategori: "tesisat", iscilik: [250, 600], sureDk: 60, tehlikeli: true },
+  { sorun: "tikali-gider", kategori: "tesisat", iscilik: [200, 450], sureDk: 45 },
+  { sorun: "musluk-ariza", kategori: "tesisat", iscilik: [150, 350], sureDk: 30 },
+  { sorun: "sigorta-atiyor", kategori: "elektrik", iscilik: [200, 500], sureDk: 45 },
+  { sorun: "priz-yanik", kategori: "elektrik", iscilik: [150, 400], sureDk: 40, tehlikeli: true },
+  { sorun: "elektrik-yok", kategori: "elektrik", iscilik: [250, 700], sureDk: 60 },
+  { sorun: "kapida-kaldim", kategori: "cilingir", iscilik: [300, 600], sureDk: 20 },
+  { sorun: "kilit-degisimi", kategori: "cilingir", iscilik: [400, 900], sureDk: 40 },
+  { sorun: "anahtar-kirildi", kategori: "cilingir", iscilik: [250, 500], sureDk: 30 },
+  { sorun: "sicak-su-yok", kategori: "kombi", iscilik: [300, 800], sureDk: 60 },
+  { sorun: "basinc-dusuk", kategori: "kombi", iscilik: [150, 350], sureDk: 30 },
+  { sorun: "petek-isinmiyor", kategori: "kombi", iscilik: [250, 600], sureDk: 60 },
+  { sorun: "camasir-makinesi", kategori: "beyaz-esya", iscilik: [300, 700], sureDk: 60 },
+  { sorun: "buzdolabi", kategori: "beyaz-esya", iscilik: [400, 1200], sureDk: 75 },
+  { sorun: "bulasik-makinesi", kategori: "beyaz-esya", iscilik: [300, 800], sureDk: 60 },
+];
 
-// Her sorun için tahmini işçilik aralığı (TL) ve süresi (dk); "tehlikeli" sorunlarda uyarı vurgulanır
-export const sorunBilgisi: Record<string, { iscilik: [number, number]; sureDk: number; tehlikeli?: boolean }> = {
-  "su-sizintisi": { iscilik: [250, 600], sureDk: 60, tehlikeli: true },
-  "tikali-gider": { iscilik: [200, 450], sureDk: 45 },
-  "musluk-ariza": { iscilik: [150, 350], sureDk: 30 },
-  "sigorta-atiyor": { iscilik: [200, 500], sureDk: 45 },
-  "priz-yanik": { iscilik: [150, 400], sureDk: 40, tehlikeli: true },
-  "elektrik-yok": { iscilik: [250, 700], sureDk: 60 },
-  "kapida-kaldim": { iscilik: [300, 600], sureDk: 20 },
-  "kilit-degisimi": { iscilik: [400, 900], sureDk: 40 },
-  "anahtar-kirildi": { iscilik: [250, 500], sureDk: 30 },
-  "sicak-su-yok": { iscilik: [300, 800], sureDk: 60 },
-  "basinc-dusuk": { iscilik: [150, 350], sureDk: 30 },
-  "petek-isinmiyor": { iscilik: [250, 600], sureDk: 60 },
-  "camasir-makinesi": { iscilik: [300, 700], sureDk: 60 },
-  buzdolabi: { iscilik: [400, 1200], sureDk: 75 },
-  "bulasik-makinesi": { iscilik: [300, 800], sureDk: 60 },
-};
+// Hizmetlerden türetilen hızlı erişim tabloları
+export const sorunBilgisi: Record<string, Hizmet> = Object.fromEntries(hizmetler.map((h) => [h.sorun, h]));
+
+export const kategoriSorunlari = Object.fromEntries(
+  KATEGORILER.map((k) => [k, hizmetler.filter((h) => h.kategori === k).map((h) => h.sorun)]),
+) as Record<Kategori, string[]>;
 
 // Ana sayfadaki "Acil mi?" kısayolları — en sık acil çağrı nedenleri
-export const acilKisayollar: { sorun: string; kategori: Kategori }[] = [
+export const acilKisayollar: AcilKisayol[] = [
   { sorun: "su-sizintisi", kategori: "tesisat" },
   { sorun: "elektrik-yok", kategori: "elektrik" },
   { sorun: "kapida-kaldim", kategori: "cilingir" },
@@ -54,7 +70,7 @@ export const acilKisayollar: { sorun: string; kategori: Kategori }[] = [
 export const saatDilimleri = ["10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
 
 // Stilize harita üzerindeki semt merkezleri (UstaHaritasi.svelte ile aynı koordinat sistemi)
-export const semtler: Record<Semt, Konum & { yaka: "avrupa" | "asya" }> = {
+export const semtler: Record<Semt, Konum & { yaka: Yaka }> = {
   Sarıyer: { x: 57, y: 14, yaka: "avrupa" },
   Beşiktaş: { x: 51, y: 50, yaka: "avrupa" },
   Şişli: { x: 42, y: 46, yaka: "avrupa" },
@@ -75,8 +91,7 @@ const KM_BIRIM = 0.3; // harita biriminin yaklaşık kilometre karşılığı
 
 const y = (ad: string, puan: number, dil: Dil, tarih: string, metin: string): Yorum => ({ ad, puan, dil, tarih, metin });
 
-type UstaGirdisi = Omit<Usta, "sorunlar">;
-const usta = (u: UstaGirdisi): Usta => ({ ...u, sorunlar: kategoriSorunlari[u.kategori] });
+const usta = (u: Omit<Usta, "sorunlar">): Usta => ({ ...u, sorunlar: kategoriSorunlari[u.kategori] });
 
 export const ustalar: Usta[] = [
   usta({
@@ -227,6 +242,44 @@ export const ustalar: Usta[] = [
       y("Ahmet T.", 4, "tr", "2026-09-04", "Çamaşır makinesinin pompası değişti, sorun kalmadı."),
     ],
   }),
+];
+
+// Örnek iş emirleri — kod ve fiyat dökümü gerçek kurallarla (kurallar.ts) üretilir; testlerde ve
+// geliştirme sırasındaki "dolu liste" görünümünde kullanılır. Kullanıcının kendi iş emirleri localStorage'dadır.
+function ornekIs(
+  ustaId: number,
+  sorun: string,
+  aciliyet: Aciliyet,
+  zaman: string,
+  rastgele: string,
+  ek: Pick<IsEmri, "durum" | "odeme"> & Partial<IsEmri>,
+): IsEmri {
+  const u = ustalar.find((x) => x.id === ustaId)!;
+  const [iscilikMin, iscilikMax] = sorunBilgisi[sorun].iscilik;
+  return {
+    ustaId,
+    sorun,
+    aciliyet,
+    zaman,
+    adresNotu: "",
+    kod: kodUret(u.kategori, zaman, rastgele),
+    ustaAd: u.ad,
+    kategori: u.kategori,
+    fiyat: fiyatHesapla({ cikisUcreti: u.cikisUcreti, aciliyet, zaman, iscilikMin, iscilikMax }),
+    olusturma: zaman,
+    varisDk: 25,
+    telefon: "0555 000 00 00",
+    ...ek,
+  };
+}
+
+export const ornekIsEmirleri: IsEmri[] = [
+  ornekIs(1, "su-sizintisi", "hemen", "2026-10-03T23:10", "K7Q", { durum: "tamamlandi", odeme: "nakit", dogrulandi: true, bitis: "2026-10-04T00:20" }),
+  ornekIs(2, "sigorta-atiyor", "bugun", "2026-10-05T14:00", "M4T", { durum: "tamamlandi", odeme: "kart", dogrulandi: true, bitis: "2026-10-05T15:05" }),
+  ornekIs(3, "kapida-kaldim", "hemen", "2026-10-06T02:30", "R9P", { durum: "tamamlandi", odeme: "nakit", dogrulandi: true, bitis: "2026-10-06T02:55" }),
+  ornekIs(8, "basinc-dusuk", "randevu", "2026-10-11T10:00", "B2X", { durum: "iptal", odeme: "kart", iptalNedeni: "cozuldu", bitis: "2026-10-09T18:40" }),
+  ornekIs(12, "buzdolabi", "bugun", "2026-10-08T16:00", "H6W", { durum: "iptal", odeme: "kart", iptalNedeni: "gecikti", bitis: "2026-10-08T16:50" }),
+  ornekIs(9, "tikali-gider", "randevu", "2026-10-12T12:00", "D3N", { durum: "aktif", odeme: "nakit" }),
 ];
 
 export function ustaBul(id: number): Usta | undefined {

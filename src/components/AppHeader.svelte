@@ -3,7 +3,7 @@
   import Ikon from "$lib/components/Ikon.svelte";
   import { tema } from "$lib/tema.svelte";
   import { bilgiSayfasiBul, dil, diller, sayfaYolu } from "$lib/i18n.svelte";
-  import type { Dil } from "../types/ustam";
+  import type { Dil } from "../lib/types";
 
   const temaIkonu = { sistem: "otomatik", gunduz: "gunes", gece: "ay" } as const;
 

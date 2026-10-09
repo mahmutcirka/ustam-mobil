@@ -8,7 +8,7 @@
   import { profil } from "$lib/profil.svelte";
   import { saat } from "$lib/saat.svelte";
   import type { Anahtar } from "$lib/ceviriler";
-  import type { Aciliyet, Kategori } from "../types/ustam";
+  import type { Aciliyet, Kategori } from "../lib/types";
 
   let adim = $state<1 | 2 | 3 | 4>(1);
   let kategori = $state<Kategori>("tesisat");

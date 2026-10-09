@@ -1,5 +1,5 @@
 // Detay ekranında hazırlanan, henüz onaylanmamış çağrı taslağı
-import type { CagriTaslagi } from "../types/ustam";
+import type { CagriTaslagi } from "./types";
 import { tahminiFiyat, ustaBul } from "./data";
 import { oku, yaz } from "./depo";
 

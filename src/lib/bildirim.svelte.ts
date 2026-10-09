@@ -1,11 +1,5 @@
 // Kısa bildirimler (toast) — sayfa değiştirse bile gösterilebilmesi için sessionStorage kuyruğu kullanır
-export type BildirimTuru = "basari" | "bilgi" | "hata";
-
-export interface Bildirim {
-  id: number;
-  metin: string;
-  tur: BildirimTuru;
-}
+import type { Bildirim, BildirimTuru } from "./types";
 
 const KUYRUK = "bildirim-kuyrugu";
 let sayac = 0;

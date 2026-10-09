@@ -1,20 +1,18 @@
 // Kullanıcının bu cihazda yazdığı yorumlar — usta detayında örnek yorumların üstünde gösterilir
-import type { Usta, Yorum } from "../types/ustam";
+import type { Usta, Yorum, YorumKaydi } from "./types";
 import { oku, yaz } from "./depo";
 
 const ANAHTAR = "yorumlarim";
 
-type Kayit = Yorum & { ustaId: number; isKodu: string };
-
 class Yorumlarim {
-  liste = $state<Kayit[]>(oku<Kayit[]>(ANAHTAR, []));
+  liste = $state<YorumKaydi[]>(oku<YorumKaydi[]>(ANAHTAR, []));
 
-  ekle(k: Kayit) {
+  ekle(k: YorumKaydi) {
     this.liste = [k, ...this.liste.filter((y) => y.isKodu !== k.isKodu)];
     yaz(ANAHTAR, this.liste);
   }
 
-  isIcin(isKodu: string): Kayit | undefined {
+  isIcin(isKodu: string): YorumKaydi | undefined {
     return this.liste.find((y) => y.isKodu === isKodu);
   }
 

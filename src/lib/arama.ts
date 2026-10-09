@@ -1,6 +1,6 @@
 // Akıllı arama — usta adı, semt, kategori ve sorun adlarında (4 dilin hepsinde) arar.
 // "musluk" → Tesisat / Musluk arızası, "sicak su" → Kombi / Sıcak su yok, "Kadikoy" → Kadıköy'deki ustalar.
-import type { Kategori, Usta } from "../types/ustam";
+import type { Kategori, SorunOnerisi, Usta } from "./types";
 import { kategoriSorunlari } from "./data";
 import { sozlukler } from "./ceviriler";
 
@@ -21,11 +21,6 @@ const sozluk = (anahtar: string) =>
   Object.values(sozlukler)
     .map((s) => (s as Record<string, string>)[anahtar] ?? "")
     .join(" ");
-
-export interface SorunOnerisi {
-  sorun: string;
-  kategori: Kategori;
-}
 
 // Her sorun için 4 dildeki adı ve kategorisi — aranabilir tek metin
 const sorunDizini = Object.entries(kategoriSorunlari).flatMap(([kategori, sorunlar]) =>

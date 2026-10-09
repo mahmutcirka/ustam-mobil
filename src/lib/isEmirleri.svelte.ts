@@ -1,5 +1,5 @@
 // İş emirleri — kod ve fiyat dökümü Rust'tan (motor.ts), liste localStorage'da saklanır
-import type { CagriTaslagi, IptalNedeni, IsEmri, OdemeTercihi, Usta } from "../types/ustam";
+import type { CagriTaslagi, EskiIsEmriKaydi, IptalNedeni, IsEmri, OdemeTercihi, Usta } from "./types";
 import { mesafeKm, sorunBilgisi, tahminiFiyat, varisDk } from "./data";
 import { oku, yaz } from "./depo";
 import { fiyatHesapla, isEmriKoduUret } from "./motor";
@@ -8,9 +8,7 @@ import { profil } from "./profil.svelte";
 const ANAHTAR = "is-emirleri";
 
 // Önceki sürümlerdeki kayıtlar (tek "tutar" alanı, "bekliyor"/"yolda" durumları) okunurken yeni biçime çevrilir
-type EskiKayit = Partial<IsEmri> & CagriTaslagi & { kod: string; tutar?: number; durum?: string };
-
-function donustur(e: EskiKayit): IsEmri {
+function donustur(e: EskiIsEmriKaydi): IsEmri {
   const tutar = e.tutar ?? 0;
   return {
     ...e,
@@ -26,7 +24,7 @@ function donustur(e: EskiKayit): IsEmri {
 }
 
 class IsEmirleri {
-  liste = $state<IsEmri[]>(oku<EskiKayit[]>(ANAHTAR, []).map(donustur));
+  liste = $state<IsEmri[]>(oku<EskiIsEmriKaydi[]>(ANAHTAR, []).map(donustur));
 
   aktifler = $derived(this.liste.filter((i) => i.durum === "aktif"));
   gecmis = $derived(this.liste.filter((i) => i.durum !== "aktif"));

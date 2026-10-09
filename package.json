@@ -9,6 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "test": "bun test tests",
+    "check": "astro check",
     "telefon": "bun araclar/telefon.ts",
     "astro": "astro",
     "tauri": "tauri"
@@ -28,6 +29,7 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@tauri-apps/cli": "^2",
     "@types/bun": "^1.4.2",
     "svelte": "^5.56.3",

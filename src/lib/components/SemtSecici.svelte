@@ -3,7 +3,7 @@
   import Ikon from "./Ikon.svelte";
   import { semtler, semtListesi } from "$lib/data";
   import { dil } from "$lib/i18n.svelte";
-  import type { Semt } from "../../types/ustam";
+  import type { Semt } from "../types";
 
   let { secili, sec }: { secili: Semt; sec: (s: Semt) => void } = $props();
 

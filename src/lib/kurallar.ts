@@ -1,7 +1,7 @@
 // Ustam iş kuralları — src-tauri/src/lib.rs'teki Rust kurallarının birebir TypeScript karşılığı.
 // Tauri içinde Rust kullanılır; tarayıcıda (bun run dev) bu dosya devreye girer.
 // İki uygulama da src-tauri/test-vektorleri.json'daki ortak örneklerle test edilir.
-import type { Aciliyet, Kategori } from "../types/ustam";
+import type { FiyatDokumu, FiyatGirdisi, Kategori, KodDurumu } from "./types";
 
 export const ALFABE = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 export const ACIL_UCRET = 150;
@@ -15,27 +15,6 @@ export const KATEGORI_KODU: Record<Kategori, string> = {
   kombi: "KMB",
   "beyaz-esya": "BYZ",
 };
-
-export type KodDurumu = "gecerli" | "bicim-hatali" | "kontrol-hatali";
-
-export interface FiyatGirdisi {
-  cikisUcreti: number;
-  aciliyet: Aciliyet;
-  zaman: string;
-  iscilikMin: number;
-  iscilikMax: number;
-}
-
-export interface FiyatDokumu {
-  cikis: number;
-  acil: number;
-  gece: number;
-  pazar: number;
-  iscilikMin: number;
-  iscilikMax: number;
-  toplamMin: number;
-  toplamMax: number;
-}
 
 const BICIM = /^UST-(TES|ELK|CLN|KMB|BYZ)-(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])-[A-HJ-NP-Z2-9]{4}$/;
 

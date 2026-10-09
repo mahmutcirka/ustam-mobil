@@ -9,8 +9,8 @@
   import UstaHaritasi from "./UstaHaritasi.svelte";
   import ArizaSihirbazi from "./ArizaSihirbazi.svelte";
   import { acilKisayollar, basHarfler, kategoriler, kategoriIkon, mesafeKm, paraYaz, sayiYaz, tarihYaz, ustaDurumu, ustalar, varisDk } from "$lib/data";
-  import { sorunAra, ustaEslesir, type SorunOnerisi } from "$lib/arama";
-  import { oneriPuani, type NedenTuru } from "$lib/eslestirme";
+  import { sorunAra, ustaEslesir } from "$lib/arama";
+  import { oneriPuani } from "$lib/eslestirme";
   import { takip } from "$lib/takip";
   import type { Anahtar } from "$lib/ceviriler";
   import { dil, diller, dilAdlari } from "$lib/i18n.svelte";
@@ -20,27 +20,16 @@
   import { saat } from "$lib/saat.svelte";
   import { yorumlarim } from "$lib/yorumlar.svelte";
   import { oku, yaz } from "$lib/depo";
-  import type { Dil, Kategori, Usta } from "../types/ustam";
+  import { SIRALAMALAR, type Gorunum, type Kategori, type NedenTuru, type Siralama, type SorunOnerisi, type Usta, type UstaFiltresi } from "../lib/types";
 
-  type Siralama = "onerilen" | "yakin" | "puan" | "fiyat";
-  type Gorunum = "liste" | "harita";
-  interface Filtre {
-    musait: boolean;
-    favori: boolean;
-    mesafe: number; // 0 = hepsi
-    puan: number; // 0 = hepsi
-    fiyat: number; // 0 = hepsi
-    dil: Dil | "";
-  }
-
-  const BOS_FILTRE: Filtre = { musait: false, favori: false, mesafe: 0, puan: 0, fiyat: 0, dil: "" };
-  const siralamalar: Siralama[] = ["onerilen", "yakin", "puan", "fiyat"];
+  const BOS_FILTRE: UstaFiltresi = { musait: false, favori: false, mesafe: 0, puan: 0, fiyat: 0, dil: "" };
+  const siralamalar = SIRALAMALAR;
 
   let kategori = $state<Kategori | "tumu">("tumu");
   let arama = $state("");
   let seciliSorun = $state<SorunOnerisi | null>(null);
-  let filtre = $state<Filtre>({ ...BOS_FILTRE });
-  let taslakFiltre = $state<Filtre>({ ...BOS_FILTRE });
+  let filtre = $state<UstaFiltresi>({ ...BOS_FILTRE });
+  let taslakFiltre = $state<UstaFiltresi>({ ...BOS_FILTRE });
   let siralama = $state<Siralama>("onerilen");
   let gorunum = $state<Gorunum>(oku<Gorunum>("liste-gorunum", "liste"));
 
@@ -58,7 +47,7 @@
 
   const sorunOnerileri = $derived(seciliSorun ? [] : sorunAra(arama));
 
-  function uygun(u: Usta, f: Filtre): boolean {
+  function uygun(u: Usta, f: UstaFiltresi): boolean {
     if (kategori !== "tumu" && u.kategori !== kategori) return false;
     if (seciliSorun && !u.sorunlar.includes(seciliSorun.sorun)) return false;
     if (!seciliSorun && arama.trim() && !ustaEslesir(u, arama)) return false;

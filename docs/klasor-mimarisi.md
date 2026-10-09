@@ -31,8 +31,9 @@ ustam/
 │   ├── layouts/             # Sayfa iskeleti: Layout.astro (header, alt menü, bildirimler, karşılama, tema + dil/RTL)
 │   ├── pages/               # Dosya tabanlı rotalar (.astro, .mdx); en/ ar/ fa/ alt klasörleri bilgi sayfalarının diğer dilleri
 │   ├── components/          # Sayfa düzeyindeki bileşenler (.svelte, .tsx, .astro)
-│   ├── lib/                 # İş kuralları, mock veri, çeviriler, ikonlar, Svelte 5 store'ları; components/ altında küçük UI parçaları
-│   ├── types/               # TypeScript tip tanımları ve arayüzler (.ts)
+│   ├── lib/                 # İş kuralları, örnek veri, çeviriler, ikonlar, Svelte 5 store'ları
+│   │   ├── types/           # Veri sözleşmesi: her ana tip ayrı dosyada, index.ts hepsini dışa aktarır
+│   │   └── components/      # Küçük UI parçaları; ui/ altında veri tipini tanımayan genel bileşenler
 │   └── styles/              # Global tema değişkenleri ve CSS stilleri (app.css)
 │
 ├── araclar/                 # Geliştirme araçları: telefon.ts + telefon.html (bun run telefon — telefon çerçeveli önizleme)
@@ -73,8 +74,9 @@ ustam/
 - **Ne konur?** Svelte 5 `$state` store'ları (çağrı taslağı, iş emirleri, dil, tema), mock veriler (`data.ts`), çeviri sözlükleri (`ceviriler.ts`) ve Rust invoke çağrıları.
 - **Nasıl import edilir?** `$lib/data` veya `$lib/cagri.svelte` şeklinde doğrudan alias ile çağrılır.
 
-### 8. `src/types/` (Tip Tanımları)
-- **Ne konur?** Projede kullanılan TypeScript arayüzleri (`interface`) ve tipleri (`type`). Veri modelleri karmaşıklaştıkça tipler bu klasörde toplanır.
+### 8. `src/lib/types/` (Veri Sözleşmesi)
+- **Ne konur?** Uygulamanın bütün veri tipleri: `ortak.ts` (dil, semt, konum), `usta.ts`, `hizmet.ts`, `isEmri.ts`, `kural.ts` (Rust yapılarının karşılığı), `profil.ts`, `liste.ts`, `bildirim.ts`; `index.ts` hepsini dışa aktarır.
+- **Kural:** Yeni veri alanı önce burada tanımlanır; durum gibi alanlar serbest metin değil sabit seçenek listesidir (`as const` dizi + türetilmiş tip). Alan tabloları: [`docs/veri-modeli.md`](veri-modeli.md).
 
 ### 9. `src/styles/` (Tasarım ve Stiller)
 - **Ne konur?** `app.css` ve tema tanımları.

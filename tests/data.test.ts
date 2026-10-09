@@ -2,8 +2,10 @@
 import { describe, expect, test } from "bun:test";
 import {
   aralikYaz,
+  hizmetler,
   kategoriSorunlari,
   mesafeKm,
+  ornekIsEmirleri,
   puanDagilimi,
   semtler,
   sorunBilgisi,
@@ -12,6 +14,8 @@ import {
   varisDk,
 } from "../src/lib/data";
 import { sozlukler } from "../src/lib/ceviriler";
+import { fiyatHesapla, kodDurumu } from "../src/lib/kurallar";
+import { ACILIYETLER, DILLER, IS_DURUMLARI, KATEGORILER, ROZETLER } from "../src/lib/types";
 
 const tr = sozlukler.tr as Record<string, string>;
 
@@ -76,5 +80,41 @@ describe("yardımcılar", () => {
   test("tek değerli aralık tek fiyat olarak yazılır", () => {
     expect(aralikYaz(450, 450, "en")).not.toContain("–");
     expect(aralikYaz(450, 850, "en")).toContain("–");
+  });
+});
+
+describe("veri sözleşmesi (Görev 11)", () => {
+  test("her ana tipten en az 6 örnek kayıt var", () => {
+    expect(ustalar.length).toBeGreaterThanOrEqual(6);
+    expect(hizmetler.length).toBeGreaterThanOrEqual(6);
+    expect(ornekIsEmirleri.length).toBeGreaterThanOrEqual(6);
+    expect(ustalar.flatMap((u) => u.yorumlar).length).toBeGreaterThanOrEqual(6);
+  });
+
+  test("sabit seçenek listeleri örnek veriyle uyumlu", () => {
+    for (const u of ustalar) {
+      expect(KATEGORILER).toContain(u.kategori);
+      for (const r of u.rozetler) expect(ROZETLER).toContain(r);
+      for (const d of u.diller) expect(DILLER).toContain(d);
+    }
+    for (const e of ornekIsEmirleri) {
+      expect(IS_DURUMLARI).toContain(e.durum);
+      expect(ACILIYETLER).toContain(e.aciliyet);
+    }
+  });
+
+  test.each(ornekIsEmirleri.map((e) => [e.kod, e] as const))("%s: kod geçerli, usta ve sorun tutarlı, fiyat kurala uygun", (_kod, e) => {
+    expect(kodDurumu(e.kod)).toBe("gecerli");
+    const u = ustalar.find((x) => x.id === e.ustaId)!;
+    expect(u).toBeDefined();
+    expect(u.kategori).toBe(e.kategori);
+    expect(u.sorunlar).toContain(e.sorun);
+    const [iscilikMin, iscilikMax] = sorunBilgisi[e.sorun].iscilik;
+    expect(e.fiyat).toEqual(fiyatHesapla({ cikisUcreti: u.cikisUcreti, aciliyet: e.aciliyet, zaman: e.zaman, iscilikMin, iscilikMax }));
+    if (e.durum === "iptal") expect(e.iptalNedeni).toBeDefined();
+  });
+
+  test("hizmet tablosu kategori sorunlarıyla aynı", () => {
+    expect(new Set(Object.values(kategoriSorunlari).flat())).toEqual(new Set(hizmetler.map((h) => h.sorun)));
   });
 });

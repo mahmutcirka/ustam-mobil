@@ -1,21 +1,7 @@
 // "Önerilen" sıralamanın açık ve tutarlı kuralı. Yapay zekâ değildir: sabit ağırlıklarla puanlanır
 // ve kullanıcıya hangi etkenlerin ne kadar katkı verdiği gösterilir ("Neden öneriyoruz?").
-import type { Dil, Semt, Usta } from "../types/ustam";
+import type { NedenTuru, Oneri, OneriBaglami, Usta } from "./types";
 import { mesafeKm, ustaDurumu, ustalar } from "./data";
-
-export type NedenTuru = "musait" | "yakin" | "puan" | "hizli" | "dil" | "fiyat";
-
-export interface Oneri {
-  puan: number; // yüksek olan önce
-  nedenler: NedenTuru[]; // kullanıcıya gösterilecek olumlu etkenler, en güçlüden zayıfa
-}
-
-export interface OneriBaglami {
-  semt: Semt;
-  dil: Dil;
-  simdi: Date;
-  ortalamaUcret?: number;
-}
 
 // Ağırlıklar — toplam en fazla ~100 puan
 const AGIRLIK = { musait: 40, yakinlik: 20, puan: 20, yanit: 10, dil: 6, fiyat: 4 };

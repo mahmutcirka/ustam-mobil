@@ -8,7 +8,7 @@
   import { profil } from "$lib/profil.svelte";
   import { saat } from "$lib/saat.svelte";
   import { yorumlarim } from "$lib/yorumlar.svelte";
-  import type { Usta } from "../types/ustam";
+  import type { Usta } from "../lib/types";
 
   let { ustalar, sorun, listeyeDon }: { ustalar: Usta[]; sorun?: string; listeyeDon: () => void } = $props();
 

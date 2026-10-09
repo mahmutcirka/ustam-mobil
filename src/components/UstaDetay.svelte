@@ -32,7 +32,7 @@
   import { oku, yaz } from "$lib/depo";
   import type { Anahtar } from "$lib/ceviriler";
   import type { IkonAdi } from "$lib/ikonlar";
-  import type { Aciliyet, Rozet, Usta } from "../types/ustam";
+  import type { Aciliyet, Rozet, Usta } from "../lib/types";
 
   let { usta: u }: { usta: Usta } = $props();
 

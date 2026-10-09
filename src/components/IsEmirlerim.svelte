@@ -13,7 +13,7 @@
   import { dil } from "$lib/i18n.svelte";
   import { bildirim } from "$lib/bildirim.svelte";
   import type { Anahtar } from "$lib/ceviriler";
-  import type { IptalNedeni, IsEmri } from "../types/ustam";
+  import type { IptalNedeni, IsEmri } from "../lib/types";
 
   const nedenler: IptalNedeni[] = ["vazgectim", "gecikti", "baskasi", "cozuldu"];
 
