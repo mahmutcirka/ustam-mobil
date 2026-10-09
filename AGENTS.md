@@ -56,6 +56,9 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
    `src-tauri/test-vektorleri.json` dosyasına elle hesaplanmış örnek eklenir.
 5. **Svelte 5 Runes:** Yeni Svelte bileşenlerinde yalnızca Runes kullanılır (`export let` ve `$:` yasak).
 6. **Commit biçimi:** `feat:` / `fix:` / `docs:` / `refactor:` / `chore:` önekleri ([`docs/kurallar.md`](docs/kurallar.md)).
+7. **PR güvenliği:** `master` kural setiyle korunur (PR zorunlu, force push ve dal silme kapalı); PR'ı yalnız
+   collaborator'lar merge eder ve okunmayan PR merge edilmez — ayrıntı:
+   [`docs/kurallar.md` § PR Güvenliği](docs/kurallar.md#4-pr-güvenliği).
 
 ## 4. Kırmızı Çizgiler
 

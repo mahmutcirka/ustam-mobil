@@ -52,7 +52,28 @@ Her PR açıklamasında 2–3 cümleyle şunlar yazılır:
 
 Merge'den önce **Files changed** sekmesinde yalnızca istenen dosyaların değiştiği kontrol edilir.
 
-## 4. Kod Yazım Kuralları
+## 4. PR Güvenliği
+
+> Görev tanımı: [`docs/tasks/week-4/09-1-master-korumasi.task.md`](tasks/week-4/09-1-master-korumasi.task.md).
+> Depo herkese açıktır; herkes fork'layıp PR açabilir. PR açmak zararsızdır, okunmadan merge etmek değildir.
+
+- **`master` korumalıdır.** GitHub kural seti `master koruması` (Settings → Rules → Rulesets) varsayılan dalı hedefler:
+  PR zorunlu, force push kapalı, dal silme kapalı, bypass listesi boş. `master`'a doğrudan `git push` reddedilir;
+  her değişiklik PR ile girer. Kanıt: [`docs/kanit/master-korumasi.png`](kanit/master-korumasi.png).
+- **PR'ı yalnız collaborator'lar merge eder:** öğrenci (`mahmutcirka`) ve eğitmen (`keyvanarasteh`). Dışarıdan PR açan
+  biri kendi PR'ını merge edemez. Merge biçimi *merge commit*; merge edilen dal otomatik silinir.
+- **Dış katkıcıların iş akışları onaysız çalışmaz** (Settings → Actions → General → *Require approval for all
+  external contributors*); iş akışı izni yalnız okuma (*Read repository contents and packages permissions*).
+- **Tanımadığımız birinden gelen PR merge edilmeden önce:**
+  1. **Files changed** sekmesinde her dosya satır satır okunur.
+  2. Şu değişikliklere özellikle bakılır: `.github/workflows/` (gizli bilgiye erişen ya da dışarı veri gönderen
+     adım), `package.json` betikleri (`postinstall`, `build`, `dev`), `src-tauri/` (Rust komutları, `Cargo.toml`,
+     `tauri.conf.json` izinleri ve CSP) ve bağımlılık dosyaları (`bun.lock`, `Cargo.lock`: yeni ya da adı benzeyen paket).
+  3. PR dalı yerelde ayrı bir klasöre alınır, `bun install` + `bun run build` + `bun run test` + `cargo test`
+     çalıştırılır, uygulama açılıp denenir.
+- **Okunmayan PR merge edilmez.** Eğitmenin PR'ları da merge'den önce **Files changed** sekmesinden okunur.
+
+## 5. Kod Yazım Kuralları
 
 - **Svelte 5 Runes:** `$state`, `$derived`, `$props`, `$effect`; `export let` ve `$:` kullanılmaz.
 - **İsimlendirme:** Değişken, fonksiyon ve dosya adları Türkçe ve ASCII (`isEmirleri`, `kodUret`, `UstaKart.svelte`).
@@ -64,7 +85,7 @@ Merge'den önce **Files changed** sekmesinde yalnızca istenen dosyaların deği
   eklenir ve birim testiyle (`cargo test`) doğrulanır.
 - **Yeni sayfa:** Önce [`docs/mimari-agac.md`](mimari-agac.md) güncellenir, sonra `src/pages/` altına eklenir.
 
-## 5. Testler
+## 6. Testler
 
 Her PR'dan önce yerelde, her push'ta CI'da ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml)):
 
