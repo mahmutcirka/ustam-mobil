@@ -76,3 +76,7 @@ export interface UstaKartBaglami {
   /** İsteğe bağlı: aranan sorun — detayda önceden seçili gelir */
   sorun?: string;
 }
+
+/** Bir liste ekranının gösterebileceği dört hal (Görev 13) */
+export const LISTE_DURUMLARI = ["yukleniyor", "hata", "bos", "dolu"] as const;
+export type ListeDurumu = (typeof LISTE_DURUMLARI)[number];

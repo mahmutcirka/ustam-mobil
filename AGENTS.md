@@ -25,6 +25,7 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | [`docs/teslim.md`](docs/teslim.md) | Teslim adımları, görev → PR eşlemesi | Teslim biçimi bu belgeye göre hazırlanır. |
 | [`docs/ilerleme-batch-01.md`](docs/ilerleme-batch-01.md) | Batch 01 kontrol matrisi ve derleme kanıtı | Yeni teslimden önce matris güncellenir. |
 | [`docs/ajan-uyum-testi.md`](docs/ajan-uyum-testi.md) | Ajanın bu kurallara uyum testi | Kurallar değiştiğinde test yeniden çalıştırılır. |
+| [`docs/gelistirme-notlari.md`](docs/gelistirme-notlari.md) | Elle deneme kısa yolları (`?durum=` ile dört liste hali) | Liste ekranları veriyi tek yükleme işlevinden alır ve yükleniyor / hata / boş / dolu hallerini `ui/` bileşenleriyle gösterir. |
 | [`docs/gorev-sartnamesi.md`](docs/gorev-sartnamesi.md) | Her görevde doldurulan şartname şablonu | Değişiklikten önce Amaç, Kapsam dışı, Kabul ölçütleri, Dokunulacak dosyalar ve Doğrulama adımları yazılır. |
 | [`docs/istemler/`](docs/istemler/README.md) | Görev başına istem günlüğü (`NN-kisa-ad.md`) | Her görevin istemi, planı, düzeltmeleri ve doğrulama sonucu aynı dalda kaydedilir. |
 | [`docs/tasks/`](docs/tasks/) | Eğitmenin haftalık görev dokümanları | Salt okunur; ajan bu dosyaları değiştirmez. |

@@ -63,3 +63,31 @@ export interface KartGirdisi {
   /** İsteğe bağlı: görseli soluk göster (ör. şu an müsait değil) */
   soluk?: boolean;
 }
+
+/** Boş durum bileşeninin girdileri (ui/BosDurum.svelte) */
+export interface BosDurumGirdisi {
+  /** Kısa başlık (ör. "Aramanıza uygun usta bulunamadı") */
+  baslik: string;
+  /** İsteğe bağlı: ne yapılabileceğini anlatan açıklama */
+  aciklama?: string;
+  /** İsteğe bağlı: düğme metni; href ya da tıklama olayıyla birlikte verilir */
+  dugmeMetni?: string;
+  /** İsteğe bağlı: düğme bir sayfaya gidiyorsa adres */
+  href?: string;
+  /** İsteğe bağlı: üstteki ikon; varsayılan "ara" */
+  ikon?: IkonAdi;
+  /** İsteğe bağlı: düğmeyi ikincil (çerçeveli) göster */
+  ikincil?: boolean;
+}
+
+/** Hata durumu bileşeninin girdileri (ui/HataDurumu.svelte) */
+export interface HataDurumuGirdisi {
+  /** Kısa başlık (ör. "Bir şeyler ters gitti") */
+  baslik: string;
+  /** Kullanıcıya ne olduğunu anlatan mesaj */
+  mesaj: string;
+  /** İsteğe bağlı: "Tekrar dene" düğmesinin metni; tekrar dene olayıyla birlikte verilir */
+  tekrarMetni?: string;
+  /** İsteğe bağlı: teknik ayrıntı (hata türü) — küçük yazıyla gösterilir */
+  ayrinti?: string;
+}

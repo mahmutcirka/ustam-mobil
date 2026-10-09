@@ -2,7 +2,7 @@
   // Çağrı özeti — Usta → Sorun → Zaman → Adres → İletişim → Ödeme → Onay.
   // Fiyat dökümü Rust'tan (fiyat_hesapla); onayda iş emri kodu Rust'tan (is_emri_uret). Ödeme alınmaz.
   import Ikon from "$lib/components/Ikon.svelte";
-  import BosDurum from "$lib/components/BosDurum.svelte";
+  import BosDurum from "$lib/components/ui/BosDurum.svelte";
   import { aralikYaz, basHarfler, paraYaz, sorunBilgisi, tarihYaz } from "$lib/data";
   import { cagri } from "$lib/cagri.svelte";
   import { isEmirleri } from "$lib/isEmirleri.svelte";
@@ -173,9 +173,7 @@
     </div>
     <button class="btn hayalet" onclick={() => cagri.temizle()} disabled={isleniyor}>{dil.t("cagri.vazgec")}</button>
   {:else}
-    <BosDurum ikon="pano" baslik={dil.t("cagri.bos")}>
-      <a class="btn kucuk" href="/">{dil.t("cagri.ustaSec")}</a>
-    </BosDurum>
+    <BosDurum ikon="pano" baslik={dil.t("cagri.bos")} dugmeMetni={dil.t("cagri.ustaSec")} href="/" />
   {/if}
 </div>
 
