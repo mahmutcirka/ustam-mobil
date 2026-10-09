@@ -30,11 +30,15 @@
   import { bildirim } from "$lib/bildirim.svelte";
   import { fotoKucult } from "$lib/foto";
   import { oku, yaz } from "$lib/depo";
+  import { sonListeAdresi } from "$lib/listeAdresi";
   import type { Anahtar } from "$lib/ceviriler";
   import type { IkonAdi } from "$lib/ikonlar";
   import type { Aciliyet, Rozet, Usta } from "../lib/types";
 
   let { usta: u }: { usta: Usta } = $props();
+
+  // Geri düğmesi listeyi son arama ve süzgeç seçimiyle açar (listeAdresi.ts); doğrudan açıldıysa ana sayfa
+  const listeAdresi = sonListeAdresi();
 
   const rozetIkon: Record<Rozet, IkonAdi> = { dogrulanmis: "kalkan", sigortali: "onay", "7-24": "saat", "hizli-yanit": "simsek" };
 
@@ -137,7 +141,7 @@
 <div class="kapak">
   <div class="kapak-ic">
     <div class="ust-satir">
-      <a class="yuvarlak" href="/" aria-label={dil.t("detay.geri")}><Ikon ad={dil.yon === "rtl" ? "ok-sag" : "ok-sol"} /></a>
+      <a class="yuvarlak" href={listeAdresi} aria-label={dil.t("detay.geri")}><Ikon ad={dil.yon === "rtl" ? "ok-sag" : "ok-sol"} /></a>
       <button
         class="yuvarlak"
         class:favori

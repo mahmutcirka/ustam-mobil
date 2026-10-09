@@ -90,4 +90,8 @@ export interface HataDurumuGirdisi {
   tekrarMetni?: string;
   /** İsteğe bağlı: teknik ayrıntı (hata türü) — küçük yazıyla gösterilir */
   ayrinti?: string;
+  /** İsteğe bağlı: tekrar denemek anlamsızsa (ör. bulunamadı) dönüş bağlantısının metni */
+  donusMetni?: string;
+  /** İsteğe bağlı: dönüş bağlantısının adresi */
+  donusHref?: string;
 }

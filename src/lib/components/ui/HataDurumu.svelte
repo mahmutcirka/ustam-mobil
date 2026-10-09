@@ -4,7 +4,8 @@
   import Ikon from "../Ikon.svelte";
   import type { HataDurumuGirdisi } from "../../types";
 
-  let { baslik, mesaj, tekrarMetni, ayrinti, tekrarDene }: HataDurumuGirdisi & { tekrarDene?: () => void } = $props();
+  let { baslik, mesaj, tekrarMetni, ayrinti, donusMetni, donusHref, tekrarDene }: HataDurumuGirdisi & { tekrarDene?: () => void } =
+    $props();
 </script>
 
 <div class="hata-durumu" role="alert">
@@ -17,6 +18,9 @@
       <Ikon ad="yenile" boyut={16} />
       {tekrarMetni}
     </button>
+  {/if}
+  {#if donusMetni && donusHref}
+    <a class="btn kucuk ikincil" href={donusHref}>{donusMetni}</a>
   {/if}
 </div>
 

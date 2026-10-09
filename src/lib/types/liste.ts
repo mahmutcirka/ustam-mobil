@@ -80,3 +80,17 @@ export interface UstaKartBaglami {
 /** Bir liste ekranının gösterebileceği dört hal (Görev 13) */
 export const LISTE_DURUMLARI = ["yukleniyor", "hata", "bos", "dolu"] as const;
 export type ListeDurumu = (typeof LISTE_DURUMLARI)[number];
+
+/** Ustalar listesinde kullanıcının seçtikleri — adreste (?q=…) tutulur, detaydan dönüşte geri yüklenir (Görev 14) */
+export interface ListeSecimi {
+  /** Arama kutusundaki metin */
+  arama: string;
+  /** Seçili kategori çipi */
+  kategori: Kategori | "tumu";
+  /** Arama önerisinden seçilen sorun (yoksa null) */
+  sorun: SorunOnerisi | null;
+  /** Sıralama */
+  siralama: Siralama;
+  /** Süzgeç */
+  filtre: UstaFiltresi;
+}
