@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ustam — Telefon Önizleme</title>
+    <link rel="icon" type="image/png" href="http://localhost:1420/favicon.png" />
+    <style>
+      /* Geliştirme aracı: uygulamanın parçası değildir, derlemeye (dist/) girmez.
+         Renkler yalnızca bu araç için; uygulama renkleri src/styles/app.css'tedir. */
+      :root {
+        --arka: #18181b;
+        --panel: #27272a;
+        --kenar: #3f3f46;
+        --yazi: #fafafa;
+        --soluk: #a1a1aa;
+        --vurgu: #f97316;
+        --govde: #0a0a0a;
+        --govde-kenar: #52525b;
+        --ekran: #ffffff;
+        --hata: #fca5a5;
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--arka);
+        color: var(--yazi);
+        font: 14px/1.4 system-ui, "Segoe UI", sans-serif;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 12px;
+        padding: 10px 16px;
+        background: var(--panel);
+        border-bottom: 1px solid var(--kenar);
+      }
+
+      header strong {
+        margin-inline-end: 8px;
+        font-size: 15px;
+      }
+
+      header strong span {
+        color: var(--vurgu);
+      }
+
+      label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--soluk);
+      }
+
+      select,
+      button {
+        height: 32px;
+        padding: 0 10px;
+        border: 1px solid var(--kenar);
+        border-radius: 8px;
+        background: var(--arka);
+        color: var(--yazi);
+        font: inherit;
+        cursor: pointer;
+      }
+
+      button:hover,
+      select:hover {
+        border-color: var(--soluk);
+      }
+
+      button[aria-pressed="true"] {
+        border-color: var(--vurgu);
+        color: var(--vurgu);
+      }
+
+      .bosluk {
+        flex: 1;
+      }
+
+      #uyari {
+        display: none;
+        padding: 10px 16px;
+        background: #450a0a;
+        color: var(--hata);
+      }
+
+      #uyari code {
+        color: var(--yazi);
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 48px;
+        min-height: 0;
+        padding: 16px;
+      }
+
+      /* Ölçeklenen dış kutu, telefonun ölçekli boyutunu yer olarak ayırır */
+      .yer {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .etiket {
+        color: var(--soluk);
+        font-size: 12px;
+      }
+
+      .olcek {
+        position: relative;
+      }
+
+      .telefon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: top left;
+        padding: 12px;
+        border: 2px solid var(--govde-kenar);
+        background: var(--govde);
+        box-shadow: 0 30px 60px rgb(0 0 0 / 0.5);
+      }
+
+      .ekran {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--ekran);
+      }
+
+      .durum-cubugu {
+        flex: none;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 26px;
+        background: #000;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .durum-cubugu .simgeler {
+        display: inline-flex;
+        gap: 5px;
+        align-items: center;
+      }
+
+      .ada {
+        position: absolute;
+        top: 11px;
+        left: 50%;
+        width: 120px;
+        height: 34px;
+        margin-left: -60px;
+        border-radius: 20px;
+        background: #000;
+      }
+
+      .kamera {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 12px;
+        height: 12px;
+        margin: -6px 0 0 -6px;
+        border-radius: 50%;
+        background: #111;
+        box-shadow: 0 0 0 2px #333;
+      }
+
+      iframe {
+        flex: 1;
+        display: block;
+        width: 100%;
+        border: 0;
+        background: var(--ekran);
+      }
+
+      .alt-cubuk {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+      }
+
+      .alt-cubuk i {
+        width: 134px;
+        height: 5px;
+        border-radius: 3px;
+        background: #fff;
+      }
+
+      .ana-tus {
+        position: absolute;
+        left: 50%;
+        width: 54px;
+        height: 54px;
+        margin-left: -27px;
+        border: 2px solid var(--govde-kenar);
+        border-radius: 50%;
+      }
+
+      footer {
+        padding: 6px 16px;
+        color: var(--soluk);
+        font-size: 12px;
+        text-align: center;
+      }
+
+      kbd {
+        padding: 1px 5px;
+        border: 1px solid var(--kenar);
+        border-radius: 4px;
+        font: 11px ui-monospace, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong><span>Ustam</span> · Telefon Önizleme</strong>
+      <label>
+        Cihaz
+        <select id="cihaz"></select>
+      </label>
+      <label>
+        Sayfa
+        <select id="sayfa"></select>
+      </label>
+      <button id="yanYana" aria-pressed="false" title="iPhone ve Android'i birlikte göster">Yan yana</button>
+      <button id="dondur" aria-pressed="false" title="Yatay / dikey (D)">⟳ Döndür</button>
+      <label>
+        Ölçek
+        <select id="olcek">
+          <option value="sigdir">Pencereye sığdır</option>
+          <option value="1">%100</option>
+          <option value="0.85">%85</option>
+          <option value="0.7">%70</option>
+          <option value="0.5">%50</option>
+        </select>
+      </label>
+      <span class="bosluk"></span>
+      <button id="yenile" title="Yenile (R)">↻ Yenile</button>
+      <button id="disarida" title="Uygulamayı ayrı sekmede aç">Sekmede aç ↗</button>
+    </header>
+
+    <div id="uyari" role="alert">
+      Uygulama sunucusuna ulaşılamıyor (<code>http://localhost:1420</code>). Başka bir terminalde
+      <code>bun run dev</code> çalıştırın ya da önizlemeyi <code>bun run telefon</code> ile açın.
+    </div>
+
+    <main id="sahne"></main>
+
+    <footer>
+      Ekran boyutları CSS pikselidir. Telefonlardaki çerçeve yalnızca görünüm içindir; dokunma hareketleri ve
+      çentik boşlukları gerçek cihazda ayrıca denenmelidir. <kbd>R</kbd> yenile · <kbd>D</kbd> döndür
+    </footer>
+
+    <script>
+      const UYGULAMA = "http://localhost:1420";
+
+      // Yaygın cihazların CSS piksel ekran boyutları
+      const CIHAZLAR = {
+        "iphone-15": { ad: "iPhone 15", tur: "ios", g: 393, y: 852, ust: 54, alt: 34, kose: 55 },
+        "iphone-se": { ad: "iPhone SE", tur: "ios-tuslu", g: 375, y: 667, ust: 20, alt: 0, kose: 0 },
+        "iphone-15-pro-max": { ad: "iPhone 15 Pro Max", tur: "ios", g: 430, y: 932, ust: 54, alt: 34, kose: 55 },
+        "pixel-8": { ad: "Google Pixel 8", tur: "android", g: 412, y: 915, ust: 32, alt: 24, kose: 40 },
+        "galaxy-a": { ad: "Samsung Galaxy A54", tur: "android", g: 360, y: 780, ust: 28, alt: 24, kose: 32 },
+      };
+
+      const SAYFALAR = {
+        "/": "Ana sayfa",
+        "/usta/1": "Usta detayı",
+        "/cagri": "Çağrı",
+        "/is-emirlerim": "İş emirlerim",
+        "/profil": "Profil",
+        "/hakkinda": "Hakkında (TR)",
+        "/en/hakkinda": "About (EN)",
+        "/ar/hakkinda": "حول (AR · RTL)",
+        "/fa/hakkinda": "درباره (FA · RTL)",
+      };
+
+      const $ = (id) => document.getElementById(id);
+
+      function ayarOku() {
+        try {
+          return JSON.parse(localStorage.getItem("telefon-onizleme") || "{}");
+        } catch {
+          return {};
+        }
+      }
+
+      const ayar = { cihaz: "iphone-15", sayfa: "/", yanYana: false, yatay: false, olcek: "sigdir", ...ayarOku() };
+      if (!CIHAZLAR[ayar.cihaz]) ayar.cihaz = "iphone-15";
+
+      function ayarYaz() {
+        try {
+          localStorage.setItem("telefon-onizleme", JSON.stringify(ayar));
+        } catch {
+          // depolama kapalıysa ayarlar yalnızca bu oturumda kalır
+        }
+      }
+
+      for (const [id, c] of Object.entries(CIHAZLAR)) $("cihaz").add(new Option(`${c.ad} — ${c.g}×${c.y}`, id));
+      for (const [yol, ad] of Object.entries(SAYFALAR)) $("sayfa").add(new Option(ad, yol));
+      $("cihaz").value = ayar.cihaz;
+      $("sayfa").value = ayar.sayfa;
+      $("olcek").value = ayar.olcek;
+
+      const SINYAL =
+        '<svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>';
+      const WIFI =
+        '<svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><path d="M7.5 2.3c2.2 0 4.2.8 5.7 2.2l1.1-1.1A9.6 9.6 0 0 0 7.5.7 9.6 9.6 0 0 0 .7 3.4l1.1 1.1a8 8 0 0 1 5.7-2.2Zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.1a6.5 6.5 0 0 0-9 0l1.1 1.1c.9-.8 2.1-1.3 3.4-1.3Zm0 3.2c-.5 0-.9.2-1.2.5l1.2 1.2 1.2-1.2c-.3-.3-.7-.5-1.2-.5Z"/></svg>';
+      const PIL =
+        '<svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="currentColor"/><path d="M23 4v4c.8-.3 1.3-1.1 1.3-2S23.8 4.3 23 4Z" fill="currentColor" opacity=".5"/></svg>';
+
+      function saat() {
+        return new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+      }
+
+      function telefonOlustur(id) {
+        const c = CIHAZLAR[id];
+        const yatay = ayar.yatay;
+        const ios = c.tur.startsWith("ios");
+        const tuslu = c.tur === "ios-tuslu";
+        // Yatayda durum çubuğu ve alt çubuk kenarlara değil, ekranın üst/altında ince kalır
+        const ust = yatay ? (ios && !tuslu ? 0 : 20) : c.ust;
+        const alt = yatay ? (c.alt ? 20 : 0) : c.alt;
+        const genislik = yatay ? c.y : c.g;
+        const yukseklik = yatay ? c.g : c.y;
+        const cerceve = tuslu ? (yatay ? [14, 70] : [70, 14]) : [12, 12]; // [dikey, yatay] çerçeve kalınlığı
+
+        const yer = document.createElement("div");
+        yer.className = "yer";
+
+        const olcek = document.createElement("div");
+        olcek.className = "olcek";
+
+        const telefon = document.createElement("div");
+        telefon.className = "telefon";
+        telefon.style.padding = `${cerceve[0]}px ${cerceve[1]}px`;
+        telefon.style.borderRadius = `${c.kose ? c.kose + 12 : 40}px`;
+
+        const ekran = document.createElement("div");
+        ekran.className = "ekran";
+        ekran.style.width = `${genislik}px`;
+        ekran.style.height = `${yukseklik}px`;
+        ekran.style.borderRadius = `${c.kose}px`;
+
+        if (ust) {
+          const durum = document.createElement("div");
+          durum.className = "durum-cubugu";
+          durum.style.height = `${ust}px`;
+          if (!ios) durum.style.padding = "0 18px";
+          durum.innerHTML = `<span class="saat">${saat()}</span>${
+            ios && !tuslu && !yatay ? '<span class="ada"></span>' : ""
+          }${!ios && !yatay ? '<span class="kamera"></span>' : ""}<span class="simgeler">${SINYAL}${WIFI}${PIL}</span>`;
+          if (tuslu) durum.style.fontSize = "12px";
+          ekran.append(durum);
+        }
+
+        const cerceveli = document.createElement("iframe");
+        cerceveli.title = `${c.ad} önizlemesi`;
+        cerceveli.src = UYGULAMA + ayar.sayfa;
+        ekran.append(cerceveli);
+
+        if (alt) {
+          const altCubuk = document.createElement("div");
+          altCubuk.className = "alt-cubuk";
+          altCubuk.style.height = `${alt}px`;
+          altCubuk.innerHTML = ios ? "<i></i>" : '<i style="width:108px;height:4px"></i>';
+          ekran.append(altCubuk);
+        }
+
+        telefon.append(ekran);
+        if (tuslu) {
+          const tus = document.createElement("span");
+          tus.className = "ana-tus";
+          if (yatay) {
+            tus.style.left = "auto";
+            tus.style.right = "8px";
+            tus.style.top = "50%";
+            tus.style.marginTop = "-27px";
+          } else {
+            tus.style.bottom = "8px";
+          }
+          telefon.append(tus);
+        }
+
+        const etiket = document.createElement("div");
+        etiket.className = "etiket";
+        etiket.textContent = `${c.ad} · ${genislik}×${yukseklik} · ${ios ? "iOS" : "Android"}`;
+
+        olcek.append(telefon);
+        yer.append(olcek, etiket);
+
+        // Ölçek hesaplaması için dış ölçüler (çerçeve + kenarlık dahil)
+        yer.dataset.g = String(genislik + cerceve[1] * 2 + 4);
+        yer.dataset.y = String(yukseklik + cerceve[0] * 2 + 4);
+        return yer;
+      }
+
+      function olcekle() {
+        const sahne = $("sahne");
+        const yerler = [...sahne.querySelectorAll(".yer")];
+        if (!yerler.length) return;
+        let oran = Number(ayar.olcek);
+        const kutu = sahne.getBoundingClientRect();
+        const genislikler = yerler.map((y) => Number(y.dataset.g));
+        const yukseklikler = yerler.map((y) => Number(y.dataset.y) + 26); // + cihaz etiketi
+        const bosluk = 48 * (yerler.length - 1);
+        const toplam = (d) => d.reduce((t, n) => t + n, 0) + bosluk;
+        // Yan yana iki telefon dar pencerede alt alta daha büyük görünür; hangisi büyükse o dizilir
+        const satir = Math.min((kutu.width - 32) / toplam(genislikler), (kutu.height - 32) / Math.max(...yukseklikler));
+        const sutun = Math.min((kutu.width - 32) / Math.max(...genislikler), (kutu.height - 32) / toplam(yukseklikler));
+        sahne.style.flexDirection = sutun > satir ? "column" : "row";
+        if (ayar.olcek === "sigdir") oran = Math.min(1, Math.max(satir, sutun));
+        for (const yer of yerler) {
+          const kutu = yer.querySelector(".olcek");
+          kutu.style.width = `${Number(yer.dataset.g) * oran}px`;
+          kutu.style.height = `${Number(yer.dataset.y) * oran}px`;
+          yer.querySelector(".telefon").style.transform = `scale(${oran})`;
+        }
+      }
+
+      function ciz() {
+        const sahne = $("sahne");
+        sahne.replaceChildren();
+        const idler = ayar.yanYana ? ["iphone-15", "pixel-8"] : [ayar.cihaz];
+        for (const id of idler) sahne.append(telefonOlustur(id));
+        $("cihaz").disabled = ayar.yanYana;
+        $("yanYana").setAttribute("aria-pressed", String(ayar.yanYana));
+        $("dondur").setAttribute("aria-pressed", String(ayar.yatay));
+        olcekle();
+        ayarYaz();
+      }
+
+      function yenile() {
+        for (const f of document.querySelectorAll("iframe")) f.src = UYGULAMA + ayar.sayfa;
+      }
+
+      $("cihaz").onchange = (e) => {
+        ayar.cihaz = e.target.value;
+        ciz();
+      };
+      $("sayfa").onchange = (e) => {
+        ayar.sayfa = e.target.value;
+        yenile();
+        ayarYaz();
+      };
+      $("olcek").onchange = (e) => {
+        ayar.olcek = e.target.value;
+        olcekle();
+        ayarYaz();
+      };
+      $("yanYana").onclick = () => {
+        ayar.yanYana = !ayar.yanYana;
+        ciz();
+      };
+      $("dondur").onclick = () => {
+        ayar.yatay = !ayar.yatay;
+        ciz();
+      };
+      $("yenile").onclick = yenile;
+      $("disarida").onclick = () => window.open(UYGULAMA + ayar.sayfa, "_blank", "noopener");
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target instanceof HTMLSelectElement || e.ctrlKey || e.metaKey || e.altKey) return;
+        if (e.key === "r" || e.key === "R") yenile();
+        if (e.key === "d" || e.key === "D") $("dondur").click();
+      });
+
+      window.addEventListener("resize", olcekle);
+      setInterval(() => {
+        for (const s of document.querySelectorAll(".saat")) s.textContent = saat();
+      }, 15000);
+
+      // Sunucu kapalıysa iframe boş kalır; no-cors isteği yalnızca bağlantı reddedilirse hata verir
+      async function sunucuDenetle() {
+        try {
+          await fetch(UYGULAMA + "/favicon.png", { mode: "no-cors", cache: "no-store" });
+          const kapaliydi = $("uyari").style.display === "block";
+          $("uyari").style.display = "none";
+          if (kapaliydi) {
+            olcekle();
+            yenile();
+          }
+        } catch {
+          $("uyari").style.display = "block";
+          olcekle();
+        }
+      }
+
+      ciz();
+      sunucuDenetle();
+      setInterval(sunucuDenetle, 5000);
+    </script>
+  </body>
+</html>

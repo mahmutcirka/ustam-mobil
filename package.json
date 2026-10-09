@@ -9,6 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "test": "bun test tests",
+    "telefon": "bun araclar/telefon.ts",
     "astro": "astro",
     "tauri": "tauri"
   },
