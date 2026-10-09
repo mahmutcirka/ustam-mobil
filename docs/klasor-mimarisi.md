@@ -23,6 +23,7 @@ ustam/
 │   ├── tauri.conf.json      # Masaüstü/mobil pencere ayarları ve frontendDist hedefi
 │   ├── Cargo.toml           # Rust kütüphaneleri ve bağımlılıkları
 │   ├── icons/               # tauri icon ile üretilen macOS / Windows / Linux / iOS / Android ikonları
+│   ├── gen/android/         # tauri android init ile üretilen Gradle projesi (APK/AAB); build/ ve .so repoya girmez
 │   ├── test-vektorleri.json # Rust ve TS kurallarının ortak, elle hesaplanmış test örnekleri
 │   └── src/lib.rs           # Rust komutları (kod üretimi/doğrulama, fiyat), testleri ve giriş noktası
 │
