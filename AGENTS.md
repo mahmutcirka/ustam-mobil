@@ -24,6 +24,8 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | [`docs/teslim.md`](docs/teslim.md) | Teslim adımları, görev → PR eşlemesi | Teslim biçimi bu belgeye göre hazırlanır. |
 | [`docs/ilerleme-batch-01.md`](docs/ilerleme-batch-01.md) | Batch 01 kontrol matrisi ve derleme kanıtı | Yeni teslimden önce matris güncellenir. |
 | [`docs/ajan-uyum-testi.md`](docs/ajan-uyum-testi.md) | Ajanın bu kurallara uyum testi | Kurallar değiştiğinde test yeniden çalıştırılır. |
+| [`docs/gorev-sartnamesi.md`](docs/gorev-sartnamesi.md) | Her görevde doldurulan şartname şablonu | Değişiklikten önce Amaç, Kapsam dışı, Kabul ölçütleri, Dokunulacak dosyalar ve Doğrulama adımları yazılır. |
+| [`docs/istemler/`](docs/istemler/README.md) | Görev başına istem günlüğü (`NN-kisa-ad.md`) | Her görevin istemi, planı, düzeltmeleri ve doğrulama sonucu aynı dalda kaydedilir. |
 | [`docs/tasks/`](docs/tasks/) | Eğitmenin haftalık görev dokümanları | Salt okunur; ajan bu dosyaları değiştirmez. |
 
 ## 2. Teknoloji Yığını ve Komutlar
@@ -84,3 +86,18 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | **Yeni sayfa / rota** | 1) [`docs/mimari-agac.md`](docs/mimari-agac.md) ağacına ekle → 2) `src/pages/` altına `.astro` veya `.mdx` ekle, `Layout` kullan → 3) bilgi sayfasıysa `en/`, `ar/`, `fa/` sürümlerini de ekle (`dil` frontmatter'ı ile) → 4) gezinmeye bağla. |
 | **Yeni arayüz metni** | `src/lib/ceviriler.ts` içinde `tr` nesnesine anahtarı ekle; `en`, `ar`, `fa` nesnelerine aynı anahtarı ekle (TypeScript eksik çeviriyi yakalar). |
 | **Yeni Rust komutu** | `src-tauri/src/lib.rs` içinde `#[tauri::command]` fonksiyonu + `generate_handler!` listesi + test → aynı kuralın TS karşılığı `src/lib/kurallar.ts` → köprü fonksiyonu `src/lib/motor.ts` → ortak örnekler `src-tauri/test-vektorleri.json`. Bileşenler `invoke()`'u doğrudan değil `motor.ts` üzerinden çağırır. |
+
+## 6. Çalışma Döngüsü
+
+Her görev aynı sırayla yapılır: **şartname → plan → değişiklik → doğrulama.**
+
+1. **Şartname:** Görev için [`docs/gorev-sartnamesi.md`](docs/gorev-sartnamesi.md) doldurulur ve
+   `docs/istemler/NN-kisa-ad.md` kaydının başına yazılır ([`docs/istemler/README.md`](docs/istemler/README.md)).
+2. **Önce plan:** Ajan hiçbir dosyayı değiştirmeden önce planını sunar (hangi dosya, neden, nasıl doğrulanacak) ve
+   öğrencinin onayını bekler. Onay gelmeden değişiklik yapılmaz; plan istem kaydına yapıştırılır.
+3. **Değişiklik:** Onaydan sonra yalnız planda yazan dosyalar değiştirilir. Her görev ayrı dalda
+   (`feature/NN-kisa-ad`) yapılır ve PR ile `master`'a girer; `master`'a doğrudan commit yoktur.
+4. **Doğrulama:** `bun run build` **0 hata** vermeden "bitti" denmez. Tipler değiştiyse `bun run check`, iş kuralı
+   değiştiyse `bun run test` ve `cargo test` de çalıştırılır. Komut çıktıları ve elle yapılan denemeler kayda yazılır.
+5. **Özet:** Bitince hangi dosyanın neden değiştiği madde madde yazılır ve öğrencinin elle denemesi gereken adımlar
+   listelenir.
