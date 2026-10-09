@@ -70,6 +70,9 @@ Kontrast oranları WCAG 2.1 bağıl parlaklık formülüyle hesaplanmıştır; m
 | `--b-1` … `--b-6` | 4 · 8 · 12 · 16 · 24 · 32 px | Boşluklar |
 | `--yz-xs` … `--yz-2xl` | 12 · 13 · 15 · 17 · 22 · 28 px | Yazı boyutları (etiket → sayfa başlığı) |
 | `--dokunma` | 44 px | En küçük dokunma hedefi (Apple HIG) |
+| `--kart-gorsel` | 52 px | Kart bileşenindeki görsel / baş harf kutusu (`ui/Kart.svelte`) |
+| `--radius-hap` | 999 px | Çip, rozet ve hap biçimli düğmeler |
+| `--radius-mini` | 6 px | Küçük kutulu etiketler (dil kısaltması "TR", "AR") |
 
 ### Renk kullanım ilkesi
 
