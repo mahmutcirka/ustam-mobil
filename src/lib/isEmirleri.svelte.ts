@@ -1,8 +1,8 @@
 // İş emirleri — kod ve fiyat dökümü Rust'tan (motor.ts), liste localStorage'da saklanır
 import type { CagriTaslagi, EskiIsEmriKaydi, IptalNedeni, IsEmri, OdemeTercihi, Usta } from "./types";
-import { mesafeKm, sorunBilgisi, tahminiFiyat, varisDk } from "./data";
+import { mesafeKm, sorunBilgisi, varisDk } from "./data";
 import { oku, yaz } from "./depo";
-import { fiyatHesapla, isEmriKoduUret } from "./motor";
+import { fiyatHesapla, isEmriKoduUret } from "./native";
 import { profil } from "./profil.svelte";
 
 const ANAHTAR = "is-emirleri";
@@ -32,11 +32,10 @@ class IsEmirleri {
 
   async olustur(t: CagriTaslagi, usta: Usta, ek: { odeme: OdemeTercihi; telefon: string }): Promise<IsEmri> {
     const [iscilikMin, iscilikMax] = sorunBilgisi[t.sorun]?.iscilik ?? [0, 0];
-    const [kod, fiyat] = await Promise.all([
+    // Kod ve fiyat Rust'tan (native.ts); biri tipli hata verirse iş emri oluşmaz, hata ekranda gösterilir
+    const [{ kod }, fiyat] = await Promise.all([
       isEmriKoduUret(usta.kategori, t.zaman),
-      fiyatHesapla({ cikisUcreti: usta.cikisUcreti, aciliyet: t.aciliyet, zaman: t.zaman, iscilikMin, iscilikMax }).catch(
-        () => tahminiFiyat(usta, t.sorun, t.aciliyet, t.zaman),
-      ),
+      fiyatHesapla({ cikisUcreti: usta.cikisUcreti, aciliyet: t.aciliyet, zaman: t.zaman, iscilikMin, iscilikMax }),
     ]);
     const emir: IsEmri = {
       ...t,

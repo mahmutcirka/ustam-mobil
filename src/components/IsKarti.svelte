@@ -6,7 +6,7 @@
   import { aralikYaz, basHarfler, kategoriIkon, paraYaz, saatYaz, sayiYaz, tarihYaz, ustaBul } from "$lib/data";
   import { ONAY_SN, asamalar, takip } from "$lib/takip";
   import { isEmirleri } from "$lib/isEmirleri.svelte";
-  import { isEmriKoduDogrula } from "$lib/motor";
+  import { isEmriKoduDogrula, panoyaKopyala } from "$lib/native";
   import { kodGirdisiniDuzenle } from "$lib/kodGirdisi";
   import { dil } from "$lib/i18n.svelte";
   import { saat } from "$lib/saat.svelte";
@@ -54,12 +54,7 @@
   }
 
   async function kopyala() {
-    try {
-      await navigator.clipboard.writeText(is.kod);
-      bildirim.goster(dil.t("is.kopyalandi"), "bilgi", 1800);
-    } catch {
-      // pano izni yoksa sessizce geç
-    }
+    if (await panoyaKopyala(is.kod)) bildirim.goster(dil.t("is.kopyalandi"), "bilgi", 1800);
   }
 </script>
 

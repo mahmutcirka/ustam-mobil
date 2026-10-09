@@ -25,6 +25,8 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | [`docs/teslim.md`](docs/teslim.md) | Teslim adımları, görev → PR eşlemesi | Teslim biçimi bu belgeye göre hazırlanır. |
 | [`docs/ilerleme-batch-01.md`](docs/ilerleme-batch-01.md) | Batch 01 kontrol matrisi ve derleme kanıtı | Yeni teslimden önce matris güncellenir. |
 | [`docs/ajan-uyum-testi.md`](docs/ajan-uyum-testi.md) | Ajanın bu kurallara uyum testi | Kurallar değiştiğinde test yeniden çalıştırılır. |
+| [`docs/komutlar.md`](docs/komutlar.md) | Rust komutları: girdi, tipli sonuç, hata türleri | Rust'a yalnız `src/lib/native.ts` üzerinden gidilir; komut düz metin döndürmez, geçersiz girdide panik yapmaz. |
+| [`docs/platform-destegi.md`](docs/platform-destegi.md) | Özellik × platform tablosu (Android, iOS, macOS, Windows, Linux, web) | **Yeni özellik eklenirken bu tablo güncellenir**; desteklenmeyen özellik o platformda arayüzde görünmez. |
 | [`docs/gelistirme-notlari.md`](docs/gelistirme-notlari.md) | Elle deneme kısa yolları (`?durum=` ile dört liste hali) | Liste ekranları veriyi tek yükleme işlevinden alır ve yükleniyor / hata / boş / dolu hallerini `ui/` bileşenleriyle gösterir. |
 | [`docs/gorev-sartnamesi.md`](docs/gorev-sartnamesi.md) | Her görevde doldurulan şartname şablonu | Değişiklikten önce Amaç, Kapsam dışı, Kabul ölçütleri, Dokunulacak dosyalar ve Doğrulama adımları yazılır. |
 | [`docs/istemler/`](docs/istemler/README.md) | Görev başına istem günlüğü (`NN-kisa-ad.md`) | Her görevin istemi, planı, düzeltmeleri ve doğrulama sonucu aynı dalda kaydedilir. |
@@ -80,6 +82,8 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 - Yapay gecikme, sahte ağ isteği ya da "gerçek zamanlı bağlandı" gibi gerçek dışı iddialar — simülasyon kodda adıyla belirtilir (`takip.ts`).
 - İş kuralını yalnızca bir tarafta değiştirmek — Rust (`lib.rs`) ve TS (`kurallar.ts`) birlikte, ortak vektörlerle.
 - Bileşen ya da store içinde veri tipi tanımlamak ya da `any` yazmak — yerine `src/lib/types/` ([`docs/veri-modeli.md`](docs/veri-modeli.md)).
+- Bileşende `invoke()`, `@tauri-apps/*` ya da `navigator.userAgent` ile platform sorgusu — yerine `src/lib/native.ts` (`destekleniyorMu`, `platform`).
+- Bir platformda çalışmayan özelliği devre dışı düğme ya da hata mesajıyla bırakmak — o platformda hiç gösterilmez ([`docs/platform-destegi.md`](docs/platform-destegi.md)).
 
 ## 5. Sık Görevler İçin Tarifler
 
@@ -88,7 +92,8 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | **Renk değiştirmek / eklemek** | 1) [`docs/branding.md`](docs/branding.md) tablosuna token'ı light + dark hex ve kontrast oranıyla ekle → 2) `src/styles/app.css` içinde `:root` ve `:root[data-tema="gece"]` altına aynı adla yaz → 3) bileşende `var(--token)` kullan. |
 | **Yeni sayfa / rota** | 1) [`docs/mimari-agac.md`](docs/mimari-agac.md) ağacına ekle → 2) `src/pages/` altına `.astro` veya `.mdx` ekle, `Layout` kullan → 3) bilgi sayfasıysa `en/`, `ar/`, `fa/` sürümlerini de ekle (`dil` frontmatter'ı ile) → 4) gezinmeye bağla. |
 | **Yeni arayüz metni** | `src/lib/ceviriler.ts` içinde `tr` nesnesine anahtarı ekle; `en`, `ar`, `fa` nesnelerine aynı anahtarı ekle (TypeScript eksik çeviriyi yakalar). |
-| **Yeni Rust komutu** | `src-tauri/src/lib.rs` içinde `#[tauri::command]` fonksiyonu + `generate_handler!` listesi + test → aynı kuralın TS karşılığı `src/lib/kurallar.ts` → köprü fonksiyonu `src/lib/motor.ts` → ortak örnekler `src-tauri/test-vektorleri.json`. Bileşenler `invoke()`'u doğrudan değil `motor.ts` üzerinden çağırır. |
+| **Yeni Rust komutu** | `src-tauri/src/lib.rs` içinde `#[tauri::command]` fonksiyonu (sonuç `struct`, hata `KomutHatasi`) + `generate_handler!` listesi + en az 2 test → aynı kuralın TS karşılığı `src/lib/kurallar.ts` → tip `src/lib/types/native.ts` → işlev `src/lib/native.ts` (tarayıcı yedeğiyle) → ortak örnekler `src-tauri/test-vektorleri.json` → [`docs/komutlar.md`](docs/komutlar.md). Bileşenler `invoke()`'u ya da Tauri eklentilerini doğrudan değil yalnız `native.ts` üzerinden çağırır. |
+| **Yeni özellik (platforma bağlı olabilecek)** | Beş platform için değerlendir (destekleniyor / farklı yolla / yok) → [`docs/platform-destegi.md`](docs/platform-destegi.md) tablosu ve `native.ts` `DESTEK` tablosu birlikte güncellenir → bileşen `destekleniyorMu("…")` ile sorar; "yok" ise arayüzde hiç gösterilmez. |
 
 ## 6. Çalışma Döngüsü
 

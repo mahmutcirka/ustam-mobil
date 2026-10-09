@@ -199,5 +199,122 @@
         "toplamMax": 320
       }
     }
+  ],
+  "fiyatHatalari": [
+    {
+      "aciklama": "Eksi çıkış ücreti",
+      "girdi": {
+        "cikisUcreti": -50,
+        "aciliyet": "bugun",
+        "zaman": "2026-10-07T14:00",
+        "iscilikMin": 200,
+        "iscilikMax": 400
+      },
+      "hata": {
+        "tur": "gecersiz-tutar",
+        "ayrinti": "cikisUcreti"
+      }
+    },
+    {
+      "aciklama": "Üst sınırı aşan işçilik",
+      "girdi": {
+        "cikisUcreti": 300,
+        "aciliyet": "bugun",
+        "zaman": "2026-10-07T14:00",
+        "iscilikMin": 200,
+        "iscilikMax": 2000000
+      },
+      "hata": {
+        "tur": "gecersiz-tutar",
+        "ayrinti": "iscilikMax"
+      }
+    },
+    {
+      "aciklama": "İşçilik alt sınırı üst sınırdan büyük",
+      "girdi": {
+        "cikisUcreti": 300,
+        "aciliyet": "bugun",
+        "zaman": "2026-10-07T14:00",
+        "iscilikMin": 500,
+        "iscilikMax": 200
+      },
+      "hata": {
+        "tur": "aralik-ters"
+      }
+    },
+    {
+      "aciklama": "Tanınmayan aciliyet",
+      "girdi": {
+        "cikisUcreti": 300,
+        "aciliyet": "yarin",
+        "zaman": "2026-10-07T14:00",
+        "iscilikMin": 200,
+        "iscilikMax": 400
+      },
+      "hata": {
+        "tur": "bilinmeyen-aciliyet",
+        "ayrinti": "yarin"
+      }
+    },
+    {
+      "aciklama": "Geçersiz tarih",
+      "girdi": {
+        "cikisUcreti": 300,
+        "aciliyet": "bugun",
+        "zaman": "2026-13-40T10:00",
+        "iscilikMin": 200,
+        "iscilikMax": 400
+      },
+      "hata": {
+        "tur": "gecersiz-tarih",
+        "ayrinti": "2026-13-40T10:00"
+      }
+    },
+    {
+      "aciklama": "Boş tarih",
+      "girdi": {
+        "cikisUcreti": 300,
+        "aciliyet": "bugun",
+        "zaman": "",
+        "iscilikMin": 200,
+        "iscilikMax": 400
+      },
+      "hata": {
+        "tur": "gecersiz-tarih",
+        "ayrinti": ""
+      }
+    },
+    {
+      "aciklama": "Önce tarih denetlenir (tarih ve tutar ikisi de hatalı)",
+      "girdi": {
+        "cikisUcreti": -1,
+        "aciliyet": "bugun",
+        "zaman": "dün",
+        "iscilikMin": 200,
+        "iscilikMax": 400
+      },
+      "hata": {
+        "tur": "gecersiz-tarih",
+        "ayrinti": "dün"
+      }
+    }
+  ],
+  "kodHatalari": [
+    {
+      "kategori": "boyaci",
+      "zaman": "2026-10-12T14:30",
+      "hata": {
+        "tur": "bilinmeyen-kategori",
+        "ayrinti": "boyaci"
+      }
+    },
+    {
+      "kategori": "kombi",
+      "zaman": "2026-13-40T14:30",
+      "hata": {
+        "tur": "gecersiz-tarih",
+        "ayrinti": "2026-13-40T14:30"
+      }
+    }
   ]
 }

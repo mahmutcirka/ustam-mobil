@@ -1,8 +1,18 @@
 // Rust ile aynı kuralların TypeScript karşılığını ortak test vektörleriyle doğrular
 import { describe, expect, test } from "bun:test";
 import vektorler from "../src-tauri/test-vektorleri.json";
-import { ALFABE, fiyatHesapla, haftaninGunu, kodDurumu, kodUret, kontrolKarakteri, zamanCoz } from "../src/lib/kurallar";
-import type { FiyatGirdisi } from "../src/lib/types";
+import {
+  ALFABE,
+  fiyatGirdisiDenetle,
+  fiyatHesapla,
+  haftaninGunu,
+  kodDurumu,
+  kodUret,
+  kontrolKarakteri,
+  KuralHatasi,
+  zamanCoz,
+} from "../src/lib/kurallar";
+import type { FiyatGirdisi, Kategori, KomutHatasi } from "../src/lib/types";
 import { kategoriler } from "../src/lib/data";
 
 describe("ortak test vektörleri (Rust ile aynı)", () => {
@@ -50,5 +60,32 @@ describe("kod üretimi", () => {
 
   test("geçersiz tarih hata verir", () => {
     expect(() => kodUret("kombi", "2026-13-40T10:00")).toThrow();
+  });
+});
+
+describe("tipli hatalar (Görev 15) — Rust ile ortak örnekler", () => {
+  test.each(vektorler.fiyatHatalari.map((v) => [v.aciklama, v] as const))("%s", (_a, v) => {
+    const girdi = v.girdi as FiyatGirdisi;
+    expect(fiyatGirdisiDenetle(girdi)).toEqual(v.hata as KomutHatasi);
+    try {
+      fiyatHesapla(girdi);
+      throw new Error("hata beklenirdi");
+    } catch (e) {
+      expect(e).toBeInstanceOf(KuralHatasi);
+      expect((e as KuralHatasi).hata).toEqual(v.hata as KomutHatasi);
+    }
+  });
+
+  test.each(vektorler.kodHatalari.map((v) => [v.kategori, v] as const))("kod üretimi: %s", (_k, v) => {
+    expect(() => kodUret(v.kategori as Kategori, v.zaman)).toThrow(KuralHatasi);
+    try {
+      kodUret(v.kategori as Kategori, v.zaman);
+    } catch (e) {
+      expect((e as KuralHatasi).hata).toEqual(v.hata as KomutHatasi);
+    }
+  });
+
+  test("geçerli girdide denetim sorun bulmaz", () => {
+    for (const v of vektorler.fiyat) expect(fiyatGirdisiDenetle(v.girdi as FiyatGirdisi)).toBeNull();
   });
 });

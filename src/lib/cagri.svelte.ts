@@ -10,12 +10,16 @@ class Cagri {
 
   usta = $derived(this.taslak ? ustaBul(this.taslak.ustaId) : undefined);
 
-  // Anlık tahmin; kesin döküm onayda Rust'tan alınır
-  fiyat = $derived(
-    this.taslak && this.usta
-      ? tahminiFiyat(this.usta, this.taslak.sorun, this.taslak.aciliyet, this.taslak.zaman)
-      : null,
-  );
+  // Anlık tahmin; kesin döküm onayda Rust'tan alınır. Bozuk taslakta (ör. eski sürümden kalan geçersiz tarih)
+  // ekran çökmez: tahmin boş kalır, onayda Rust tipli hatayı döndürür ve HataDurumu gösterilir.
+  fiyat = $derived.by(() => {
+    if (!this.taslak || !this.usta) return null;
+    try {
+      return tahminiFiyat(this.usta, this.taslak.sorun, this.taslak.aciliyet, this.taslak.zaman);
+    } catch {
+      return null;
+    }
+  });
 
   hazirla(t: CagriTaslagi) {
     this.taslak = t;

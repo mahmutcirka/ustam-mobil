@@ -27,3 +27,4 @@ Bu klasör, uygulamanın yapay zekâ aracıyla nasıl geliştirildiğinin kaydı
 | 12 | Kart bileşeni | [12-kart-bileseni.md](12-kart-bileseni.md) |
 | 13 | Liste ve üç durum | [13-liste-ve-uc-durum.md](13-liste-ve-uc-durum.md) |
 | 14 | Detay ekranı | [14-detay-ekrani.md](14-detay-ekrani.md) |
+| 15 | Rust komutu | [15-rust-komutu.md](15-rust-komutu.md) |

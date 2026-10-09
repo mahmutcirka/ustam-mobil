@@ -16,7 +16,8 @@ export function zorlananDurum(arama: string, gelistirme: boolean): ListeDurumu |
 
 function gelistirmeDurumu(): ListeDurumu | null {
   if (typeof window === "undefined") return null;
-  const d = zorlananDurum(window.location.search, import.meta.env?.DEV === true);
+  // Vite: DEV boolean; Bun testlerinde ortam değişkeni (metin) — ikisi de "true" olduğunda geliştirme sayılır
+  const d = zorlananDurum(window.location.search, String(import.meta.env?.DEV) === "true");
   // Hata geçici bir arıza gibi davranır: bir kez gösterilir, "Tekrar dene" listeyi getirir
   if (d === "hata") {
     const adres = new URL(window.location.href);
