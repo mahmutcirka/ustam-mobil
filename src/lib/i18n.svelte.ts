@@ -1,5 +1,5 @@
 // Çok dil (TR · EN · AR · FA) — seçim localStorage'da saklanır, AR/FA'da <html dir="rtl">
-import type { Dil } from "../types/ustam";
+import type { Dil } from "./types";
 import { sozlukler, type Anahtar } from "./ceviriler";
 
 export const diller: Dil[] = ["tr", "en", "ar", "fa"];

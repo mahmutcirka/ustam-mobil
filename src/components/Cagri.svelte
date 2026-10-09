@@ -10,9 +10,9 @@
   import { profil } from "$lib/profil.svelte";
   import { bildirim } from "$lib/bildirim.svelte";
   import { fiyatHesapla, rustIcinde } from "$lib/motor";
-  import { ACIL_UCRET, type FiyatDokumu } from "$lib/kurallar";
+  import { ACIL_UCRET } from "$lib/kurallar";
   import type { Anahtar } from "$lib/ceviriler";
-  import type { OdemeTercihi } from "../types/ustam";
+  import type { FiyatDokumu, OdemeTercihi } from "../lib/types";
 
   let isleniyor = $state(false);
   let hata = $state("");

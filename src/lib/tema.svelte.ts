@@ -1,11 +1,9 @@
 // Tema: Sistem / Gündüz / Gece — tercih localStorage'da, uygulanan tema <html data-tema>'da
 import { yaz } from "./depo";
-
-export type TemaTercihi = "sistem" | "gunduz" | "gece";
-export type Tema = "gunduz" | "gece";
+import { TEMA_TERCIHLERI, type Tema, type TemaTercihi } from "./types";
 
 const ANAHTAR = "tema";
-const SIRA: TemaTercihi[] = ["sistem", "gunduz", "gece"];
+const SIRA: readonly TemaTercihi[] = TEMA_TERCIHLERI;
 
 const sistemKaranlik = () =>
   typeof matchMedia !== "undefined" && matchMedia("(prefers-color-scheme: dark)").matches;

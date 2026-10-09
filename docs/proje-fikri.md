@@ -61,14 +61,9 @@ Ayrıntılı rota ağacı: [`docs/mimari-agac.md`](mimari-agac.md).
 
 ## 4. Veri Modeli ve Kod Üretimi
 
-Tiplerin tek doğru kaynağı [`src/types/ustam.ts`](../src/types/ustam.ts) dosyasıdır; burada yalnızca özetlenir.
-
-| Tip | Önemli alanlar |
-|---|---|
-| `Usta` | kategori, puan ve yorum sayısı, `musait`, çıkış ücreti, **semt + harita konumu**, **konuştuğu diller**, rozetler, yanıt süresi, çalışma saatleri (`"7-24"` ya da `["08:00","22:00"]`), örnek yorumlar |
-| `Yorum` | ad, 1–5 puan, metin, **yazıldığı dil** (çevrilmez), tarih |
-| `CagriTaslagi` | usta, sorun, aciliyet, ziyaret zamanı, adres notu, isteğe bağlı fotoğraf |
-| `IsEmri` | taslak + Rust kodu, **Rust fiyat dökümü**, durum (`aktif` / `tamamlandi` / `iptal`), varış süresi, ödeme tercihi, telefon, doğrulandı mı, iptal nedeni |
+Tiplerin tek doğru kaynağı [`src/lib/types/`](../src/lib/types/index.ts) klasörüdür; alan tabloları ve tipler arası
+ilişki [`docs/veri-modeli.md`](veri-modeli.md) içindedir. Üç ana tip: **Usta** (yorumlarıyla), **Hizmet** (sorun ve
+tahmini işçilik) ve **İş emri** (Rust kodu ve fiyat dökümüyle).
 
 İşin anlık aşaması saklanmaz; oluşturma zamanı, ziyaret zamanı ve doğrulama bilgisinden
 [`src/lib/takip.ts`](../src/lib/takip.ts) ile hesaplanır.

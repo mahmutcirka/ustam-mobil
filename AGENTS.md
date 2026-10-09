@@ -15,6 +15,7 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | Belge | Kapsam | Bağlayıcı kural |
 |---|---|---|
 | [`docs/proje-fikri.md`](docs/proje-fikri.md) | Proje konsepti, ekranlar, veri modeli, kod formatı | Veri modelleri, terimler (usta, çağrı, iş emri) ve sayfa içerikleri bu konsepte sadık kalır. |
+| [`docs/veri-modeli.md`](docs/veri-modeli.md) | Veri sözleşmesi: tipler, alan tabloları, ilişkiler | **Yeni veri alanı önce `src/lib/types/` içinde tanımlanır**, sonra bu tablo güncellenir; bileşen/store içinde tip tanımlanmaz, `any` yazılmaz. |
 | [`docs/branding.md`](docs/branding.md) | Marka, renk token'ları, kontrast, ikonlar | Ad-hoc renk yazılmaz. Yalnızca `src/styles/app.css` içindeki CSS değişkenleri kullanılır. |
 | [`docs/mimari-agac.md`](docs/mimari-agac.md) | Sayfa ağacı, platformlar, dil kapsamı, breakpoint'ler | Yeni rota veya sayfa eklerken önce bu ağaç güncellenir, sonra sayfa eklenir. |
 | [`docs/klasor-mimarisi.md`](docs/klasor-mimarisi.md) | Dizin ve dosya mimarisi | Klasör yapısı yalnızca bu belgede tanımlanır; dizin ağacı başka dosyada tekrar yazılmaz. |
@@ -44,7 +45,7 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | Derleme ve doğrulama | `bun run build` → **0 hata** |
 | Rust birim testleri | `cargo test` (`src-tauri/` içinde) |
 | TypeScript kural testleri | `bun run test` |
-| Tip kontrolü | `bunx svelte-check --tsconfig ./tsconfig.json` |
+| Tip kontrolü | `bun run check` (`astro check`) ve `bunx svelte-check --tsconfig ./tsconfig.json` → **0 hata** |
 | Platform ikonları | `bun run tauri icon app-icon.svg` |
 
 ## 3. Geliştirme ve Git Kuralları
@@ -77,6 +78,7 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 - Mobilde çok seçenekli içerik için ortada modal açmak — yerine `<Pencere alt>` (alttan açılan panel).
 - Yapay gecikme, sahte ağ isteği ya da "gerçek zamanlı bağlandı" gibi gerçek dışı iddialar — simülasyon kodda adıyla belirtilir (`takip.ts`).
 - İş kuralını yalnızca bir tarafta değiştirmek — Rust (`lib.rs`) ve TS (`kurallar.ts`) birlikte, ortak vektörlerle.
+- Bileşen ya da store içinde veri tipi tanımlamak ya da `any` yazmak — yerine `src/lib/types/` ([`docs/veri-modeli.md`](docs/veri-modeli.md)).
 
 ## 5. Sık Görevler İçin Tarifler
 

@@ -23,3 +23,4 @@ Bu klasör, uygulamanın yapay zekâ aracıyla nasıl geliştirildiğinin kaydı
 | No | Görev | Kayıt |
 |---|---|---|
 | 10 | Çalışma yöntemi | [10-calisma-yontemi.md](10-calisma-yontemi.md) |
+| 11 | Veri sözleşmesi | [11-veri-sozlesmesi.md](11-veri-sozlesmesi.md) |

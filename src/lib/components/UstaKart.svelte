@@ -3,7 +3,7 @@
   // Kartın tamamı detaya gider (aranan sorun varsa önceden seçili); kalp ve "Neden?" ayrı düğmelerdir.
   import Ikon from "./Ikon.svelte";
   import Yildizlar from "./Yildizlar.svelte";
-  import type { Usta } from "../../types/ustam";
+  import type { Usta } from "../types";
   import { basHarfler, kategoriIkon, mesafeKm, paraYaz, sayiYaz, ustaDurumu, varisDk } from "$lib/data";
   import { dil, dilAdlari } from "$lib/i18n.svelte";
   import { favoriler } from "$lib/favoriler.svelte";

@@ -1,9 +1,8 @@
 // Kural motoru köprüsü — Tauri içinde Rust komutlarını, tarayıcıda (bun run dev) aynı kuralların
 // TypeScript karşılığını (kurallar.ts) çağırır. Bileşenler Rust'a doğrudan değil, buraya bağlanır.
 import { invoke, isTauri } from "@tauri-apps/api/core";
-import type { Kategori } from "../types/ustam";
 import * as kurallar from "./kurallar";
-import type { FiyatDokumu, FiyatGirdisi, KodDurumu } from "./kurallar";
+import type { FiyatDokumu, FiyatGirdisi, Kategori, KodDurumu } from "./types";
 
 export const rustIcinde = () => typeof window !== "undefined" && isTauri();
 

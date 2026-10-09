@@ -1,7 +1,8 @@
 // Rust ile aynı kuralların TypeScript karşılığını ortak test vektörleriyle doğrular
 import { describe, expect, test } from "bun:test";
 import vektorler from "../src-tauri/test-vektorleri.json";
-import { ALFABE, fiyatHesapla, haftaninGunu, kodDurumu, kodUret, kontrolKarakteri, zamanCoz, type FiyatGirdisi } from "../src/lib/kurallar";
+import { ALFABE, fiyatHesapla, haftaninGunu, kodDurumu, kodUret, kontrolKarakteri, zamanCoz } from "../src/lib/kurallar";
+import type { FiyatGirdisi } from "../src/lib/types";
 import { kategoriler } from "../src/lib/data";
 
 describe("ortak test vektörleri (Rust ile aynı)", () => {

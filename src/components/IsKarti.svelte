@@ -12,7 +12,7 @@
   import { saat } from "$lib/saat.svelte";
   import { bildirim } from "$lib/bildirim.svelte";
   import type { Anahtar } from "$lib/ceviriler";
-  import type { IsEmri } from "../types/ustam";
+  import type { IsEmri } from "../lib/types";
 
   let { is, iptalEt, bitir }: { is: IsEmri; iptalEt: (i: IsEmri) => void; bitir: (i: IsEmri) => void } = $props();
 

@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Iskelet from "../../components/Iskelet.astro";
 import UstaDetay from '../../components/UstaDetay.svelte';
 import { ustalar } from '$lib/data';
-import type { Usta } from '../../types/ustam';
+import type { Usta } from "../../lib/types";
 
 export function getStaticPaths() {
   return ustalar.map((u) => ({

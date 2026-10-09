@@ -1,14 +1,7 @@
 // Kullanıcı profili — ad, telefon, semt ve adres yalnızca bu cihazda (localStorage) tutulur
-import type { Semt } from "../types/ustam";
+import type { ProfilBilgileri } from "./types";
 import { semtler } from "./data";
 import { oku, yaz } from "./depo";
-
-export interface ProfilBilgileri {
-  ad: string;
-  telefon: string;
-  semt: Semt;
-  adres: string;
-}
 
 const ANAHTAR = "profil";
 const KARSILAMA = "karsilama-tamam";

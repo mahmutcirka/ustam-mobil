@@ -92,7 +92,8 @@ Her PR'dan önce yerelde, her push'ta CI'da ([`.github/workflows/ci.yml`](../.gi
 ```bash
 bun run build                                   # 0 hata
 bun run test                                    # TS: ortak vektörler, çeviriler, veri, canlı takip
-bunx svelte-check --tsconfig ./tsconfig.json    # tip kontrolü
+bun run check                                   # astro check: tipler, 0 hata
+bunx svelte-check --tsconfig ./tsconfig.json    # Svelte bileşenleri tip kontrolü
 cd src-tauri && cargo test                      # Rust kuralları
 ```
 
