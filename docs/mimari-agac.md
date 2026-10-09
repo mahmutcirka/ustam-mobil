@@ -25,10 +25,13 @@ Ustam
 │   ├── Akıllı arama (arama.ts): usta adı, semt, kategori ve 4 dildeki sorun adları; sorun önerileri
 │   ├── Kategori çipleri · Filtrele (alt panel: durum, mesafe, puan, ücret, dil, favori) · Sırala (alt panel)
 │   ├── "Önerilen" sıralama (eslestirme.ts) ve ilk kartta "Neden önerildi?" açıklaması
-│   └── Görünüm: Liste (usta kartları) ⇄ Harita (pinler, varış etiketi, alttaki usta kartı, "Listeye dön")
+│   ├── Görünüm: Liste (usta kartları — ui/Kart.svelte) ⇄ Harita (pinler, varış etiketi, alttaki usta kartı, "Listeye dön")
+│   ├── Dört hal (yukleyici.ts): yükleniyor (ui/Yukleniyor) · hata + "Tekrar dene" (ui/HataDurumu) · boş (ui/BosDurum) · dolu
+│   └── Seçim adreste: /?q=…&kat=…&sorun=…&sirala=…&musait=1&mesafe=…&puan=…&fiyat=…&dil=…  (listeAdresi.ts)
+│       → detaydan "geri", tarayıcının geri tuşu ve kopyalanan bağlantı aynı arama/süzgeçle açılır
 │
-├── /usta/[id] (Usta detayı ve çağrı hazırlama)       src/pages/usta/[id].astro
-│   ├── Kapak: ad, doğrulama rozeti, puan, anlık durum (müsait / meşgul / kapalı), favori
+├── /usta/[id] (Usta detayı ve çağrı hazırlama)       src/pages/usta/[id].astro   (id: 1–17, derlemede 17 sayfa)
+│   ├── Kapak: "geri" (son liste adresine) · ad, doğrulama rozeti, puan, anlık durum (müsait / meşgul / kapalı), favori
 │   ├── Rozetler · istatistikler (deneyim, tamamlanan iş, yanıt süresi, uzaklık) · saatler · diller
 │   ├── Sorun seçimi: işçilik aralığı + süre; "ustaya Türkçe iletilecek" önizlemesi; güvenlik ipucu
 │   ├── Aciliyet: Hemen (+acil ücret) / Bugün (çalışma saatleri içinde) / Randevu (7 günlük gün çipleri + saat)
@@ -36,6 +39,9 @@ Ustam
 │   ├── Fotoğraf (yalnızca görsel, ≤15 MB, cihazda küçültülür) · adres notu (profilden ya da "Tekrar çağır"dan dolar)
 │   ├── Yorumlar: puan dağılımı, 4 dilden yorumlar, kullanıcının kendi yorumu
 │   └── Sabit çağrı çubuğu: tahmini toplam + "Ustayı çağır"
+
+├── /usta/999, /olmayan-sayfa … (Bulunamadı)            src/pages/404.astro → dist/404.html
+│   └── ui/HataDurumu: "Usta bulunamadı" / "Sayfa bulunamadı" · istenen adres · "Ustalara dön" (son liste adresi)
 │
 ├── /cagri (Çağrı özeti ve onay)                      src/pages/cagri.astro
 │   ├── Adımlar: Usta · Sorun · Zaman (+ Değiştir) → Adres (düzenlenebilir) → İletişim → Ödeme
@@ -44,6 +50,7 @@ Ustam
 │   └── Onay → Rust: invoke("is_emri_uret", { kategori, zaman }) → /is-emirlerim
 │
 ├── /is-emirlerim (İş emirleri)                       src/pages/is-emirlerim.astro
+│   ├── Dört hal: yükleniyor · hata + "Tekrar dene" · boş (sekme başına ui/BosDurum) · dolu
 │   ├── Aktif sekmesi — canlı iş kartı (src/components/IsKarti.svelte)
 │   │   ├── Dikey çizelge (saatleriyle): Talep alındı → Usta onayladı → Yolda (geri sayım) → Kapıda → Tamamlandı
 │   │   ├── Güvenlik kodu alanı: UST-ELK-1210-K7QZ · kopyala · QR kod

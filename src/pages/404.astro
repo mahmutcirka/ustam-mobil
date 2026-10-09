@@ -1,0 +1,13 @@
+---
+// Bulunamadı — olmayan bir rota (ör. /usta/999). Astro bu sayfayı dist/404.html olarak üretir;
+// geliştirme sunucusu da eşleşmeyen her adreste bunu gösterir.
+import Layout from '../layouts/Layout.astro';
+import Iskelet from '../components/Iskelet.astro';
+import Bulunamadi from '../components/Bulunamadi.svelte';
+---
+
+<Layout title="Bulunamadı — Ustam">
+  <Bulunamadi client:only="svelte">
+    <Iskelet slot="fallback" tur="form" adet={1} />
+  </Bulunamadi>
+</Layout>

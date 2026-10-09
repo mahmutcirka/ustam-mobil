@@ -15,6 +15,7 @@
   import { oneriPuani } from "$lib/eslestirme";
   import { ustaKartGirdisi } from "$lib/ustaKarti";
   import { listeDurumu, ustalariYukle } from "$lib/yukleyici";
+  import { BOS_FILTRE, secimOku, secimYaz, sonListeAdresiniKaydet } from "$lib/listeAdresi";
   import { bildirim } from "$lib/bildirim.svelte";
   import { takip } from "$lib/takip";
   import type { Anahtar } from "$lib/ceviriler";
@@ -43,15 +44,24 @@
 
   yukle();
 
-  const BOS_FILTRE: UstaFiltresi = { musait: false, favori: false, mesafe: 0, puan: 0, fiyat: 0, dil: "" };
   const siralamalar = SIRALAMALAR;
 
-  let kategori = $state<Kategori | "tumu">("tumu");
-  let arama = $state("");
-  let seciliSorun = $state<SorunOnerisi | null>(null);
-  let filtre = $state<UstaFiltresi>({ ...BOS_FILTRE });
+  // Arama, kategori, sorun, sıralama ve süzgeç adresten başlar (listeAdresi.ts): detaydan dönünce korunur
+  const baslangic = secimOku(window.location.search);
+  let kategori = $state<Kategori | "tumu">(baslangic.kategori);
+  let arama = $state(baslangic.arama);
+  let seciliSorun = $state<SorunOnerisi | null>(baslangic.sorun);
+  let filtre = $state<UstaFiltresi>({ ...baslangic.filtre });
   let taslakFiltre = $state<UstaFiltresi>({ ...BOS_FILTRE });
-  let siralama = $state<Siralama>("onerilen");
+  let siralama = $state<Siralama>(baslangic.siralama);
+
+  // Seçim değiştikçe adres güncellenir (yeni geçmiş kaydı açmadan) ve detaydaki "geri" için saklanır
+  $effect(() => {
+    const sorgu = secimYaz({ arama, kategori, sorun: seciliSorun, siralama, filtre }, window.location.search);
+    const adres = window.location.pathname + sorgu;
+    if (adres !== window.location.pathname + window.location.search) history.replaceState(history.state, "", adres);
+    sonListeAdresiniKaydet(adres);
+  });
   let gorunum = $state<Gorunum>(oku<Gorunum>("liste-gorunum", "liste"));
 
   let semtPenceresi = $state(false);
