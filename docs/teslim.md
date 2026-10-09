@@ -51,3 +51,21 @@
 Dallar sırayla birbirinin üzerine kurulmuştur; PR'lar yukarıdaki sırayla merge edilmelidir.
 
 Batch 01 denetim tablosu: [`ilerleme-batch-01.md`](ilerleme-batch-01.md).
+
+## 5. Hafta 04 (Batch 02 ön yayın) — Görev → PR Eşlemesi
+
+> Görevler: [`docs/tasks/week-4/`](tasks/week-4/README.md). Puanlar taslaktır; son tarih ve Görev 16 denetimi derste duyurulacak.
+> Her görevin istemi, planı, düzeltmeleri ve doğrulaması: [`docs/istemler/`](istemler/README.md).
+
+| Görev | Konu | Taslak puan | Dal (PR) | Durum |
+|---|---|---|---|---|
+| 09.1 | Master koruması ve PR güvenliği | ön koşul | `feature/09-1-master-korumasi` (#25) | Belge tamam; **GitHub ayarları ve `docs/kanit/master-korumasi.png` öğrenci tarafından yapılacak** |
+| 10 | Çalışma yöntemi: şartname, istem günlüğü | 10 | `feature/10-calisma-yontemi` (#28) | Tamam; yeni sohbette "kural testi" yanıtı öğrenci tarafından eklenecek |
+| 11 | Veri sözleşmesi: tipler, örnek veri, `bun run check` | 15 | `feature/11-veri-sozlesmesi` (#29) | Tamam |
+| 12 | Kart bileşeni (`ui/Kart.svelte`) | 15 | `feature/12-kart-bileseni` (#30) | Tamam |
+| 13 | Liste ekranı ve üç durum | 20 | `feature/13-liste-ve-uc-durum` (#31) | Tamam |
+| 14 | Detay ekranı ve gezinme | 10 | `feature/14-detay-ekrani` (#32) | Tamam |
+| 15 | Rust komutu: tipli sonuç ve hata, platform kuralı | 20 | `feature/15-rust-komutu` (#33) | Tamam; `tauri dev` (Windows) ve Android'de elle deneme öğrenciye |
+| — | Telefon önizleme aracı (`bun run telefon`) | — | `feature/telefon-onizleme` (#26) | Tamam |
+| — | Android projesi ve APK belgesi | — | `feature/android-projesi` (#27) | Tamam |
+| — | Profil yenileme (çağrıya hazırlık, Evim, Evimi tanıyorum) | — | `feature/profil-yenileme` (#34) | Tamam |
