@@ -3,7 +3,7 @@
   import Ikon from "$lib/components/Ikon.svelte";
   import Pencere from "$lib/components/Pencere.svelte";
   import SemtSecici from "$lib/components/SemtSecici.svelte";
-  import BosDurum from "$lib/components/BosDurum.svelte";
+  import BosDurum from "$lib/components/ui/BosDurum.svelte";
   import { basHarfler, kategoriIkon, paraYaz, sayiYaz, ustaBul } from "$lib/data";
   import { tema } from "$lib/tema.svelte";
   import { bilgiSayfalari, dil, diller, dilAdlari, sayfaYolu } from "$lib/i18n.svelte";
@@ -118,9 +118,14 @@
     </div>
   {:else}
     <div class="kart">
-      <BosDurum ikon="kalp" baslik={dil.t("profil.favoriBosBaslik")} metin={dil.t("profil.favoriBosMetin")}>
-        <a class="btn ikincil kucuk" href="/">{dil.t("profil.ustalaraGoz")}</a>
-      </BosDurum>
+      <BosDurum
+        ikon="kalp"
+        baslik={dil.t("profil.favoriBosBaslik")}
+        aciklama={dil.t("profil.favoriBosMetin")}
+        dugmeMetni={dil.t("profil.ustalaraGoz")}
+        href="/"
+        ikincil
+      />
     </div>
   {/if}
 

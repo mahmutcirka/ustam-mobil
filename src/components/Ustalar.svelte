@@ -5,13 +5,16 @@
   import Pencere from "$lib/components/Pencere.svelte";
   import SemtSecici from "$lib/components/SemtSecici.svelte";
   import Kart from "$lib/components/ui/Kart.svelte";
-  import BosDurum from "$lib/components/BosDurum.svelte";
+  import BosDurum from "$lib/components/ui/BosDurum.svelte";
+  import HataDurumu from "$lib/components/ui/HataDurumu.svelte";
+  import Yukleniyor from "$lib/components/ui/Yukleniyor.svelte";
   import UstaHaritasi from "./UstaHaritasi.svelte";
   import ArizaSihirbazi from "./ArizaSihirbazi.svelte";
-  import { acilKisayollar, basHarfler, kategoriler, kategoriIkon, mesafeKm, paraYaz, sayiYaz, tarihYaz, ustaDurumu, ustalar, varisDk } from "$lib/data";
+  import { acilKisayollar, basHarfler, kategoriler, kategoriIkon, mesafeKm, paraYaz, sayiYaz, tarihYaz, ustaDurumu, varisDk } from "$lib/data";
   import { sorunAra, ustaEslesir } from "$lib/arama";
   import { oneriPuani } from "$lib/eslestirme";
   import { ustaKartGirdisi } from "$lib/ustaKarti";
+  import { listeDurumu, ustalariYukle } from "$lib/yukleyici";
   import { bildirim } from "$lib/bildirim.svelte";
   import { takip } from "$lib/takip";
   import type { Anahtar } from "$lib/ceviriler";
@@ -22,7 +25,23 @@
   import { saat } from "$lib/saat.svelte";
   import { yorumlarim } from "$lib/yorumlar.svelte";
   import { oku, yaz } from "$lib/depo";
-  import { SIRALAMALAR, type Gorunum, type Kategori, type NedenTuru, type Siralama, type SorunOnerisi, type Usta, type UstaFiltresi } from "../lib/types";
+  import { SIRALAMALAR, type Gorunum, type Kategori, type NedenTuru, type Siralama, type SorunOnerisi, type ListeDurumu, type Usta, type UstaFiltresi } from "../lib/types";
+
+  // Liste tek bir yükleme işlevinden gelir (yukleyici.ts); ekran dört halden birini gösterir
+  let ustalar = $state.raw<Usta[]>([]);
+  let durum = $state<ListeDurumu>("yukleniyor");
+
+  async function yukle() {
+    durum = "yukleniyor";
+    try {
+      ustalar = await ustalariYukle();
+      durum = listeDurumu(ustalar);
+    } catch {
+      durum = "hata";
+    }
+  }
+
+  yukle();
 
   const BOS_FILTRE: UstaFiltresi = { musait: false, favori: false, mesafe: 0, puan: 0, fiyat: 0, dil: "" };
   const siralamalar = SIRALAMALAR;
@@ -186,7 +205,7 @@
           <div class="acil pasif">
             <span class="acil-ust"><span class="acil-ikon"><Ikon ad={kategoriIkon[a.kategori]} boyut={20} /></span></span>
             <span class="acil-ad">{dil.t(`sorun.${a.sorun}` as Anahtar)}</span>
-            <span class="acil-usta">{dil.t("liste.acilYok")}</span>
+            <span class="acil-usta">{durum === "yukleniyor" || durum === "hata" ? "…" : dil.t("liste.acilYok")}</span>
           </div>
         {/if}
       {/each}
@@ -237,6 +256,18 @@
     </div>
   {/if}
 
+  {#if durum === "yukleniyor"}
+    <Yukleniyor etiket={dil.t("durum.yukleniyor")} />
+  {:else if durum === "hata"}
+    <HataDurumu
+      baslik={dil.t("durum.hataBaslik")}
+      mesaj={dil.t("durum.ustalarHata")}
+      tekrarMetni={dil.t("durum.tekrarDene")}
+      tekrarDene={yukle}
+    />
+  {:else if durum === "bos"}
+    <BosDurum ikon="kisi" baslik={dil.t("durum.ustaYokBaslik")} aciklama={dil.t("durum.ustaYokMetin")} />
+  {:else}
   <div class="cipler" role="group" aria-label={dil.t("liste.baslik")}>
     {#each ["tumu", ...kategoriler] as const as k}
       <button class="cip" aria-pressed={kategori === k} onclick={() => ((kategori = k), (seciliSorun = null))}>
@@ -311,9 +342,15 @@
       {/each}
     </div>
   {:else}
-    <BosDurum ikon="ara" baslik={dil.t("liste.bos")}>
-      <button class="btn ikincil kucuk" onclick={hepsiniTemizle}>{dil.t("liste.filtreTemizle")}</button>
-    </BosDurum>
+    <BosDurum
+      ikon="ara"
+      baslik={dil.t("liste.bos")}
+      aciklama={dil.t("durum.suzgecBosMetin")}
+      dugmeMetni={dil.t("liste.filtreTemizle")}
+      onclick={hepsiniTemizle}
+      ikincil
+    />
+  {/if}
   {/if}
 </div>
 

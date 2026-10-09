@@ -5,6 +5,10 @@
   import Yildizlar from "$lib/components/Yildizlar.svelte";
   import YildizSecici from "$lib/components/YildizSecici.svelte";
   import IsKarti from "./IsKarti.svelte";
+  import BosDurum from "$lib/components/ui/BosDurum.svelte";
+  import HataDurumu from "$lib/components/ui/HataDurumu.svelte";
+  import Yukleniyor from "$lib/components/ui/Yukleniyor.svelte";
+  import { listeYukle } from "$lib/yukleyici";
   import { aralikYaz, basHarfler, kategoriIkon, tarihYaz, ustaBul } from "$lib/data";
   import { yaz } from "$lib/depo";
   import { isEmirleri } from "$lib/isEmirleri.svelte";
@@ -13,9 +17,30 @@
   import { dil } from "$lib/i18n.svelte";
   import { bildirim } from "$lib/bildirim.svelte";
   import type { Anahtar } from "$lib/ceviriler";
-  import type { IptalNedeni, IsEmri } from "../lib/types";
+  import type { IptalNedeni, IsEmri, ListeDurumu } from "../lib/types";
 
   const nedenler: IptalNedeni[] = ["vazgectim", "gecikti", "baskasi", "cozuldu"];
+
+  // Liste, ana ekrandaki gibi tek yükleme işlevinden geçer (yukleyici.ts): yükleniyor → hata | boş | dolu.
+  // Yüklendikten sonra kartlar store'u canlı izler (iptal, tamamlama anında görünür).
+  let durum = $state<ListeDurumu>("yukleniyor");
+  let bosZorla = $state(false);
+
+  async function yukle() {
+    durum = "yukleniyor";
+    try {
+      const liste = await listeYukle(() => isEmirleri.liste);
+      bosZorla = liste.length === 0;
+      durum = "dolu";
+    } catch {
+      durum = "hata";
+    }
+  }
+
+  yukle();
+
+  const aktifler = $derived(bosZorla ? [] : isEmirleri.aktifler);
+  const gecmis = $derived(bosZorla ? [] : isEmirleri.gecmis);
 
   let sekme = $state<"aktif" | "gecmis">(isEmirleri.aktifSayisi > 0 || isEmirleri.gecmis.length === 0 ? "aktif" : "gecmis");
 
@@ -81,27 +106,39 @@
 <div class="sayfa dar">
   <h1>{dil.t("is.baslik")}</h1>
 
+  {#if durum === "yukleniyor"}
+    <Yukleniyor etiket={dil.t("durum.yukleniyor")} adet={2} />
+  {:else if durum === "hata"}
+    <HataDurumu
+      baslik={dil.t("durum.hataBaslik")}
+      mesaj={dil.t("durum.isEmirleriHata")}
+      tekrarMetni={dil.t("durum.tekrarDene")}
+      tekrarDene={yukle}
+    />
+  {:else}
   <div class="sekmeler" role="tablist">
     <button role="tab" aria-selected={sekme === "aktif"} class:aktif={sekme === "aktif"} onclick={() => (sekme = "aktif")}>
-      {dil.t("is.aktif")} <span class="adet">{isEmirleri.aktifSayisi}</span>
+      {dil.t("is.aktif")} <span class="adet">{aktifler.length}</span>
     </button>
     <button role="tab" aria-selected={sekme === "gecmis"} class:aktif={sekme === "gecmis"} onclick={() => (sekme = "gecmis")}>
-      {dil.t("is.gecmis")} <span class="adet">{isEmirleri.gecmis.length}</span>
+      {dil.t("is.gecmis")} <span class="adet">{gecmis.length}</span>
     </button>
   </div>
 
   {#if sekme === "aktif"}
-    {#each isEmirleri.aktifler as i (i.kod)}
+    {#each aktifler as i (i.kod)}
       <IsKarti is={i} {iptalEt} {bitir} />
     {:else}
-      <div class="bos">
-        <span class="bos-ikon"><Ikon ad="fis" boyut={32} /></span>
-        <p>{dil.t("is.aktifYok")}</p>
-        <a class="btn" href="/">{dil.t("cagri.ustaSec")}</a>
-      </div>
+      <BosDurum
+        ikon="fis"
+        baslik={dil.t("is.aktifYok")}
+        aciklama={dil.t("durum.aktifYokMetin")}
+        dugmeMetni={dil.t("cagri.ustaSec")}
+        href="/"
+      />
     {/each}
   {:else}
-    {#each isEmirleri.gecmis as i (i.kod)}
+    {#each gecmis as i (i.kod)}
       {@const benimYorum = yorumlarim.isIcin(i.kod)}
       <article class="kart gecmis">
         <header>
@@ -133,11 +170,9 @@
         </div>
       </article>
     {:else}
-      <div class="bos">
-        <span class="bos-ikon"><Ikon ad="fis" boyut={32} /></span>
-        <p>{dil.t("is.gecmisYok")}</p>
-      </div>
+      <BosDurum ikon="fis" baslik={dil.t("is.gecmisYok")} aciklama={dil.t("durum.gecmisYokMetin")} />
     {/each}
+  {/if}
   {/if}
 </div>
 
@@ -198,8 +233,8 @@
   }
 
   .sekmeler button.aktif {
-    background: var(--renk-ana);
-    color: var(--renk-ana-ustu);
+    background: var(--secili);
+    color: var(--secili-ustu);
   }
 
   .adet {
@@ -213,7 +248,7 @@
 
   .sekmeler button.aktif .adet {
     background: var(--koyu-cam);
-    color: var(--renk-ana-ustu);
+    color: var(--secili-ustu);
   }
 
   .gecmis {
@@ -313,29 +348,6 @@
     gap: 6px;
     font-size: 13px;
     color: var(--yazi-soluk);
-  }
-
-  .bos {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .bos p {
-    margin: 0;
-  }
-
-  .bos .btn {
-    width: auto;
-  }
-
-  .bos-ikon {
-    display: flex;
-    padding: 18px;
-    border-radius: 50%;
-    background: var(--renk-ana-yumusak);
-    color: var(--renk-ana-yazi);
   }
 
   .soru {
