@@ -8,3 +8,4 @@ export * from "./kural";
 export * from "./profil";
 export * from "./liste";
 export * from "./bildirim";
+export * from "./ui";

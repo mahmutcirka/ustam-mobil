@@ -76,7 +76,7 @@ Merge'den önce **Files changed** sekmesinde yalnızca istenen dosyaların deği
 ## 5. Kod Yazım Kuralları
 
 - **Svelte 5 Runes:** `$state`, `$derived`, `$props`, `$effect`; `export let` ve `$:` kullanılmaz.
-- **İsimlendirme:** Değişken, fonksiyon ve dosya adları Türkçe ve ASCII (`isEmirleri`, `kodUret`, `UstaKart.svelte`).
+- **İsimlendirme:** Değişken, fonksiyon ve dosya adları Türkçe ve ASCII (`isEmirleri`, `kodUret`, `IsKarti.svelte`).
 - **Renkler:** Yalnızca [`docs/branding.md`](branding.md) token'ları (`var(--renk-ana)` vb.); bileşende hex renk yazılmaz.
 - **Metinler:** Arayüz metinleri `src/lib/ceviriler.ts` içinde 4 dilde tutulur; bileşende sabit Türkçe metin yazılmaz.
 - **RTL:** `left/right` yerine `inline-start/inline-end` mantıksal özellikleri kullanılır.

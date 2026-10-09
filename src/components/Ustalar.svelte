@@ -4,13 +4,15 @@
   import Ikon from "$lib/components/Ikon.svelte";
   import Pencere from "$lib/components/Pencere.svelte";
   import SemtSecici from "$lib/components/SemtSecici.svelte";
-  import UstaKart from "$lib/components/UstaKart.svelte";
+  import Kart from "$lib/components/ui/Kart.svelte";
   import BosDurum from "$lib/components/BosDurum.svelte";
   import UstaHaritasi from "./UstaHaritasi.svelte";
   import ArizaSihirbazi from "./ArizaSihirbazi.svelte";
   import { acilKisayollar, basHarfler, kategoriler, kategoriIkon, mesafeKm, paraYaz, sayiYaz, tarihYaz, ustaDurumu, ustalar, varisDk } from "$lib/data";
   import { sorunAra, ustaEslesir } from "$lib/arama";
   import { oneriPuani } from "$lib/eslestirme";
+  import { ustaKartGirdisi } from "$lib/ustaKarti";
+  import { bildirim } from "$lib/bildirim.svelte";
   import { takip } from "$lib/takip";
   import type { Anahtar } from "$lib/ceviriler";
   import { dil, diller, dilAdlari } from "$lib/i18n.svelte";
@@ -131,6 +133,11 @@
   function gorunumSec(g: Gorunum) {
     gorunum = g;
     yaz("liste-gorunum", g);
+  }
+
+  function favoriDegistir(u: Usta) {
+    const eklendi = favoriler.degistir(u.id);
+    bildirim.goster(dil.t(eklendi ? "kart.favoriEklendi" : "kart.favoriCikarildi", { ad: u.ad }), "bilgi", 2000);
   }
 
   function nedenAc(u: Usta) {
@@ -265,7 +272,42 @@
   {:else if liste.length}
     <div class="izgara">
       {#each liste as u, i (u.id)}
-        <UstaKart usta={u} sorun={seciliSorun?.sorun} nedenAc={siralama === "onerilen" && i === 0 ? nedenAc : undefined} />
+        {@const km = mesafeKm(u, semt)}
+        {@const ozet = yorumlarim.ustaIcin(u)}
+        {@const favori = favoriler.var(u.id)}
+        <Kart
+          {...ustaKartGirdisi(u, {
+            km,
+            durum: ustaDurumu(u, saat.simdi),
+            puan: { deger: ozet.puan, sayi: ozet.sayi },
+            dil: dil.kod,
+            t: (a, d) => dil.t(a, d),
+            dilAdi: (d) => dilAdlari[d],
+            sorun: seciliSorun?.sorun,
+          })}
+        >
+          {#snippet baslikEki()}
+            {#if u.rozetler.includes("dogrulanmis")}
+              <span class="dogrulanmis"><Ikon ad="kalkan" boyut={15} etiket={dil.t("rozet.dogrulanmis")} /></span>
+            {/if}
+          {/snippet}
+          {#snippet eylem()}
+            <button
+              class="favori"
+              class:aktif={favori}
+              onclick={() => favoriDegistir(u)}
+              aria-pressed={favori}
+              aria-label={dil.t(favori ? "kart.favoriCikar" : "kart.favoriEkle")}
+            >
+              <Ikon ad="kalp" boyut={20} dolu={favori} />
+            </button>
+          {/snippet}
+          {#if siralama === "onerilen" && i === 0}
+            <button class="neden-ac" onclick={() => nedenAc(u)}>
+              <Ikon ad="bilgi" boyut={14} /> {dil.t("neden.ac")}
+            </button>
+          {/if}
+        </Kart>
       {/each}
     </div>
   {:else}
@@ -381,6 +423,46 @@
 </Pencere>
 
 <style>
+  /* Usta kartına ekrandan verilen parçalar (kartın kendisi: $lib/components/ui/Kart.svelte) */
+  .dogrulanmis {
+    display: inline-flex;
+    color: var(--basari);
+  }
+
+  .favori {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--dokunma);
+    height: var(--dokunma);
+    border: 0;
+    border-radius: var(--radius-hap);
+    background: none;
+    color: var(--yazi-soluk);
+  }
+
+  .favori:active {
+    transform: scale(0.85);
+  }
+
+  .favori.aktif {
+    color: var(--hata);
+  }
+
+  .neden-ac {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--b-1);
+    min-height: 32px;
+    padding: 0 var(--b-3);
+    border: 1px dashed var(--kenar);
+    border-radius: var(--radius-hap);
+    background: var(--kart);
+    color: var(--yazi-soluk);
+    font-size: var(--yz-xs);
+    font-weight: 600;
+  }
+
   .ust-bolum {
     background: var(--renk-koyu);
     color: var(--koyu-ustu);

@@ -1,6 +1,7 @@
 // Ustalar listesi: arama, süzgeç, sıralama ve "Önerilen" sıralamanın açıklaması
 import type { Dil, Semt } from "./ortak";
-import type { Kategori } from "./usta";
+import type { Anahtar } from "../ceviriler";
+import type { Kategori, UstaDurumu } from "./usta";
 
 /** Liste sıralama seçenekleri */
 export const SIRALAMALAR = ["onerilen", "yakin", "puan", "fiyat"] as const;
@@ -56,4 +57,22 @@ export interface OneriBaglami {
   simdi: Date;
   /** İsteğe bağlı: karşılaştırma için ortalama çıkış ücreti, TL */
   ortalamaUcret?: number;
+}
+
+/** Usta kartının ekran tarafındaki bağlamı — Usta'yı genel kart girdisine çevirirken (src/lib/ustaKarti.ts) */
+export interface UstaKartBaglami {
+  /** Kullanıcının semtinden mesafe, km */
+  km: number;
+  /** Ustanın anlık durumu (ustaDurumu) */
+  durum: UstaDurumu;
+  /** Bu cihazdaki yorumlarla birlikte puan özeti */
+  puan: { deger: number; sayi: number };
+  /** Arayüz dili */
+  dil: Dil;
+  /** Çevirmen (dil.t) */
+  t: (anahtar: Anahtar, degerler?: Record<string, string | number>) => string;
+  /** Dilin kendi dilindeki adı ("Türkçe", "العربية" …) */
+  dilAdi: (d: Dil) => string;
+  /** İsteğe bağlı: aranan sorun — detayda önceden seçili gelir */
+  sorun?: string;
 }

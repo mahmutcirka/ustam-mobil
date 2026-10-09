@@ -17,7 +17,7 @@ kendiliğinden uyup uymadığını ölçer. Ajana kurallar **hatırlatılmadan**
 | Dal | `feature/…` veya `fix/…` dalı açtı, `master`'da çalışmadı | ☐ |
 | Kaynak | Önce `docs/branding.md`'ye yeni token ekledi (light + dark + kontrast) | ☐ |
 | CSS | Aynı token'ı `app.css` içinde `:root` ve `[data-tema="gece"]` altına yazdı | ☐ |
-| Bileşen | `UstaKart.svelte` içinde hex değil `var(--token)` kullandı | ☐ |
+| Bileşen | `ui/Kart.svelte` içinde hex değil `var(--token)` kullandı | ☐ |
 | Kanıt | `bun run build` çalıştırıp 0 hata gösterdi | ☐ |
 
 ## Test 2 — Sayfa Görevi
