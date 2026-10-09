@@ -32,6 +32,7 @@
   import { oku, yaz } from "$lib/depo";
   import { sonListeAdresi } from "$lib/listeAdresi";
   import { destekleniyorMu, telefonAc } from "$lib/native";
+  import { cagriAdresi } from "$lib/profilHazirligi";
   import type { Anahtar } from "$lib/ceviriler";
   import type { IkonAdi } from "$lib/ikonlar";
   import type { Aciliyet, Rozet, Usta } from "../lib/types";
@@ -82,7 +83,8 @@
   let fotoHata = $state(false);
   let randevuSaat = $state(randevuSaatleri[1] ?? randevuSaatleri[0] ?? "12:00");
   let bugunSaat = $state(bugunSaatleri[0] ?? "");
-  let adresNotu = $state(untrack(() => profil.bilgi.adres));
+  // Profildeki adres ve kapı notu hazır gelir: "Moda Cad. 12 · 3. kat, zil 5"
+  let adresNotu = $state(untrack(() => cagriAdresi(profil.bilgi)));
   let foto = $state<string | undefined>();
   let fotoYukleniyor = $state(false);
   let tumYorumlar = $state(false);

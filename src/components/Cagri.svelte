@@ -11,6 +11,7 @@
   import { bildirim } from "$lib/bildirim.svelte";
   import { fiyatHesapla, hataAnahtari, NativeHata, rustIcinde } from "$lib/native";
   import HataDurumu from "$lib/components/ui/HataDurumu.svelte";
+  import { telefonGecerliMi } from "$lib/profilHazirligi";
   import { ACIL_UCRET } from "$lib/kurallar";
   import type { Anahtar } from "$lib/ceviriler";
   import type { FiyatDokumu, KomutHatasi, OdemeTercihi } from "../lib/types";
@@ -38,8 +39,7 @@
   });
 
   const f = $derived(rustDokumu ?? cagri.fiyat);
-  const telefonRakam = $derived(telefon.replace(/[^\d+]/g, ""));
-  const telefonGecerli = $derived(/^\+?\d{10,13}$/.test(telefonRakam));
+  const telefonGecerli = $derived(telefonGecerliMi(telefon));
   const gonderilebilir = $derived(telefonGecerli && kosullar && !isleniyor);
 
   async function onayla() {

@@ -58,12 +58,19 @@ Ustam
 │   │   └── İptal (neden penceresi) · İş tamamlandı (doğrulamadan sonra) → değerlendirme penceresi
 │   └── Geçmiş sekmesi — tamamlanan / iptal edilen işler, puanım, "Tekrar çağır"
 │
-├── /profil (Kullanıcı, ayarlar, veri hakları)        src/pages/profil.astro
-│   ├── İstatistikler: toplam iş, tamamlanan, harcama, yorumlar
-│   ├── Ad, telefon, adres · semt · favori ustalar
-│   ├── Dil (4) · tema (Sistem / Gündüz / Gece)
-│   ├── KVKK: verilerimi dışa aktar (JSON) · tüm verilerimi sil
-│   └── Bilgi sayfalarına bağlantılar (seçili dilde)
+├── /profil (Kullanıcı, ev, ayarlar, veri hakları)   src/pages/profil.astro
+│   ├── Kimlik (koyu alan): baş harfler, ad, telefon, semt · "Profili düzenle"
+│   ├── "Çağrıya hazırlık" ölçeri (profilHazirligi.ts): ad, telefon, adres, kapı notu → %; eksik her alan
+│   │   bir çip — dokununca düzenleme paneli o alana odaklanarak açılır
+│   ├── Düzenleme paneli (alt panel): ad, telefon (10–13 rakam denetimi), adres, kapı / kat notu → Kaydet
+│   ├── İstatistikler: toplam iş, tamamlanan, harcama, verdiğin puan
+│   ├── Evim: semt (alt panel) · adres · kapı notu — usta detayındaki adres notuna "adres · kapı notu" olarak gelir
+│   ├── "Evimi tanıyorum": ana su vanası · sigorta kutusu · doğalgaz vanası (ipucu + 187 gaz acil) — n/3
+│   ├── Favori ustalar (ui/Kart, ana sayfadakiyle aynı kart; kalp ile çıkarılır)
+│   ├── Görünüm (Sistem / Gündüz / Gece) · Dil (4)
+│   ├── Gizlilik: "yalnız bu cihazda" notu · dışa aktar (web: indir, masaüstü: İndirilenler, telefon: pano) · tümünü sil
+│   ├── Bilgi sayfalarına bağlantılar (seçili dilde)
+│   └── Sürüm · çekirdek (Rust / TS) · platform (uygulamada)
 │
 └── Bilgi ve yasal sayfalar — her biri 4 dilde (AR ve FA: dir="rtl")
     ├── /hakkinda   · /en/hakkinda   · /ar/hakkinda   · /fa/hakkinda    (MDX + React CanliRozet)
