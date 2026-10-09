@@ -114,7 +114,7 @@ Rust yapılarıyla ([`src-tauri/src/lib.rs`](../src-tauri/src/lib.rs), serde `ca
 | Dosya | Tipler |
 |---|---|
 | `ortak.ts` | `Dil` (`DILLER`), `Semt` (`SEMTLER`), `Yaka`, `Konum` |
-| `profil.ts` | `ProfilBilgileri` (`ad`, `telefon`, `semt`, `adres`), `TemaTercihi` (`sistem` · `gunduz` · `gece`), `Tema` |
+| `profil.ts` | `ProfilBilgileri` (`ad`, `telefon`, `semt`, `adres`, `kapiNotu` — kat/daire/zil, çağrı notuna eklenir), `ProfilAlani` (`PROFIL_ALANLARI`: "Çağrıya hazırlık" ölçerinin 4 alanı), `HazirlikMaddesi` (`su-vanasi` · `sigorta-kutusu` · `dogalgaz-vanasi`) ve `EvHazirligi` (madde → biliyor mu), `TemaTercihi` (`sistem` · `gunduz` · `gece`), `Tema` |
 | `liste.ts` | `Siralama`, `Gorunum`, `UstaFiltresi`, `SorunOnerisi`, `NedenTuru`, `Oneri`, `OneriBaglami` |
 | `bildirim.ts` | `Bildirim`, `BildirimTuru` (`basari` · `bilgi` · `hata`) |
 

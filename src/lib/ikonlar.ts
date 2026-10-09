@@ -56,6 +56,7 @@ export const ikonlar = {
   para: [kutu(2.5, 6, 19, 12, 2), daire(12, 12, 2.8), "M6 9.5v.01", "M18 14.5v.01"],
   yorum: ["M4 5.5h16v11H9.5L5 20.5v-4H4z", "M8 9.5h8", "M8 12.5h5"],
   yenile: ["M20 12a8 8 0 1 1-2.35-5.65L20 8.5", "M20 3.5v5h-5"],
+  kalem: ["M4 20h4L19 9a2.1 2.1 0 0 0-4-4L4 16z", "M13.5 6.5l4 4"],
 } as const satisfies Record<string, readonly string[]>;
 
 export type IkonAdi = keyof typeof ikonlar;

@@ -60,6 +60,12 @@ export const DESTEK: Record<Ozellik, Record<Platform, DestekTuru>> = {
   "veri-disa-aktarma": { android: "farkli-yolla", ios: "farkli-yolla", macos: "farkli-yolla", windows: "farkli-yolla", linux: "farkli-yolla", web: "destekleniyor" },
 };
 
+/** Platformun özel adı; tarayıcı için null (ekran "Tarayıcı" metnini çeviriden alır) */
+export function platformAdi(p: Platform = platform()): string | null {
+  const adlar: Record<Platform, string | null> = { android: "Android", ios: "iOS", macos: "macOS", windows: "Windows", linux: "Linux", web: null };
+  return adlar[p];
+}
+
 export const destekYolu = (o: Ozellik, p: Platform = platform()): DestekTuru => DESTEK[o][p];
 
 /** Özellik bu platformda (doğrudan ya da farklı yolla) var mı? "yok" ise arayüzde hiç gösterilmez */
