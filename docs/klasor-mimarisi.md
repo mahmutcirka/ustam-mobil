@@ -91,3 +91,9 @@ ustam/
 
 ### 12. `.github/workflows/` (Sürekli Entegrasyon)
 - **Ne konur?** `ci.yml` — her push ve PR'da derleme, testler ve tip kontrolü.
+
+---
+
+## 🗄️ Geçici Yerel Arka Uç (`src-tauri/src/backend/`)
+
+SQLite tabanlı geçici arka uç (migration, rol/izin, kaynak denetleyicileri, iş işlevleri) `src-tauri/src/backend/` altındadır; ayrıntı, tablolar ve komut listesi tek kaynakta: [`docs/backend.md`](backend.md).
