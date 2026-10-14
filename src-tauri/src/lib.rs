@@ -295,11 +295,50 @@ fn veri_dosyasi_kaydet(app: tauri::AppHandle, icerik: String) -> Result<Kaydedil
     }
 }
 
+mod backend;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![is_emri_uret, is_emri_dogrula, fiyat_hesapla, veri_dosyasi_kaydet])
+        .setup(|app| backend::commands::setup(app))
+        .invoke_handler(tauri::generate_handler![
+            is_emri_uret, is_emri_dogrula, fiyat_hesapla, veri_dosyasi_kaydet,
+            backend::commands::auth_register,
+            backend::commands::auth_login,
+            backend::commands::auth_logout,
+            backend::commands::auth_me,
+            backend::commands::user_index,
+            backend::commands::user_store,
+            backend::commands::user_sync_roles,
+            backend::commands::user_sync_permissions,
+            backend::commands::user_set_status,
+            backend::commands::role_index,
+            backend::commands::role_store,
+            backend::commands::role_update,
+            backend::commands::role_destroy,
+            backend::commands::role_sync_permissions,
+            backend::commands::permission_index,
+            backend::commands::permission_generate,
+            backend::commands::crud_resources,
+            backend::commands::crud_index,
+            backend::commands::crud_show,
+            backend::commands::crud_store,
+            backend::commands::crud_update,
+            backend::commands::crud_destroy,
+            backend::commands::crud_destroy_many,
+            backend::commands::crud_aggregate,
+            backend::commands::db_migrate_status,
+            backend::commands::contact_submit,
+            backend::domain::is_emri_olustur,
+            backend::domain::is_emri_iptal,
+            backend::domain::is_emri_kod_dogrula,
+            backend::domain::is_emri_tamamla,
+            backend::domain::yorum_ekle,
+            backend::domain::fiyat_simule,
+            backend::domain::fiyat_kurali_yayinla,
+            backend::domain::ustam_dashboard
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
