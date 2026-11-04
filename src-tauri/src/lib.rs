@@ -1,3 +1,4 @@
+mod permissions;
 use serde::{Deserialize, Serialize};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -301,8 +302,12 @@ mod backend;
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_notification::init())
         .setup(|app| backend::commands::setup(app))
         .invoke_handler(tauri::generate_handler![
+            permissions::permissions_status,
+            permissions::permission_request,
+            permissions::bildirim_gonder,
             is_emri_uret, is_emri_dogrula, fiyat_hesapla, veri_dosyasi_kaydet,
             backend::commands::auth_register,
             backend::commands::auth_login,
