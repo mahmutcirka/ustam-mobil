@@ -43,6 +43,7 @@ describe("platform", () => {
     expect(veriKayitYolu("android")).toBe("pano");
   });
 
+  // @lat: [[testler#Testler#İzinler ve platform#Platform tablosu belgeyle aynı]]
   test("tablo her özellik ve platformu kapsar; belgedeki tabloyla aynı", () => {
     const belge = readFileSync("docs/platform-destegi.md", "utf8");
     const simge = { destekleniyor: "✅", "farkli-yolla": "🔁", yok: "—" } as const;

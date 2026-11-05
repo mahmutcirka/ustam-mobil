@@ -406,6 +406,7 @@ mod testler {
         }
     }
 
+    // @lat: [[testler#Testler#Kural motoru#Fiyat dökümü ortak örneklerle aynı]]
     #[test]
     fn ortak_fiyat_dokumleri() {
         for v in vektorler()["fiyat"].as_array().unwrap() {
@@ -454,6 +455,7 @@ mod testler {
         }
     }
 
+    // @lat: [[testler#Testler#Kural motoru#Kontrol karakteri tek hatayı yakalar]]
     #[test]
     fn rastgele_kisimdaki_her_tek_karakter_hatasi_yakalanir() {
         for tohum in 1..40 {
@@ -489,6 +491,7 @@ mod testler {
         assert_eq!(kod_durumu(""), KodDurumu::BicimHatali);
     }
 
+    // @lat: [[testler#Testler#Kural motoru#Tipli hata biçimi]]
     #[test]
     fn hata_json_bicimi() {
         assert_eq!(serde_json::to_value(KomutHatasi::AralikTers).unwrap(), json!({ "tur": "aralik-ters" }));

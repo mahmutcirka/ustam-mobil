@@ -15,6 +15,7 @@ import {
 import type { FiyatGirdisi, Kategori, KomutHatasi } from "../src/lib/types";
 import { kategoriler } from "../src/lib/data";
 
+// @lat: [[testler#Testler#Kural motoru#TypeScript kuralları ortak örneklerle aynı]]
 describe("ortak test vektörleri (Rust ile aynı)", () => {
   test.each(vektorler.kontrolKarakteri)("kontrol karakteri $govde → $beklenen", ({ govde, beklenen }) => {
     expect(kontrolKarakteri(govde)).toBe(beklenen);

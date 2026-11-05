@@ -270,6 +270,7 @@ mod testler {
     use super::*;
     use serde_json::json;
 
+    // @lat: [[testler#Testler#İzinler ve platform#İzin durumu işletim sisteminden eşlenir]]
     #[test]
     fn izin_durumu_isletim_sisteminden_eslenir() {
         assert_eq!(izin_degeri(PermissionState::Granted), (IzinDegeri::Verildi, false));

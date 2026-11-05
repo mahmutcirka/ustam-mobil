@@ -6,6 +6,7 @@ import { bildirimGoster, destekleniyorMu, izinDurumu, konumOku, NativeHata } fro
 import { semtler } from "../src/lib/data";
 import type { BildirimTercihleri, IsEmri } from "../src/lib/types";
 
+// @lat: [[testler#Testler#İzinler ve platform#Konum en yakın semte eşlenir]]
 describe("konumdan en yakın semt", () => {
   test("semt merkezi kendi semtine eşlenir", () => {
     for (const [semt, k] of Object.entries(semtler)) expect(enYakinSemt(k)?.semt).toBe(semt as keyof typeof semtler);
@@ -48,6 +49,7 @@ const isEmri = (ek: Partial<IsEmri> = {}): IsEmri =>
 
 const an = (ms: number) => new Date(T0 + ms);
 
+// @lat: [[testler#Testler#Akışlar#İş bildirimi tekrar etmez]]
 describe("iş bildirimleri", () => {
   test("acil iş: onay → yolda → kapıda sırasıyla", () => {
     expect(isOlaylari(isEmri()).map((o) => o.olay)).toEqual(["onaylandi", "yolda", "kapida"]);

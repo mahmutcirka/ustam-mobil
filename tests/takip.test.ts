@@ -14,6 +14,7 @@ const hemen = {
   dogrulandi: false,
 };
 
+// @lat: [[testler#Testler#Akışlar#Takip aşamaları sırayla ilerler]]
 describe("aşamalar", () => {
   test("talep alındı → onaylandı → yolda → kapıda", () => {
     expect(takip(hemen, sonra(5)).asama).toBe("alindi");
