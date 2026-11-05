@@ -1,1 +1,3 @@
 config.local.yaml
+# lat yerel önbelleği (ayrıştırma ve init kaydı)
+.cache/
