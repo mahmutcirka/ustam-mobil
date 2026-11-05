@@ -10,6 +10,7 @@ import {
   type IsEmri,
   type Kategori,
   type Konum,
+  type CografiKonum,
   type Semt,
   type Usta,
   type UstaDurumu,
@@ -69,20 +70,21 @@ export const acilKisayollar: AcilKisayol[] = [
 // Bugün / randevu için seçilebilen ziyaret saatleri
 export const saatDilimleri = ["10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
 
-// Stilize harita üzerindeki semt merkezleri (UstaHaritasi.svelte ile aynı koordinat sistemi)
-export const semtler: Record<Semt, Konum & { yaka: Yaka }> = {
-  Sarıyer: { x: 57, y: 14, yaka: "avrupa" },
-  Beşiktaş: { x: 51, y: 50, yaka: "avrupa" },
-  Şişli: { x: 42, y: 46, yaka: "avrupa" },
-  Beyoğlu: { x: 44, y: 60, yaka: "avrupa" },
-  Fatih: { x: 33, y: 70, yaka: "avrupa" },
-  Bakırköy: { x: 14, y: 80, yaka: "avrupa" },
-  Beykoz: { x: 78, y: 26, yaka: "asya" },
-  Üsküdar: { x: 63, y: 60, yaka: "asya" },
-  Kadıköy: { x: 60, y: 79, yaka: "asya" },
-  Ataşehir: { x: 76, y: 70, yaka: "asya" },
-  Maltepe: { x: 80, y: 88, yaka: "asya" },
-  Kartal: { x: 92, y: 95, yaka: "asya" },
+// Stilize harita üzerindeki semt merkezleri (UstaHaritasi.svelte ile aynı koordinat sistemi) ve ilçe merkezlerinin
+// yaklaşık gerçek koordinatları (enlem/boylam, WGS84) — "Konumumdan bul" cihaz konumunu en yakın semte eşler (konum.ts)
+export const semtler: Record<Semt, Konum & CografiKonum & { yaka: Yaka }> = {
+  Sarıyer: { x: 57, y: 14, enlem: 41.1676, boylam: 29.0502, yaka: "avrupa" },
+  Beşiktaş: { x: 51, y: 50, enlem: 41.0430, boylam: 29.0094, yaka: "avrupa" },
+  Şişli: { x: 42, y: 46, enlem: 41.0602, boylam: 28.9877, yaka: "avrupa" },
+  Beyoğlu: { x: 44, y: 60, enlem: 41.0370, boylam: 28.9770, yaka: "avrupa" },
+  Fatih: { x: 33, y: 70, enlem: 41.0186, boylam: 28.9397, yaka: "avrupa" },
+  Bakırköy: { x: 14, y: 80, enlem: 40.9800, boylam: 28.8720, yaka: "avrupa" },
+  Beykoz: { x: 78, y: 26, enlem: 41.1340, boylam: 29.0920, yaka: "asya" },
+  Üsküdar: { x: 63, y: 60, enlem: 41.0230, boylam: 29.0150, yaka: "asya" },
+  Kadıköy: { x: 60, y: 79, enlem: 40.9900, boylam: 29.0290, yaka: "asya" },
+  Ataşehir: { x: 76, y: 70, enlem: 40.9840, boylam: 29.1070, yaka: "asya" },
+  Maltepe: { x: 80, y: 88, enlem: 40.9350, boylam: 29.1310, yaka: "asya" },
+  Kartal: { x: 92, y: 95, enlem: 40.8890, boylam: 29.1890, yaka: "asya" },
 };
 
 export const semtListesi = Object.keys(semtler) as Semt[];

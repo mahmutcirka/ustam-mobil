@@ -7,10 +7,18 @@ export const YOLA_CIKIS_EN_ERKEN_SN = 45; // "hemen" çağrılarında yola çık
 
 export const asamalar: readonly IsAsamasi[] = IS_ASAMALARI;
 
-export function takip(is: Pick<IsEmri, "durum" | "olusturma" | "zaman" | "varisDk" | "dogrulandi">, simdi: Date): TakipBilgisi {
+type TakipGirdisi = Pick<IsEmri, "durum" | "olusturma" | "zaman" | "varisDk" | "dogrulandi">;
+
+/** Simülasyondaki aşama geçiş anları (ms) — takip() ve cihaz bildirimleri (isBildirimleri.ts) aynı zamanları kullanır */
+export function asamaZamanlari(is: Pick<IsEmri, "olusturma" | "zaman" | "varisDk">) {
   const olusma = new Date(is.olusturma).getTime();
   const varis = new Date(is.zaman).getTime();
   const yolaCikis = Math.max(varis - is.varisDk * 60_000, olusma + YOLA_CIKIS_EN_ERKEN_SN * 1000);
+  return { olusma, onay: olusma + ONAY_SN * 1000, yolaCikis, varis };
+}
+
+export function takip(is: TakipGirdisi, simdi: Date): TakipBilgisi {
+  const { onay, yolaCikis, varis } = asamaZamanlari(is);
   const t = simdi.getTime();
 
   const kalanDk = Math.max(0, Math.ceil((varis - t) / 60_000));
@@ -20,7 +28,7 @@ export function takip(is: Pick<IsEmri, "durum" | "olusturma" | "zaman" | "varisD
   if (is.durum === "tamamlandi") asama = "tamamlandi";
   else if (is.dogrulandi || t >= varis) asama = "kapida";
   else if (t >= yolaCikis) asama = "yolda";
-  else if (t >= olusma + ONAY_SN * 1000) asama = "onaylandi";
+  else if (t >= onay) asama = "onaylandi";
   else asama = "alindi";
 
   return { asama, kalanDk, ilerleme, varis: new Date(varis) };

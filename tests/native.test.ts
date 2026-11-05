@@ -83,6 +83,12 @@ describe("tarayıcıdaki yedek yol (Rust yokken)", () => {
       "gecersiz-icerik",
       "dosya-yazilamadi",
       "platform-desteklemiyor",
+      "izin-yok",
+      "izin-istenemedi",
+      "konum-servisi-kapali",
+      "konum-okunamadi",
+      "bildirim-gosterilemedi",
+      "ayarlar-acilamadi",
       "ic-hata",
     ];
     for (const tur of turler) {

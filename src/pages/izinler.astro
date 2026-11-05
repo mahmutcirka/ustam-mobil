@@ -1,8 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Iskelet from "../components/Iskelet.astro";
 import Izinler from "../components/Izinler.svelte";
 ---
 
-<Layout title="İzinler | Ustam">
-  <Izinler client:load />
+<Layout title="İzinler — Ustam">
+  <Izinler client:only="svelte">
+    <Iskelet slot="fallback" tur="form" />
+  </Izinler>
 </Layout>

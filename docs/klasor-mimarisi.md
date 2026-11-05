@@ -25,6 +25,8 @@ ustam/
 │   ├── icons/               # tauri icon ile üretilen macOS / Windows / Linux / iOS / Android ikonları
 │   ├── gen/android/         # tauri android init ile üretilen Gradle projesi (APK/AAB); build/ ve .so repoya girmez
 │   ├── test-vektorleri.json # Rust ve TS kurallarının ortak test örnekleri (doğru sonuçlar ve tipli hatalar)
+│   ├── Info.ios.plist       # Yalnız iOS'a eklenen izin açıklaması (konum) — docs/izinler.md
+│   ├── src/permissions.rs   # İzin komutları: durum, isteme, yerel bildirim, tek seferlik konum, sistem ayarları
 │   └── src/lib.rs           # Rust komutları (kod üretimi/doğrulama, fiyat), testleri ve giriş noktası
 │
 ├── src/                     # Ön yüz kaynak kodları (Frontend)
