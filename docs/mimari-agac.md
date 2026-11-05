@@ -162,5 +162,6 @@ Breakpoint'ler [`src/styles/app.css`](../src/styles/app.css) (ızgara, `max-widt
 
 - Form ve özet ekranları (`/usta/[id]`, `/cagri`, `/profil`, bilgi sayfaları) her boyutta `.sayfa.dar` ile
   **560px** okunabilir genişlikte kalır.
-- Tauri masaüstü penceresi varsayılan olarak 420×820 açılır (telefon düzeni); pencere büyütüldüğünde aynı
+- Tauri masaüstü penceresi varsayılan olarak 420×820 açılır (telefon düzeni), en küçük boyutu 360×600'dür (`tauri.conf.json` →
+  `minWidth` / `minHeight`; en dar telefon genişliği); pencere büyütüldüğünde aynı
   breakpoint'ler devreye girer.

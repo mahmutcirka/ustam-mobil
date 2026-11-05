@@ -14,7 +14,7 @@ Denetim matrisi [[docs/ilerleme-batch-01.md]]. Sonraki tasarım, kural motoru ve
 
 Veri sözleşmesi, Kart bileşeni, liste ve üç durum, detay ekranı ve Rust komutu görevleri (11–15) master'da; çalışma yöntemi (10) belgelendi.
 
-Açık kalanlar öğrencinin GitHub'da yapacağı adımlardır: master için kural seti ve ekran görüntüsü (09.1) ile yeni sohbette kural testi yanıtı (10). Görev 16 denetimi bu adımlar bitince `v0.2.0-batch-02` etiketiyle kapanır.
+Denetim matrisi [[docs/ilerleme-batch-02.md]]; masaüstü penceresinin en küçük boyutu 360×600 ([[src-tauri/tauri.conf.json]]). Açık kalanlar öğrencinin GitHub'da yapacağı adımlardır: master için kural seti ve ekran görüntüsü (09.1) ile yeni sohbette kural testi yanıtı (10). Görev 16 bu adımlar bitince `v0.2.0-batch-02` etiketiyle kapanır.
 
 ## Hafta 05
 

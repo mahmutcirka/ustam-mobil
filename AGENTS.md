@@ -24,6 +24,7 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | [`docs/kaynaklar.md`](docs/kaynaklar.md) | Tasarım ve teknik referanslar | Yeni dış kaynak kullanıldığında buraya eklenir. |
 | [`docs/teslim.md`](docs/teslim.md) | Teslim adımları, görev → PR eşlemesi | Teslim biçimi bu belgeye göre hazırlanır. |
 | [`docs/ilerleme-batch-01.md`](docs/ilerleme-batch-01.md) | Batch 01 kontrol matrisi ve derleme kanıtı | Yeni teslimden önce matris güncellenir. |
+| [`docs/ilerleme-batch-02.md`](docs/ilerleme-batch-02.md) | Batch 02 kontrol matrisi (Görev 09.1–16), en küçük pencere, derleme kanıtı | Etiket (`v0.2.0-batch-02`) yalnız matris tamamen işaretlenince atılır. |
 | [`docs/ajan-uyum-testi.md`](docs/ajan-uyum-testi.md) | Ajanın bu kurallara uyum testi | Kurallar değiştiğinde test yeniden çalıştırılır. |
 | [`docs/komutlar.md`](docs/komutlar.md) | Rust komutları: girdi, tipli sonuç, hata türleri | Rust'a yalnız `src/lib/native.ts` üzerinden gidilir; komut düz metin döndürmez, geçersiz girdide panik yapmaz. |
 | [`docs/platform-destegi.md`](docs/platform-destegi.md) | Özellik × platform tablosu (Android, iOS, macOS, Windows, Linux, web) | **Yeni özellik eklenirken bu tablo güncellenir**; desteklenmeyen özellik o platformda arayüzde görünmez. |
