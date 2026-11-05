@@ -11,6 +11,7 @@
     "test": "bun test tests",
     "check": "astro check",
     "telefon": "bun araclar/telefon.ts",
+    "ekran": "bun araclar/ekran-cekimi.ts",
     "astro": "astro",
     "tauri": "tauri"
   },

@@ -55,6 +55,7 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | Tip kontrolü | `bun run check` (`astro check`) ve `bunx svelte-check --tsconfig ./tsconfig.json` → **0 hata** |
 | Platform ikonları | `bun run tauri icon app-icon.svg` |
 | Bilgi grafiği denetimi | `lat check` → **0 hata** (`npm install -g lat.md`) |
+| README görselleri ve video | `bun run ekran` (`bun run dev` açıkken; çıktı `docs/ekran-goruntuleri/`) |
 
 ## 3. Geliştirme ve Git Kuralları
 

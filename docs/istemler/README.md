@@ -31,3 +31,4 @@ Bu klasör, uygulamanın yapay zekâ aracıyla nasıl geliştirildiğinin kaydı
 | 16 | Batch 02 denetimi | [16-batch-02-denetimi.md](16-batch-02-denetimi.md) |
 | — | Yetkiler (izinler) | [yetkiler.md](yetkiler.md) |
 | — | lat.md bilgi grafiği (Hafta 05) | [lat-md.md](lat-md.md) |
+| — | README ekran görüntüleri ve kullanım videosu | [readme-ekran-video.md](readme-ekran-video.md) |
