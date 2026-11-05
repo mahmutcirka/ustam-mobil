@@ -47,6 +47,8 @@
 
 - [Akademik Bilgiler](#-akademik-bilgiler)
 - [Proje Hakkında](#-proje-hakkında)
+- [Kullanım Videosu](#-kullanım-videosu)
+- [Ekran Görüntüleri](#-ekran-görüntüleri)
 - [Temel Özellikler](#-temel-özellikler)
 - [Mimari](#-mimari)
 - [Teknoloji Yığını](#-teknoloji-yığını)
@@ -86,6 +88,97 @@ uygulamasının dönüştürülmesiyle geliştirilmiştir (etkinlik → usta, se
 
 ---
 
+## 🎬 Kullanım Videosu
+
+<div align="center">
+  <img src="docs/ekran-goruntuleri/ustam-kullanim.gif" alt="Ustam kullanım videosu: karşılama, ustalar, harita, usta detayı, çağrı, canlı takip, izinler, profil, gece teması ve Arapça" width="300" />
+  <br />
+  <sub>~50 sn · Karşılama → Ustalar → Harita → Usta detayı → Çağrı özeti → Canlı takip → Profil → İzinler → Gece teması + Arapça (RTL)</sub>
+  <br />
+  <sub>Daha net ve küçük sürüm: <a href="docs/ekran-goruntuleri/ustam-kullanim.webp"><code>ustam-kullanim.webp</code></a></sub>
+</div>
+
+Videodaki çağrı gerçek akışla oluşturuldu: usta seçildi, sorun ve aciliyet belirlendi, telefon girilip koşullar
+onaylandı; iş emri kodu (`UST-ELK-0511-…`) ve fiyat dökümü kural motorundan geldi.
+
+---
+
+## 📸 Ekran Görüntüleri
+
+<table>
+  <tr>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/01-karsilama.png" alt="Karşılama" width="200" /><br />
+      <b>Karşılama</b><br />
+      <sub>İlk açılış: tanıtım, dil ve semt seçimi</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/02-ustalar.png" alt="Ustalar" width="200" /><br />
+      <b>Ustalar</b><br />
+      <sub>"Ne oldu?" kısayolları, arama, kategori ve filtre</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/03-harita.png" alt="Harita" width="200" /><br />
+      <b>Harita</b><br />
+      <sub>Stilize İstanbul haritasında usta pinleri</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/09-ariza-sihirbazi.png" alt="Ne oldu sihirbazı" width="200" /><br />
+      <b>Ne oldu sihirbazı</b><br />
+      <sub>Alan → sorun → aciliyet → en iyi 3 usta</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/04-usta-detay.png" alt="Usta detayı" width="200" /><br />
+      <b>Usta detayı</b><br />
+      <sub>Rozetler, çalışma saatleri, sorun ve işçilik aralığı</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/05-cagri-ozeti.png" alt="Çağrı özeti" width="200" /><br />
+      <b>Çağrı özeti</b><br />
+      <sub>Adres notu, telefon, ödeme tercihi, fiyat dökümü</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/06-canli-takip.png" alt="Canlı takip" width="200" /><br />
+      <b>Canlı takip</b><br />
+      <sub>Geri sayım, aşamalar ve kapıdaki ustanın güvenlik kodu</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/07-profil.png" alt="Profil" width="200" /><br />
+      <b>Profil</b><br />
+      <sub>Çağrıya hazırlık ölçeri, Evim, Evimi tanıyorum</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/08-izinler.png" alt="İzinler" width="200" /><br />
+      <b>İzinler</b><br />
+      <sub>Bildirim ve konum: gerçek durum, ne için, veri nereye gider</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/10-arapca-rtl.png" alt="Arapça (RTL)" width="200" /><br />
+      <b>Arapça (RTL)</b><br />
+      <sub>4 dil; Arapça ve Farsça sağdan sola</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/11-gece-temasi.png" alt="Gece teması" width="200" /><br />
+      <b>Gece teması</b><br />
+      <sub>Sistem / Gündüz / Gece</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/ekran-goruntuleri/12-masaustu.png" alt="Masaüstü" width="200" /><br />
+      <b>Masaüstü</b><br />
+      <sub>Geniş ekranda yan menü ve 3 sütunlu ızgara</sub>
+    </td>
+  </tr>
+</table>
+
+Görüntüler telefon görünümünde (390 × 844, 2x) uygulamanın kendisinden alındı; kişi bilgileri örnek veridir.
+Yeniden üretmek için: `bun run dev` açıkken `bun run ekran` (ayrıntı: [`araclar/ekran-cekimi.ts`](araclar/ekran-cekimi.ts)).
+
+---
+
 ## ✨ Temel Özellikler
 
 **Ustaları bulma**
@@ -114,9 +207,10 @@ uygulamasının dönüştürülmesiyle geliştirilmiştir (etkinlik → usta, se
 - ✅ İş bitince 1–5 yıldız ve yorum; iptalde neden sorulur; geçmişten "Tekrar çağır".
 
 **Dil, erişilebilirlik ve gizlilik**
-- 🌍 **TR · EN · AR · FA** (259 anahtar × 4 dil), AR/FA'da `dir="rtl"` ve mantıksal CSS; yabancı kullanıcının seçtiği sorun ustaya **Türkçe** iletilir.
+- 🌍 **TR · EN · AR · FA** (469 anahtar × 4 dil), AR/FA'da `dir="rtl"` ve mantıksal CSS; yabancı kullanıcının seçtiği sorun ustaya **Türkçe** iletilir.
 - 🎨 SVG ikon seti, Sistem / Gündüz / Gece teması, WCAG AA kontrast, klavye odağı ve `prefers-reduced-motion` desteği.
 - 🔐 Tüm veriler cihazda (localStorage); profilde KVKK için **dışa aktarma** ve **tümünü silme**.
+- 🔔 **İzin merkezi** (`/izinler`): bildirim ve yaklaşık konum izninin işletim sisteminden okunan gerçek durumu; usta onayladı / yola çıktı / kapıda bildirimleri; **"Konumumdan bul"** ile en yakın semt (konum saklanmaz).
 - 📱 Telefon / tablet / masaüstü / büyük ekran için 1–4 sütun; masaüstünde yan menü.
 - 📖 Hakkında, İletişim, Kullanım Koşulları ve Gizlilik sayfaları — 4 dilde.
 
