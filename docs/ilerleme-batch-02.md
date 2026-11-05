@@ -7,7 +7,7 @@
 
 | No | Görev | İstenen çıktı | Kanıt | Durum |
 |:---:|---|---|---|:---:|
-| 09.1 | Master koruması | `master` için kural seti: PR zorunlu, force push ve dal silme kapalı; ekran görüntüsü | GitHub → Settings → Rules; `docs/kanit/master-korumasi.png` | ☐ öğrenci |
+| 09.1 | Master koruması | `master` için kural seti: PR zorunlu, force push ve dal silme kapalı; ekran görüntüsü | Kural seti `master-korumasi` (Active, bypass yok): [`kanit/master-korumasi.png`](kanit/master-korumasi.png) | ☑ |
 | 09.1 | PR güvenliği belgesi | PR güvenlik kuralları, AGENTS git kuralı | [`kurallar.md` § 4](kurallar.md#4-pr-güvenliği), PR #25 | ☑ |
 | 10 | Çalışma yöntemi | Şartname şablonu, istem günlüğü, AGENTS çalışma döngüsü | [`gorev-sartnamesi.md`](gorev-sartnamesi.md), [`istemler/`](istemler/README.md), PR #28 | ☑ |
 | 10 | Kural testi | Yeni sohbette ajanın kuralları doğru söylemesi | [`istemler/10-calisma-yontemi.md`](istemler/10-calisma-yontemi.md) "Kural testi" | ☐ öğrenci |
@@ -18,7 +18,7 @@
 | 15 | Rust komutu ve platform | Tipli sonuç ve hata, platform tablosu | [`komutlar.md`](komutlar.md), [`platform-destegi.md`](platform-destegi.md), PR #33 | ☑ |
 | 16 | Pencere boyutu | `tauri.conf.json` içinde `minWidth` / `minHeight` | `minWidth: 360`, `minHeight: 600` (aşağıda) | ☑ |
 | 16 | Denetim belgesi | `docs/ilerleme-batch-02.md` | Bu belge | ☑ |
-| 16 | Etiket | `v0.2.0-batch-02` | § 4 | ☐ 09.1 bitince |
+| 16 | Etiket | `v0.2.0-batch-02` | § 4 | ☑ |
 
 Batch 02 dışında aynı dönemde eklenenler: telefon önizleme aracı (#26), Android projesi (#27), profil yenileme (#34),
 SQLite yerel arka uç (#36, eğitmen), yetkiler / izinler (#37), lat.md bilgi grafiği (#38).
@@ -60,7 +60,7 @@ CI (GitHub Actions) her PR'da derleme, TS testleri, tip kontrolü (Linux) ve `ca
 
 ## 4. Git Etiketi
 
-Görev 09.1'in GitHub adımı (kural seti + ekran görüntüsü) bitip tablo tamamen işaretlenince:
+Görev 09.1'in kural seti etkinleştirilip kanıtı eklendikten sonra atıldı (Görev 10'un kural testi yanıtı öğrenci adımı olarak açık):
 
 ```bash
 git checkout master
