@@ -59,7 +59,7 @@ Batch 01 denetim tablosu: [`ilerleme-batch-01.md`](ilerleme-batch-01.md).
 
 | Görev | Konu | Taslak puan | Dal (PR) | Durum |
 |---|---|---|---|---|
-| 09.1 | Master koruması ve PR güvenliği | ön koşul | `feature/09-1-master-korumasi` (#25) | Belge tamam; **GitHub ayarları ve `docs/kanit/master-korumasi.png` öğrenci tarafından yapılacak** |
+| 09.1 | Master koruması ve PR güvenliği | ön koşul | `feature/09-1-master-korumasi` (#25) | Tamam; kural seti `master-korumasi` etkin ([`kanit/master-korumasi.png`](kanit/master-korumasi.png)) |
 | 10 | Çalışma yöntemi: şartname, istem günlüğü | 10 | `feature/10-calisma-yontemi` (#28) | Tamam; yeni sohbette "kural testi" yanıtı öğrenci tarafından eklenecek |
 | 11 | Veri sözleşmesi: tipler, örnek veri, `bun run check` | 15 | `feature/11-veri-sozlesmesi` (#29) | Tamam |
 | 12 | Kart bileşeni (`ui/Kart.svelte`) | 15 | `feature/12-kart-bileseni` (#30) | Tamam |
@@ -71,5 +71,5 @@ Batch 01 denetim tablosu: [`ilerleme-batch-01.md`](ilerleme-batch-01.md).
 | — | Profil yenileme (çağrıya hazırlık, Evim, Evimi tanıyorum) | — | `feature/profil-yenileme` (#34) | Tamam |
 | — | SQLite yerel arka uç (eğitmen) | — | `feature/sqlite-rbac-altyapi` (#36) | Tamam |
 | — | Yetkiler: izin merkezi, yerel bildirim, tek seferlik konum | — | `feature/yetkiler-izin-altyapisi` (#37) | Tamam; cihazda elle deneme öğrenciye ([`izinler.md`](izinler.md#elle-deneme)) |
-| 16 | Batch 02 denetimi: en küçük pencere, ilerleme belgesi | — | `feature/16-batch-02-denetimi` | Tamam; `v0.2.0-batch-02` etiketi 09.1 bitince ([`ilerleme-batch-02.md`](ilerleme-batch-02.md)) |
+| 16 | Batch 02 denetimi: en küçük pencere, ilerleme belgesi | — | `feature/16-batch-02-denetimi` | Tamam; `v0.2.0-batch-02` etiketi atıldı ([`ilerleme-batch-02.md`](ilerleme-batch-02.md)) |
 | — | lat.md bilgi grafiği (Hafta 05) | ek puan | `feature/lat-md` (#38) | Tamam |
