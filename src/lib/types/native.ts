@@ -35,6 +35,18 @@ export type KomutHatasi =
   | { tur: "dosya-yazilamadi"; ayrinti: string }
   /** Komut bu platformda yok */
   | { tur: "platform-desteklemiyor" }
+  /** Gereken izin verilmemiş (komut diyalog açmaz; kullanıcı /izinler ekranından verir) */
+  | { tur: "izin-yok" }
+  /** Sistem izin diyaloğu açılamadı; ayrinti: sistemin mesajı */
+  | { tur: "izin-istenemedi"; ayrinti: string }
+  /** Cihazın konum servisi kapalı */
+  | { tur: "konum-servisi-kapali" }
+  /** Konum okunamadı (zaman aşımı, sinyal yok …); ayrinti: sistemin mesajı */
+  | { tur: "konum-okunamadi"; ayrinti: string }
+  /** Bildirim gösterilemedi; ayrinti: sistemin mesajı */
+  | { tur: "bildirim-gosterilemedi"; ayrinti: string }
+  /** Sistem ayarları açılamadı; ayrinti: sistemin mesajı */
+  | { tur: "ayarlar-acilamadi"; ayrinti: string }
   /** Yalnız TS: Rust komutu çalışmadan Tauri katmanında oluşan beklenmeyen hata; ayrinti: ham mesaj */
   | { tur: "ic-hata"; ayrinti: string };
 
@@ -45,7 +57,16 @@ export const PLATFORMLAR = ["android", "ios", "macos", "windows", "linux", "web"
 export type Platform = (typeof PLATFORMLAR)[number];
 
 /** Platforma göre değişebilen özellikler (docs/platform-destegi.md) */
-export const OZELLIKLER = ["kural-motoru", "acil-arama", "foto-ekleme", "panoya-kopyalama", "veri-disa-aktarma"] as const;
+export const OZELLIKLER = [
+  "kural-motoru",
+  "acil-arama",
+  "foto-ekleme",
+  "panoya-kopyalama",
+  "veri-disa-aktarma",
+  "bildirim",
+  "konum",
+  "sistem-ayarlari",
+] as const;
 export type Ozellik = (typeof OZELLIKLER)[number];
 
 /** Bir özelliğin bir platformdaki durumu: doğrudan / farklı yolla / yok (arayüzde hiç görünmez) */

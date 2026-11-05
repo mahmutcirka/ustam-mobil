@@ -18,7 +18,7 @@ Ustam
 │   └── 2. adım: semt seçimi → mesafe ve varış süreleri bu semtten hesaplanır
 │
 ├── / (Ustalar — ana sayfa)                          src/pages/index.astro
-│   ├── Semt düğmesi (alt panel) · profil kısayolu · selamlama
+│   ├── Semt düğmesi (alt panel: "Konumumdan bul" — telefon ve tarayıcıda, en yakın semt) · profil kısayolu · selamlama
 │   ├── "Ne oldu?": 4 acil kısayol — en yakın müsait usta adı + varış süresi → /usta/[id]?sorun=…&aciliyet=hemen
 │   ├── "Arızayı adım adım tarif et" → Ne oldu sihirbazı (alt panel): alan → sorun → aciliyet → en iyi 3 usta
 │   ├── Aktif iş bandı: "{usta} yolda · ~9 dk" → /is-emirlerim
@@ -68,9 +68,15 @@ Ustam
 │   ├── "Evimi tanıyorum": ana su vanası · sigorta kutusu · doğalgaz vanası (ipucu + 187 gaz acil) — n/3
 │   ├── Favori ustalar (ui/Kart, ana sayfadakiyle aynı kart; kalp ile çıkarılır)
 │   ├── Görünüm (Sistem / Gündüz / Gece) · Dil (4)
-│   ├── Gizlilik: "yalnız bu cihazda" notu · dışa aktar (web: indir, masaüstü: İndirilenler, telefon: pano) · tümünü sil
+│   ├── Gizlilik: "yalnız bu cihazda" notu · İzinler → /izinler · dışa aktar (web: indir, masaüstü: İndirilenler, telefon: pano) · tümünü sil
 │   ├── Bilgi sayfalarına bağlantılar (seçili dilde)
 │   └── Sürüm · çekirdek (Rust / TS) · platform (uygulamada)
+│
+├── /izinler (İzin merkezi)                           src/pages/izinler.astro
+│   ├── Bildirim ve Konum kartları: işletim sisteminden okunan anlık durum, ne için, veri nereye gider
+│   ├── İzin ver (diyalog yalnız bu düğmeyle) · reddedildiyse "Ayarları aç" · durumu yenile (ayarlardan dönünce kendiliğinden)
+│   ├── Bildirim kategorileri (iş durumu, randevu) · deneme bildirimi
+│   └── İzin istemeyen özellikler (fotoğraf, acil arama) — ayrıntı: docs/izinler.md
 │
 └── Bilgi ve yasal sayfalar — her biri 4 dilde (AR ve FA: dir="rtl")
     ├── /hakkinda   · /en/hakkinda   · /ar/hakkinda   · /fa/hakkinda    (MDX + React CanliRozet)
@@ -95,6 +101,7 @@ Karşılama ─► Ustalar ─► Usta detayı ─► Çağrı özeti ─[Rust: 
 | `profil.svelte.ts` | Ad, telefon, **semt**, adres; karşılama tamamlandı mı | `localStorage["profil"]`, `["karsilama-tamam"]` |
 | `cagri.svelte.ts` | Onaylanmamış çağrı taslağı (foto dahil) ve anlık fiyat tahmini | `localStorage["cagri-taslagi"]` |
 | `isEmirleri.svelte.ts` | İş emirleri; doğrulama, tamamlama, iptal | `localStorage["is-emirleri"]` |
+| `bildirimIzleyici.svelte.ts` | Bildirim kategorisi tercihleri; gönderilen iş bildirimleri (tekrarı önler) | `localStorage["bildirim-tercihleri"]`, `["gonderilen-bildirimler"]` |
 | `favoriler.svelte.ts` | Favori usta kimlikleri | `localStorage["favoriler"]` |
 | `yorumlar.svelte.ts` | Kullanıcının yorumları; usta puanına eklenir | `localStorage["yorumlarim"]` |
 | `i18n.svelte.ts` | Seçili dil, `t()` çevirisi, RTL yönü | `localStorage["dil"]` |

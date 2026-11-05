@@ -280,6 +280,11 @@
     <h2 class="bolum-baslik">{dil.t("profil.gizlilik")}</h2>
     <p class="aciklama ust"><Ikon ad="kilit" boyut={14} /> {dil.t("profil.gizlilikNot")}</p>
     <div class="kart liste">
+      <a href="/izinler">
+        <Ikon ad="kalkan" boyut={18} />
+        <span>{dil.t("profil.izinler")}</span>
+        <Ikon ad={ok} boyut={16} />
+      </a>
       <button onclick={disaAktar}>
         <Ikon ad="kopyala" boyut={18} />
         <span>{dil.t(disaAktarPano ? "profil.disaAktarKopyala" : "profil.disaAktar")}</span>

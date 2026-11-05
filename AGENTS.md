@@ -27,6 +27,8 @@ Rust ile `UST-ELK-1210-K7QZ` biçiminde iş emri kodu üreten bir Tauri v2 uygul
 | [`docs/ajan-uyum-testi.md`](docs/ajan-uyum-testi.md) | Ajanın bu kurallara uyum testi | Kurallar değiştiğinde test yeniden çalıştırılır. |
 | [`docs/komutlar.md`](docs/komutlar.md) | Rust komutları: girdi, tipli sonuç, hata türleri | Rust'a yalnız `src/lib/native.ts` üzerinden gidilir; komut düz metin döndürmez, geçersiz girdide panik yapmaz. |
 | [`docs/platform-destegi.md`](docs/platform-destegi.md) | Özellik × platform tablosu (Android, iOS, macOS, Windows, Linux, web) | **Yeni özellik eklenirken bu tablo güncellenir**; desteklenmeyen özellik o platformda arayüzde görünmez. |
+| [`docs/izinler.md`](docs/izinler.md) | İzinler: hangi izin, ne için, veri nereye gider; bildirim senaryoları | **Açıklanamayan izin istenmez**; durum okumak diyalog açmaz, diyalog yalnız kullanıcı eylemiyle; konum saklanmaz ve loglanmaz. |
+| [`docs/backend.md`](docs/backend.md) | SQLite tabanlı geçici yerel arka uç: tablolar, roller/izinler, komutlar | Sorgularda tablo/sütun adı yalnız beyaz listeden, değerler parametreyle; her denetleyici yetki denetler. |
 | [`docs/gelistirme-notlari.md`](docs/gelistirme-notlari.md) | Elle deneme kısa yolları (`?durum=` ile dört liste hali) | Liste ekranları veriyi tek yükleme işlevinden alır ve yükleniyor / hata / boş / dolu hallerini `ui/` bileşenleriyle gösterir. |
 | [`docs/gorev-sartnamesi.md`](docs/gorev-sartnamesi.md) | Her görevde doldurulan şartname şablonu | Değişiklikten önce Amaç, Kapsam dışı, Kabul ölçütleri, Dokunulacak dosyalar ve Doğrulama adımları yazılır. |
 | [`docs/istemler/`](docs/istemler/README.md) | Görev başına istem günlüğü (`NN-kisa-ad.md`) | Her görevin istemi, planı, düzeltmeleri ve doğrulama sonucu aynı dalda kaydedilir. |

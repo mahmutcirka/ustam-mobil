@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- İzinler ve gerekçeleri: docs/izinler.md -->
+    <!-- Bildirim: iş emri aşamaları (Android 13+ çalışma zamanı izni) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Konum: yalnız yaklaşık konum, tek sefer, en yakın semti bulmak için -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Hassas konum gerekmiyor: konum eklentisinin eklediği izin veri minimizasyonu için çıkarılır -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" tools:node="remove" />
+    <!-- Zamanlanmış bildirim kullanılmıyor: bildirim eklentisinin açılışta çalışma ve uyanık tutma izinleri çıkarılır -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" tools:node="remove" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" tools:node="remove" />
 
     <!-- AndroidTV support -->
     <uses-feature android:name="android.software.leanback" android:required="false" />

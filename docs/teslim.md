@@ -69,3 +69,5 @@ Batch 01 denetim tablosu: [`ilerleme-batch-01.md`](ilerleme-batch-01.md).
 | — | Telefon önizleme aracı (`bun run telefon`) | — | `feature/telefon-onizleme` (#26) | Tamam |
 | — | Android projesi ve APK belgesi | — | `feature/android-projesi` (#27) | Tamam |
 | — | Profil yenileme (çağrıya hazırlık, Evim, Evimi tanıyorum) | — | `feature/profil-yenileme` (#34) | Tamam |
+| — | SQLite yerel arka uç (eğitmen) | — | `feature/sqlite-rbac-altyapi` (#36) | Tamam |
+| — | Yetkiler: izin merkezi, yerel bildirim, tek seferlik konum | — | `feature/yetkiler-izin-altyapisi` (#37) | Tamam; cihazda elle deneme öğrenciye ([`izinler.md`](izinler.md#elle-deneme)) |

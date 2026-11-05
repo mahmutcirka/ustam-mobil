@@ -17,6 +17,13 @@ döndürmez ve geçersiz girdide panik yapmaz. Tarayıcıda (Rust yokken) `nativ
 | `is_emri_dogrula` | `isEmriKoduDogrula(kod)` | `kod`: kapıdaki ustanın söylediği metin (boşluk/küçük harf olabilir) | `KodDurumu`: `gecerli` · `bicim-hatali` · `kontrol-hatali` | — (her girdide bir durum döner) |
 | `fiyat_hesapla` | `fiyatHesapla(girdi)` | `FiyatGirdisi { cikisUcreti, aciliyet, zaman, iscilikMin, iscilikMax }` | `FiyatDokumu { cikis, acil, gece, pazar, iscilikMin, iscilikMax, toplamMin, toplamMax }` (TL, tam sayı) | `gecersiz-tarih`, `bilinmeyen-aciliyet`, `gecersiz-tutar`, `aralik-ters` |
 | `veri_dosyasi_kaydet` | `verileriKaydet(icerik, dosyaAdi)` | `icerik`: dışa aktarılacak JSON metni | `KaydedilenDosya { yol }` — masaüstünde İndirilenler'deki tam yol | `gecersiz-icerik`, `dosya-yazilamadi`, `platform-desteklemiyor` (mobil) |
+| `permissions_status` | `izinDurumu()` | — | `IzinDurumu[]` (`{ id, durum, istenebilir }`, bildirim + konum) — **asla diyalog açmaz** | — (okunamayan durum `okunamadi` olarak döner) |
+| `permission_request` | `izinIste(id)` | `id`: `bildirim` · `konum` (başka değer serde'de reddedilir) | Güncel `IzinDurumu[]` | `izin-istenemedi`, `konum-servisi-kapali`, `platform-desteklemiyor` (masaüstünde konum) |
+| `bildirim_gonder` | `bildirimGoster(baslik, govde)` | Başlık ≤ 80, gövde ≤ 240 karakter, boş olamaz | — (yerel bildirim gösterilir) | `gecersiz-icerik`, `izin-yok`, `bildirim-gosterilemedi` |
+| `konum_oku` | `konumOku()` | — | `KonumOkumasi { enlem, boylam, dogrulukM }` — yaklaşık, tek sefer; saklanmaz | `izin-yok`, `konum-servisi-kapali`, `konum-okunamadi`, `platform-desteklemiyor` (masaüstü) |
+| `sistem_ayarlarini_ac` | `sistemAyarlariniAc()` | — | — (uygulamanın ayar sayfası / bildirim ayarları açılır) | `ayarlar-acilamadi`, `platform-desteklemiyor` (Linux) |
+
+İzin komutları `src-tauri/src/permissions.rs` içindedir (qLar deseninden gelen `permissions_status` / `permission_request` adları korunur); hepsi `async`'tir, mobil eklenti yanıtını beklerken ana iş parçacığını durdurmaz. Ayrıntı: [`docs/izinler.md`](izinler.md).
 
 Kod biçimi ve fiyat kuralları (acil ücret, gece %25, Pazar %15): [`docs/proje-fikri.md`](proje-fikri.md) § 4.
 
@@ -38,7 +45,13 @@ Rust'ta `#[serde(tag = "tur", content = "ayrinti", rename_all = "kebab-case")]`;
 | `aralik-ters` | — | `iscilikMin > iscilikMax` | `hata.aralikTers` |
 | `gecersiz-icerik` | — | Dışa aktarılacak içerik boş ya da 5 MB'tan büyük | `hata.gecersizIcerik` |
 | `dosya-yazilamadi` | işletim sistemi mesajı | İndirilenler klasörü bulunamadı ya da yazılamadı | `hata.dosyaYazilamadi` |
-| `platform-desteklemiyor` | — | Komut bu platformda yok (mobilde dosyaya kaydetme) | `native.ts` panoya kopyalamaya geçer |
+| `platform-desteklemiyor` | — | Komut bu platformda yok (mobilde dosyaya kaydetme, masaüstünde konum) | `native.ts` panoya kopyalamaya geçer; özellik o platformda gösterilmez |
+| `izin-yok` | — | Gereken izin verilmemiş; komut diyalog açmaz | `hata.izinYok` (konumda /izinler bağlantısı) |
+| `izin-istenemedi` | sistemin mesajı | İzin diyaloğu açılamadı | `hata.izinIstenemedi` |
+| `konum-servisi-kapali` | — | Cihazın konum servisi kapalı | `hata.konumServisiKapali` |
+| `konum-okunamadi` | sistemin mesajı | Zaman aşımı (10 sn), sinyal yok | `hata.konumOkunamadi` |
+| `bildirim-gosterilemedi` | sistemin mesajı | İşletim sistemi bildirimi göstermedi | `hata.bildirimGosterilemedi` |
+| `ayarlar-acilamadi` | sistemin mesajı | Sistem ayarları açılamadı | `hata.ayarlarAcilamadi` |
 | `ic-hata` *(yalnız TS)* | ham mesaj | Rust komutu çalışmadan Tauri katmanında oluşan beklenmeyen hata | `hata.icHata` |
 
 `fiyat_hesapla` denetim sırası iki tarafta da aynıdır: **tarih → aciliyet → tutarlar (çıkış, işçilik alt, üst) → aralık**.

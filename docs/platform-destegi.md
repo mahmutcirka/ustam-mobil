@@ -21,6 +21,9 @@ seçen işlevleri (`telefonAc`, `panoyaKopyala`, `verileriKaydet`) kullanır. Pl
 | `foto-ekleme` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `panoya-kopyalama` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `veri-disa-aktarma` | 🔁 | 🔁 | 🔁 | 🔁 | 🔁 | ✅ |
+| `bildirim` | ✅ | ✅ | ✅ | ✅ | ✅ | 🔁 |
+| `konum` | ✅ | ✅ | — | — | — | 🔁 |
+| `sistem-ayarlari` | ✅ | ✅ | ✅ | ✅ | — | — |
 
 ## Özellikler ve "farklı yolla" / "yok" satırları
 
@@ -61,11 +64,32 @@ seçen işlevleri (`telefonAc`, `panoyaKopyala`, `verileriKaydet`) kullanır. Pl
   `platform-desteklemiyor` döner ve `native.ts` içeriği **panoya kopyalar**. Düğmenin adı bu platformlarda
   "Verilerimi kopyala (JSON)" olur.
 
+### `bildirim` — iş emri aşamaları ve randevu hatırlatması (yerel bildirim)
+
+- **Beş platform:** Rust komutu `bildirim_gonder` (`tauri-plugin-notification`, Rust tarafından çağrılır; web görünümüne
+  eklentinin JS izni verilmez). Android 13+ ve iOS'ta çalışma zamanı izni vardır; masaüstünde yoktur → durum "İzin gerekmiyor".
+- **Web 🔁:** Tarayıcının `Notification` API'si. Android Chrome sayfadan doğrudan bildirime izin vermez → tipli hata.
+- Senaryolar, açık/kapalı davranışı ve push farkı: [`docs/izinler.md`](izinler.md).
+
+### `konum` — "Konumumdan bul" (semt seçici)
+
+- **Android / iOS ✅:** Rust komutu `konum_oku` (`tauri-plugin-geolocation`, yalnız mobil derlemede); yaklaşık konum, bir kez.
+- **Web 🔁:** Tarayıcının Geolocation API'si (aynı seçenekler: yüksek doğruluk yok, 10 sn zaman aşımı).
+- **macOS / Windows / Linux —:** Eklentinin masaüstü sürümü gerçek konum okumaz (sıfır döner); düğme **gösterilmez**,
+  semt listeden seçilir. /izinler ekranında "Bu cihazda yok" diye belirtilir.
+
+### `sistem-ayarlari` — reddedilen izni açmak için "Ayarları aç" (/izinler)
+
+- **Android ✅:** Uygulamanın kendi Kotlin eklentisi (`AyarlarEklentisi.kt`) uygulama ayrıntıları ekranını açar.
+- **iOS ✅:** `app-settings:` adresi (uygulamanın Ayarlar sayfası). **Windows ✅:** `ms-settings:notifications`.
+  **macOS ✅:** Sistem Ayarları → Bildirimler. Adresler Rust'ta sabittir; web görünümü adres veremez.
+- **Linux / Web —:** Ortak bir ayar adresi yok; düğme gösterilmez, yerine yönerge metni çıkar.
+
 ## Elle deneme
 
 | Cihaz | Ne denenir |
 |---|---|
 | Tarayıcı (`bun run dev`) | Usta detayı → tehlikeli bir sorun (Su sızıntısı) → "112'yi ara" görünür; Profil → dışa aktar → dosya iner |
 | Windows (`bun run tauri dev`) | Aynı ekranda "112'yi ara" **görünmez**; Profil → dışa aktar → bildirimde İndirilenler yolu |
-| Android (APK, [`docs/kurulum.md`](kurulum.md)) | "112'yi ara" çeviriciyi açar; Profil → "Verilerimi kopyala" → panoya kopyalandı bildirimi |
+| Android (APK, [`docs/kurulum.md`](kurulum.md)) | "112'yi ara" çeviriciyi açar; Profil → "Verilerimi kopyala" → panoya kopyalandı bildirimi; izin senaryoları: [`docs/izinler.md`](izinler.md#elle-deneme) |
 | iOS / macOS / Linux | Bu bilgisayarda derlenemedi (iOS ve macOS için Mac gerekir); tablo kodla aynıdır, cihazda denenmedi |

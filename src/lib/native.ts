@@ -13,10 +13,13 @@ import type {
   DestekTuru,
   FiyatDokumu,
   FiyatGirdisi,
+  IzinDurumu,
+  IzinKimligi,
   KaydedilenDosya,
   Kategori,
   KodDurumu,
   KomutHatasi,
+  KonumOkumasi,
   Ozellik,
   Platform,
   UretilenKod,
@@ -58,6 +61,12 @@ export const DESTEK: Record<Ozellik, Record<Platform, DestekTuru>> = {
   "panoya-kopyalama": { android: "destekleniyor", ios: "destekleniyor", macos: "destekleniyor", windows: "destekleniyor", linux: "destekleniyor", web: "destekleniyor" },
   // KVKK verilerimi dışa aktar: tarayıcıda indirme, masaüstünde Rust ile İndirilenler'e dosya, telefonda panoya kopyalama
   "veri-disa-aktarma": { android: "farkli-yolla", ios: "farkli-yolla", macos: "farkli-yolla", windows: "farkli-yolla", linux: "farkli-yolla", web: "destekleniyor" },
+  // Yerel bildirim: Tauri bildirim eklentisi (Rust); tarayıcıda Notification API
+  "bildirim": { android: "destekleniyor", ios: "destekleniyor", macos: "destekleniyor", windows: "destekleniyor", linux: "destekleniyor", web: "farkli-yolla" },
+  // Tek seferlik yaklaşık konum: telefonda konum eklentisi (Rust); tarayıcıda Geolocation API; masaüstünde yok
+  "konum": { android: "destekleniyor", ios: "destekleniyor", macos: "yok", windows: "yok", linux: "yok", web: "farkli-yolla" },
+  // Reddedilen izni açmak için sistem ayarları: Android Kotlin eklentisi, iOS/Windows/macOS ayar adresi; Linux ve tarayıcıda yok
+  "sistem-ayarlari": { android: "destekleniyor", ios: "destekleniyor", macos: "destekleniyor", windows: "destekleniyor", linux: "yok", web: "yok" },
 };
 
 /** Platformun özel adı; tarayıcı için null (ekran "Tarayıcı" metnini çeviriden alır) */
@@ -80,9 +89,9 @@ function hataya(e: unknown): NativeHata {
   return new NativeHata({ tur: "ic-hata", ayrinti: String(e) });
 }
 
-async function cagir<T>(komut: string, argumanlar: Record<string, unknown>, yedek: () => T): Promise<T> {
+async function cagir<T>(komut: string, argumanlar: Record<string, unknown>, yedek: () => T | Promise<T>): Promise<T> {
   try {
-    return rustIcinde() ? await invoke<T>(komut, argumanlar) : yedek();
+    return rustIcinde() ? await invoke<T>(komut, argumanlar) : await yedek();
   } catch (e) {
     throw hataya(e);
   }
@@ -179,7 +188,94 @@ export function hataAnahtari(h: KomutHatasi): Anahtar {
     "gecersiz-icerik": "hata.gecersizIcerik",
     "dosya-yazilamadi": "hata.dosyaYazilamadi",
     "platform-desteklemiyor": "hata.platformDesteklemiyor",
+    "izin-yok": "hata.izinYok",
+    "izin-istenemedi": "hata.izinIstenemedi",
+    "konum-servisi-kapali": "hata.konumServisiKapali",
+    "konum-okunamadi": "hata.konumOkunamadi",
+    "bildirim-gosterilemedi": "hata.bildirimGosterilemedi",
+    "ayarlar-acilamadi": "hata.ayarlarAcilamadi",
     "ic-hata": "hata.icHata",
   };
   return anahtarlar[h.tur];
 }
+
+// ---------------------------------------------------------------- izinler (docs/izinler.md)
+// Tauri içinde Rust komutları (permissions.rs); tarayıcıda aynı durumlar tarayıcının kendi API'lerinden okunur.
+// Hiçbir işlev kendiliğinden izin diyaloğu açmaz: diyalog yalnız izinIste() ile, kullanıcı düğmeye bastığında açılır.
+
+const KONUM_SECENEKLERI: PositionOptions = { enableHighAccuracy: false, timeout: 10_000, maximumAge: 120_000 };
+
+async function webBildirimDurumu(): Promise<IzinDurumu> {
+  if (typeof Notification === "undefined") return { id: "bildirim", durum: "desteklenmiyor", istenebilir: false };
+  const durumlar = { granted: "verildi", denied: "reddedildi", default: "sorulmadi" } as const;
+  const p = Notification.permission;
+  return { id: "bildirim", durum: durumlar[p] ?? "okunamadi", istenebilir: p === "default" };
+}
+
+async function webKonumDurumu(): Promise<IzinDurumu> {
+  if (typeof navigator === "undefined" || !("geolocation" in navigator)) return { id: "konum", durum: "desteklenmiyor", istenebilir: false };
+  try {
+    const { state } = await navigator.permissions.query({ name: "geolocation" });
+    const durumlar = { granted: "verildi", denied: "reddedildi", prompt: "sorulmadi" } as const;
+    return { id: "konum", durum: durumlar[state] ?? "okunamadi", istenebilir: state === "prompt" };
+  } catch {
+    // Permissions API'si olmayan tarayıcı: durum bilinmez, ama konum isteğiyle sorulabilir
+    return { id: "konum", durum: "okunamadi", istenebilir: true };
+  }
+}
+
+function webKonumHatasi(e: GeolocationPositionError): NativeHata {
+  if (e.code === e.PERMISSION_DENIED) return new NativeHata({ tur: "izin-yok" });
+  return new NativeHata({ tur: "konum-okunamadi", ayrinti: e.message });
+}
+
+function webKonumOku(): Promise<KonumOkumasi> {
+  return new Promise((coz, reddet) =>
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => coz({ enlem: coords.latitude, boylam: coords.longitude, dogrulukM: coords.accuracy }),
+      (e) => reddet(webKonumHatasi(e)),
+      KONUM_SECENEKLERI,
+    ),
+  );
+}
+
+const webIzinleri = () => Promise.all([webBildirimDurumu(), webKonumDurumu()]);
+
+/** Rust: permissions_status → izinlerin anlık durumu; asla diyalog açmaz */
+export const izinDurumu = () => cagir<IzinDurumu[]>("permissions_status", {}, webIzinleri);
+
+/** Rust: permission_request → izin için sistem diyaloğunu açar, güncel durumları döner. Yalnız kullanıcı eylemiyle çağrılır */
+export const izinIste = (id: IzinKimligi) =>
+  cagir<IzinDurumu[]>("permission_request", { id }, async () => {
+    if (id === "bildirim") {
+      if (typeof Notification === "undefined") throw new NativeHata({ tur: "platform-desteklemiyor" });
+      await Notification.requestPermission();
+    } else {
+      // Tarayıcıda konum izni ayrı sorulamaz; sorulması için bir okuma başlatılır, sonuç kullanılmadan atılır
+      await webKonumOku().catch(() => undefined); // izin sonucu aşağıda durumdan okunur
+    }
+    return webIzinleri();
+  });
+
+/** Rust: bildirim_gonder → yerel bildirim (push değil). İzin yoksa diyalog açmaz, "izin-yok" hatası verir */
+export const bildirimGoster = (baslik: string, govde: string) =>
+  cagir<void>("bildirim_gonder", { baslik, govde }, () => {
+    if (typeof Notification === "undefined") throw new NativeHata({ tur: "platform-desteklemiyor" });
+    if (Notification.permission !== "granted") throw new NativeHata({ tur: "izin-yok" });
+    try {
+      new Notification(baslik, { body: govde, icon: "/favicon.png" });
+    } catch (e) {
+      // Android Chrome sayfadan doğrudan bildirimi yasaklar (service worker ister)
+      throw new NativeHata({ tur: "bildirim-gosterilemedi", ayrinti: String(e) });
+    }
+  });
+
+/** Rust: konum_oku → yaklaşık konum, bir kez. İzin yoksa "izin-yok"; konum servisi kapalıysa "konum-servisi-kapali" */
+export const konumOku = () => cagir<KonumOkumasi>("konum_oku", {}, webKonumOku);
+
+/** Rust: sistem_ayarlarini_ac → uygulamanın ayar sayfası (telefon) ya da bildirim ayarları (Windows/macOS).
+ *  Yalnız destekleniyorMu("sistem-ayarlari") iken çağrılır */
+export const sistemAyarlariniAc = () =>
+  cagir<void>("sistem_ayarlarini_ac", {}, () => {
+    throw new NativeHata({ tur: "platform-desteklemiyor" });
+  });

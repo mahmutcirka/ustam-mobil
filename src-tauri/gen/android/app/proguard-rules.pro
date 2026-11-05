@@ -19,3 +19,5 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# Uygulamanın kendi Tauri eklentisi adıyla yüklenir (permissions.rs → register_android_plugin); küçültmede adı korunur
+-keep class edu.istinye.ustam.AyarlarEklentisi { *; }

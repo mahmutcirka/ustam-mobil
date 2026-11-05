@@ -11,6 +11,8 @@ const KISISEL_ANAHTARLAR = [
   "liste-gorunum",
   "tekrar-taslagi",
   "ev-hazirligi",
+  "bildirim-tercihleri",
+  "gonderilen-bildirimler",
 ];
 
 // Dışa aktarılacak JSON metni. Kaydetme yolu platforma göre native.ts → verileriKaydet içinde seçilir.

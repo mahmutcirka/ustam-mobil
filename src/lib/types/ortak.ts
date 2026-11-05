@@ -32,3 +32,11 @@ export interface Konum {
   /** Dikey konum, 0 (kuzey) – 110 (güney) */
   y: number;
 }
+
+/** Gerçek dünyada konum (WGS84) — yalnız cihaz konumunu en yakın semte eşlemek için */
+export interface CografiKonum {
+  /** Enlem, ondalık derece */
+  enlem: number;
+  /** Boylam, ondalık derece */
+  boylam: number;
+}

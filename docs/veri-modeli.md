@@ -113,10 +113,11 @@ Rust yapılarıyla ([`src-tauri/src/lib.rs`](../src-tauri/src/lib.rs), serde `ca
 
 | Dosya | Tipler |
 |---|---|
-| `ortak.ts` | `Dil` (`DILLER`), `Semt` (`SEMTLER`), `Yaka`, `Konum` |
+| `ortak.ts` | `Dil` (`DILLER`), `Semt` (`SEMTLER`), `Yaka`, `Konum` (stilize harita), `CografiKonum` (`enlem`, `boylam` — semt merkezleri; cihaz konumu yalnız en yakın semti bulmak için kullanılır, saklanmaz) |
 | `profil.ts` | `ProfilBilgileri` (`ad`, `telefon`, `semt`, `adres`, `kapiNotu` — kat/daire/zil, çağrı notuna eklenir), `ProfilAlani` (`PROFIL_ALANLARI`: "Çağrıya hazırlık" ölçerinin 4 alanı), `HazirlikMaddesi` (`su-vanasi` · `sigorta-kutusu` · `dogalgaz-vanasi`) ve `EvHazirligi` (madde → biliyor mu), `TemaTercihi` (`sistem` · `gunduz` · `gece`), `Tema` |
 | `liste.ts` | `Siralama`, `Gorunum`, `UstaFiltresi`, `SorunOnerisi`, `NedenTuru`, `Oneri`, `OneriBaglami` |
-| `bildirim.ts` | `Bildirim`, `BildirimTuru` (`basari` · `bilgi` · `hata`) |
+| `bildirim.ts` | `Bildirim`, `BildirimTuru` (`basari` · `bilgi` · `hata`); cihaz bildirimi: `BildirimKategorisi` (`is-durumu` · `randevu`), `BildirimTercihleri`, `IsOlayi` (`onaylandi` · `randevu-onaylandi` · `randevu-yaklasiyor` · `yolda` · `kapida`), `IsBildirimi` (`anahtar` = `kod:olay`, tekrarı önler) |
+| `izin.ts` | `IzinKimligi` (`bildirim` · `konum`), `IzinDegeri` (`verildi` · `reddedildi` · `sorulmadi` · `servis-kapali` · `gerekmiyor` · `desteklenmiyor` · `okunamadi`), `IzinDurumu` (`id`, `durum`, `istenebilir`), `KonumOkumasi` (`enlem`, `boylam`, `dogrulukM`) — Rust `permissions.rs` ile aynı alanlar ([`docs/izinler.md`](izinler.md)) |
 
 ## Kurallar
 

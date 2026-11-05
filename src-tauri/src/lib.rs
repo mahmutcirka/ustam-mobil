@@ -101,6 +101,18 @@ enum KomutHatasi {
     DosyaYazilamadi(String),
     /// Bu komut bu platformda yok (ör. mobilde dosyaya kaydetme)
     PlatformDesteklemiyor,
+    /// Gereken izin verilmemiş; komut diyalog açmaz, kullanıcı /izinler ekranından verir
+    IzinYok,
+    /// İşletim sistemi izin diyaloğunu açamadı (ayrıntı: sistemin mesajı)
+    IzinIstenemedi(String),
+    /// Cihazın konum servisi kapalı
+    KonumServisiKapali,
+    /// Konum okunamadı: zaman aşımı, sinyal yok … (ayrıntı: sistemin mesajı)
+    KonumOkunamadi(String),
+    /// Bildirim gösterilemedi (ayrıntı: sistemin mesajı)
+    BildirimGosterilemedi(String),
+    /// Sistem ayarları açılamadı (ayrıntı: sistemin mesajı)
+    AyarlarAcilamadi(String),
 }
 
 // Tutarlar için makul üst sınır (TL); taşmayı ve yazım hatalarını engeller
@@ -296,13 +308,26 @@ fn veri_dosyasi_kaydet(app: tauri::AppHandle, icerik: String) -> Result<Kaydedil
 }
 
 mod backend;
+mod permissions;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .setup(|app| backend::commands::setup(app))
+        .plugin(tauri_plugin_notification::init())
+        .plugin(permissions::ayarlar_eklentisi())
+        .setup(|app| {
+            // Konum eklentisi yalnız telefonda: masaüstü sürümü gerçek konum okumaz (docs/izinler.md)
+            #[cfg(mobile)]
+            app.handle().plugin(tauri_plugin_geolocation::init())?;
+            backend::commands::setup(app)
+        })
         .invoke_handler(tauri::generate_handler![
+            permissions::permissions_status,
+            permissions::permission_request,
+            permissions::bildirim_gonder,
+            permissions::konum_oku,
+            permissions::sistem_ayarlarini_ac,
             is_emri_uret, is_emri_dogrula, fiyat_hesapla, veri_dosyasi_kaydet,
             backend::commands::auth_register,
             backend::commands::auth_login,

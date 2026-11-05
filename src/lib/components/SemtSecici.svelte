@@ -1,6 +1,8 @@
 <script lang="ts">
-  // Semt seçimi — Avrupa ve Anadolu yakası olarak gruplanmış düğmeler
+  // Semt seçimi — "Konumumdan bul" ve Avrupa / Anadolu yakası olarak gruplanmış düğmeler
   import Ikon from "./Ikon.svelte";
+  import KonumdanSemt from "./KonumdanSemt.svelte";
+  import { destekleniyorMu } from "$lib/native";
   import { semtler, semtListesi } from "$lib/data";
   import { dil } from "$lib/i18n.svelte";
   import type { Semt } from "../types";
@@ -11,6 +13,8 @@
 </script>
 
 <div class="semtler">
+  <!-- Konum okunamayan platformda (masaüstü) düğme hiç görünmez -->
+  {#if destekleniyorMu("konum")}<KonumdanSemt {sec} />{/if}
   {#each yakalar as yaka}
     <div class="yaka">
       <span class="baslik">{dil.t(`harita.${yaka}`)}</span>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Yalnız iOS derlemesine eklenir (macOS'ta konum kullanılmaz). Gerekçe: docs/izinler.md -->
+<plist version="1.0">
+<dict>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>Bulunduğunuz semti seçip size en yakın ustaları göstermek için konumunuzu yalnız siz "Konumumdan bul" dediğinizde bir kez kullanırız; konum saklanmaz ve sunucuya gönderilmez.</string>
+</dict>
+</plist>
