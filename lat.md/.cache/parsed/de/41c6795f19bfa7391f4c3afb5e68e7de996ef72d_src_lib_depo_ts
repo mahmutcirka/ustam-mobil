@@ -1,0 +1,2 @@
+v6:2c4e54b5819c2a58aa4af1dd55019761883b2dbd
+{"path":"src/lib/depo.ts","symbols":[{"name":"oku","kind":"function","startLine":3,"endLine":11,"signature":"function oku<T>(anahtar: string, varsayilan: T): T {"},{"name":"yaz","kind":"function","startLine":13,"endLine":20,"signature":"function yaz(anahtar: string, deger: unknown) {"}],"timings":{"readMs":0.20679999999993015,"hashMs":0.027000000000043656,"cacheReadMs":0.09369999999989886,"cacheStatus":"miss","cacheWriteMs":0,"parseMs":0.24430000000006658}}

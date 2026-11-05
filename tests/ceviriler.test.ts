@@ -9,6 +9,7 @@ const yerTutucular = (metin: string) => [...metin.matchAll(/\{(\w+)\}/g)].map((m
 // Arap alfabesi (Arapça ve Farsça) — Unicode betik özelliğiyle
 const ARAP_ALFABESI = /\p{Script=Arabic}/u;
 
+// @lat: [[testler#Testler#İzinler ve platform#Çeviri anahtarları dört dilde aynı]]
 describe("çeviri sözlüğü", () => {
   test.each(diller)("%s: Türkçe ile aynı anahtar kümesi", (d) => {
     expect(Object.keys(sozlukler[d]).sort()).toEqual([...anahtarlar].sort());

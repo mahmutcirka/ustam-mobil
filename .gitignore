@@ -17,3 +17,4 @@ docs/tasks/**/raw/
 
 # Yerel ajan / editör ayarları
 .claude/
+.lat-build

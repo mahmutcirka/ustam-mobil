@@ -28,3 +28,5 @@ Bu klasör, uygulamanın yapay zekâ aracıyla nasıl geliştirildiğinin kaydı
 | 13 | Liste ve üç durum | [13-liste-ve-uc-durum.md](13-liste-ve-uc-durum.md) |
 | 14 | Detay ekranı | [14-detay-ekrani.md](14-detay-ekrani.md) |
 | 15 | Rust komutu | [15-rust-komutu.md](15-rust-komutu.md) |
+| — | Yetkiler (izinler) | [yetkiler.md](yetkiler.md) |
+| — | lat.md bilgi grafiği (Hafta 05) | [lat-md.md](lat-md.md) |
