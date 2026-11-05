@@ -71,3 +71,5 @@ Batch 01 denetim tablosu: [`ilerleme-batch-01.md`](ilerleme-batch-01.md).
 | — | Profil yenileme (çağrıya hazırlık, Evim, Evimi tanıyorum) | — | `feature/profil-yenileme` (#34) | Tamam |
 | — | SQLite yerel arka uç (eğitmen) | — | `feature/sqlite-rbac-altyapi` (#36) | Tamam |
 | — | Yetkiler: izin merkezi, yerel bildirim, tek seferlik konum | — | `feature/yetkiler-izin-altyapisi` (#37) | Tamam; cihazda elle deneme öğrenciye ([`izinler.md`](izinler.md#elle-deneme)) |
+| 16 | Batch 02 denetimi: en küçük pencere, ilerleme belgesi | — | `feature/16-batch-02-denetimi` | Tamam; `v0.2.0-batch-02` etiketi 09.1 bitince ([`ilerleme-batch-02.md`](ilerleme-batch-02.md)) |
+| — | lat.md bilgi grafiği (Hafta 05) | ek puan | `feature/lat-md` (#38) | Tamam |
